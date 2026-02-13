@@ -1,0 +1,254 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "9195c4f9a54b6d64a494490dc4825265",
+    "entities": [
+      {
+        "tableName": "empleados",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`legajo` TEXT NOT NULL, `nombre` TEXT NOT NULL, `apellido` TEXT NOT NULL, `sector` TEXT NOT NULL, `fechaIngreso` TEXT NOT NULL, `activo` INTEGER NOT NULL, `fechaCreacion` TEXT NOT NULL, PRIMARY KEY(`legajo`))",
+        "fields": [
+          {
+            "fieldPath": "legajo",
+            "columnName": "legajo",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nombre",
+            "columnName": "nombre",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "apellido",
+            "columnName": "apellido",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sector",
+            "columnName": "sector",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fechaIngreso",
+            "columnName": "fechaIngreso",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "activo",
+            "columnName": "activo",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fechaCreacion",
+            "columnName": "fechaCreacion",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "legajo"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "registros_asistencia",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `legajo_empleado` TEXT NOT NULL, `fecha` TEXT NOT NULL, `horas_trabajadas` INTEGER NOT NULL, `observaciones` TEXT, `fecha_registro` INTEGER NOT NULL, FOREIGN KEY(`legajo_empleado`) REFERENCES `empleados`(`legajo`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "legajoEmpleado",
+            "columnName": "legajo_empleado",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fecha",
+            "columnName": "fecha",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "horasTrabajadas",
+            "columnName": "horas_trabajadas",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "observaciones",
+            "columnName": "observaciones",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "fechaRegistro",
+            "columnName": "fecha_registro",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_registros_asistencia_legajo_empleado",
+            "unique": false,
+            "columnNames": [
+              "legajo_empleado"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_registros_asistencia_legajo_empleado` ON `${TABLE_NAME}` (`legajo_empleado`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "empleados",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "legajo_empleado"
+            ],
+            "referencedColumns": [
+              "legajo"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "dias_laborales",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`fecha` TEXT NOT NULL, `esLaboral` INTEGER NOT NULL, `tipoDia` TEXT NOT NULL, `descripcion` TEXT, PRIMARY KEY(`fecha`))",
+        "fields": [
+          {
+            "fieldPath": "fecha",
+            "columnName": "fecha",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "esLaboral",
+            "columnName": "esLaboral",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tipoDia",
+            "columnName": "tipoDia",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "descripcion",
+            "columnName": "descripcion",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "fecha"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "horas_empleado_mes",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `legajoEmpleado` TEXT NOT NULL, `año` INTEGER NOT NULL, `mes` INTEGER NOT NULL, `totalHoras` REAL NOT NULL, `diasTrabajados` INTEGER NOT NULL, `promedioDiario` REAL NOT NULL, `ultimaActualizacion` TEXT NOT NULL, FOREIGN KEY(`legajoEmpleado`) REFERENCES `empleados`(`legajo`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "legajoEmpleado",
+            "columnName": "legajoEmpleado",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "año",
+            "columnName": "año",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mes",
+            "columnName": "mes",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "totalHoras",
+            "columnName": "totalHoras",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "diasTrabajados",
+            "columnName": "diasTrabajados",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "promedioDiario",
+            "columnName": "promedioDiario",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ultimaActualizacion",
+            "columnName": "ultimaActualizacion",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "empleados",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "legajoEmpleado"
+            ],
+            "referencedColumns": [
+              "legajo"
+            ]
+          }
+        ]
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9195c4f9a54b6d64a494490dc4825265')"
+    ]
+  }
+}

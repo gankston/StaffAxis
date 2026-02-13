@@ -1,0 +1,39 @@
+# Android / Gradle
+/build
+.gradle/
+local.properties
+*.iml
+.idea/
+*.apk
+*.ap_
+*.aab
+*.dex
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Keystore - NUNCA subir a GitHub (contiene claves de firma)
+*.keystore
+*.jks
+
+# Backup y temporales del proyecto
+*_backup*
+*_temp*
+*_clean*
+screenshot*.png
+screencap*.png
+
+# Logs y temporales
+*.log
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# Kotlin
+*.class
+out/
+
+# Secrets (si agregas archivos de configuración con credenciales)
+secrets.properties
+*.env

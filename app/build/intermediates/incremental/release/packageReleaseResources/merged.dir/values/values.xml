@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="background">#FAFAFA</color>
+    <color name="con_asistencia">#2196F3</color>
+    <color name="dia_laboral">#4CAF50</color>
+    <color name="error">#F44336</color>
+    <color name="feriado">#F44336</color>
+    <color name="fin_semana">#9E9E9E</color>
+    <color name="info">#2196F3</color>
+    <color name="primary">#2196F3</color>
+    <color name="primary_variant">#1976D2</color>
+    <color name="secondary">#FF9800</color>
+    <color name="secondary_variant">#F57C00</color>
+    <color name="success">#4CAF50</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="surface_variant">#F5F5F5</color>
+    <color name="warning">#FF9800</color>
+    <string name="agregar_empleado">Agregar Empleado</string>
+    <string name="apellido_hint">Apellido</string>
+    <string name="app_name">StaffAxis</string>
+    <string name="buscar_empleado">Buscar empleado...</string>
+    <string name="calendario_title">Calendario de Asistencia</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="con_asistencia">Con Asistencia</string>
+    <string name="confirmar">Confirmar</string>
+    <string name="dashboard_title">Carga de Horas</string>
+    <string name="dia_laboral">Día Laboral</string>
+    <string name="editar">Editar</string>
+    <string name="eliminar">Eliminar</string>
+    <string name="empleado_no_encontrado">Empleado no encontrado</string>
+    <string name="empleado_sin_entrada">El empleado no tiene entrada registrada</string>
+    <string name="empleado_ya_tiene_entrada">El empleado ya registró entrada hoy</string>
+    <string name="empleados_title">Gestión de Empleados</string>
+    <string name="entrada_registrada">Entrada registrada exitosamente</string>
+    <string name="error_generico">Ocurrió un error inesperado</string>
+    <string name="exportacion_exitosa">Archivo exportado exitosamente</string>
+    <string name="exportar_csv">Exportar a CSV</string>
+    <string name="exportar_excel">Exportar a Excel</string>
+    <string name="fecha_ingreso">Fecha de Ingreso</string>
+    <string name="feriado">Feriado</string>
+    <string name="filtrar_por_legajo">Filtrar por DNI (opcional)</string>
+    <string name="fin_semana">Fin de Semana</string>
+    <string name="guardar">Guardar</string>
+    <string name="guardar_empleado">Guardar Empleado</string>
+    <string name="legajo_duplicado">Ya existe un empleado con este DNI</string>
+    <string name="legajo_hint">Ingrese DNI del empleado</string>
+    <string name="legajo_hint_empleado">DNI</string>
+    <string name="nav_calendario">Calendario</string>
+    <string name="nav_empleados">Empleados</string>
+    <string name="nav_home">Inicio</string>
+    <string name="nav_reportes">Reportes</string>
+    <string name="nombre_hint">Nombre</string>
+    <string name="periodo_actual">Período Actual</string>
+    <string name="registrar_entrada">Registrar Entrada</string>
+    <string name="registrar_salida">Registrar Salida</string>
+    <string name="registros_hoy">Registros de hoy</string>
+    <string name="reportes_title">Reportes y Exportación</string>
+    <string name="salida_registrada">Salida registrada exitosamente</string>
+    <string name="seleccionar_fecha_fin">Fecha Fin</string>
+    <string name="seleccionar_fecha_inicio">Fecha Inicio</string>
+    <style name="Base.Theme.Asistencia" parent="Theme.AppCompat.Light.DarkActionBar">
+        
+        
+    </style>
+    <style name="Theme.Asistencia" parent="Base.Theme.Asistencia">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">#1E1E2E</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+</resources>

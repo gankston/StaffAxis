@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">StaffAxis</string>
+    
+    <!-- Navegación -->
+    <string name="nav_home">Inicio</string>
+    <string name="nav_empleados">Empleados</string>
+    <string name="nav_calendario">Calendario</string>
+    <string name="nav_reportes">Reportes</string>
+    
+    <!-- Pantalla Principal -->
+    <string name="dashboard_title">Carga de Horas</string>
+    <string name="registrar_entrada">Registrar Entrada</string>
+    <string name="registrar_salida">Registrar Salida</string>
+    <string name="legajo_hint">Ingrese DNI del empleado</string>
+    <string name="registros_hoy">Registros de hoy</string>
+    
+    <!-- Empleados -->
+    <string name="empleados_title">Gestión de Empleados</string>
+    <string name="agregar_empleado">Agregar Empleado</string>
+    <string name="nombre_hint">Nombre</string>
+    <string name="apellido_hint">Apellido</string>
+    <string name="legajo_hint_empleado">DNI</string>
+    <string name="fecha_ingreso">Fecha de Ingreso</string>
+    <string name="guardar_empleado">Guardar Empleado</string>
+    <string name="buscar_empleado">Buscar empleado...</string>
+    
+    <!-- Calendario -->
+    <string name="calendario_title">Calendario de Asistencia</string>
+    <string name="periodo_actual">Período Actual</string>
+    <string name="dia_laboral">Día Laboral</string>
+    <string name="feriado">Feriado</string>
+    <string name="fin_semana">Fin de Semana</string>
+    <string name="con_asistencia">Con Asistencia</string>
+    
+    <!-- Reportes -->
+    <string name="reportes_title">Reportes y Exportación</string>
+    <string name="seleccionar_fecha_inicio">Fecha Inicio</string>
+    <string name="seleccionar_fecha_fin">Fecha Fin</string>
+    <string name="exportar_excel">Exportar a Excel</string>
+    <string name="exportar_csv">Exportar a CSV</string>
+    <string name="filtrar_por_legajo">Filtrar por DNI (opcional)</string>
+    
+    <!-- Mensajes -->
+    <string name="empleado_no_encontrado">Empleado no encontrado</string>
+    <string name="entrada_registrada">Entrada registrada exitosamente</string>
+    <string name="salida_registrada">Salida registrada exitosamente</string>
+    <string name="empleado_ya_tiene_entrada">El empleado ya registró entrada hoy</string>
+    <string name="empleado_sin_entrada">El empleado no tiene entrada registrada</string>
+    <string name="legajo_duplicado">Ya existe un empleado con este DNI</string>
+    <string name="exportacion_exitosa">Archivo exportado exitosamente</string>
+    <string name="error_generico">Ocurrió un error inesperado</string>
+    
+    <!-- Botones -->
+    <string name="guardar">Guardar</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="eliminar">Eliminar</string>
+    <string name="editar">Editar</string>
+    <string name="confirmar">Confirmar</string>
+</resources>

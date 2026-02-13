@@ -1,0 +1,70 @@
+com.registro.empleados.app-resValues-0 C:\Registro empleados\app\build\generated\res\resValues\release
+com.registro.empleados.app-updated_navigation_xml-1 C:\Registro empleados\app\build\generated\updated_navigation_xml\release
+com.registro.empleados.app-packageReleaseResources-2 C:\Registro empleados\app\build\intermediates\incremental\release\packageReleaseResources\merged.dir
+com.registro.empleados.app-packageReleaseResources-3 C:\Registro empleados\app\build\intermediates\incremental\release\packageReleaseResources\stripped.dir
+com.registro.empleados.app-merged-not-compiled-resources-4 C:\Registro empleados\app\build\intermediates\merged-not-compiled-resources\release
+com.registro.empleados.app-release-5 C:\Registro empleados\app\build\intermediates\merged_res\release\mergeReleaseResources
+com.registro.empleados.app-main-6 C:\Registro empleados\app\src\main\res
+com.registro.empleados.app-release-7 C:\Registro empleados\app\src\release\res
+com.registro.empleados.app-profileinstaller-1.3.0-8 C:\Users\pgast\.gradle\caches\8.13\transforms\055fd05d8c502eb040a0c3110314c5c7\transformed\profileinstaller-1.3.0\res
+com.registro.empleados.app-fragment-1.5.1-9 C:\Users\pgast\.gradle\caches\8.13\transforms\05c78646933e6485049179936364b43d\transformed\fragment-1.5.1\res
+com.registro.empleados.app-ui-text-release-10 C:\Users\pgast\.gradle\caches\8.13\transforms\128c01be130f00f1e5a8caafd1213c26\transformed\ui-text-release\res
+com.registro.empleados.app-foundation-layout-release-11 C:\Users\pgast\.gradle\caches\8.13\transforms\13b28739e5742aaf090afa39e8df3529\transformed\foundation-layout-release\res
+com.registro.empleados.app-navigation-compose-2.7.6-12 C:\Users\pgast\.gradle\caches\8.13\transforms\1a0ddcb889afe522bac77a6d6e1af2da\transformed\navigation-compose-2.7.6\res
+com.registro.empleados.app-lifecycle-viewmodel-ktx-2.7.0-13 C:\Users\pgast\.gradle\caches\8.13\transforms\1c73123f7b8ff575b32520bdb8ea65a7\transformed\lifecycle-viewmodel-ktx-2.7.0\res
+com.registro.empleados.app-activity-1.8.2-14 C:\Users\pgast\.gradle\caches\8.13\transforms\24217ac6dcb0e788b934385f5ae79bc0\transformed\activity-1.8.2\res
+com.registro.empleados.app-core-runtime-2.2.0-15 C:\Users\pgast\.gradle\caches\8.13\transforms\24d99c0f7ec68dcdf2abb8352a0098c3\transformed\core-runtime-2.2.0\res
+com.registro.empleados.app-ui-tooling-preview-release-16 C:\Users\pgast\.gradle\caches\8.13\transforms\2624a7bcd6e8dd458a0dbc1e906d33ae\transformed\ui-tooling-preview-release\res
+com.registro.empleados.app-appcompat-1.6.1-17 C:\Users\pgast\.gradle\caches\8.13\transforms\2827bc4be84f0d513579d45f2dfbd593\transformed\appcompat-1.6.1\res
+com.registro.empleados.app-ui-graphics-release-18 C:\Users\pgast\.gradle\caches\8.13\transforms\34cff144bc767b6455017e30b009bf36\transformed\ui-graphics-release\res
+com.registro.empleados.app-lifecycle-viewmodel-savedstate-2.7.0-19 C:\Users\pgast\.gradle\caches\8.13\transforms\355eb0476587f4240b2547838af44417\transformed\lifecycle-viewmodel-savedstate-2.7.0\res
+com.registro.empleados.app-ui-unit-release-20 C:\Users\pgast\.gradle\caches\8.13\transforms\35f533974dcf2e259ee68e8fcee31b91\transformed\ui-unit-release\res
+com.registro.empleados.app-work-runtime-2.9.0-21 C:\Users\pgast\.gradle\caches\8.13\transforms\3a17f3cbb08538d8d2fd69a86bd8e4d7\transformed\work-runtime-2.9.0\res
+com.registro.empleados.app-appcompat-resources-1.6.1-22 C:\Users\pgast\.gradle\caches\8.13\transforms\3aa022081b796cedca2c94fb4451ea7b\transformed\appcompat-resources-1.6.1\res
+com.registro.empleados.app-emoji2-views-helper-1.3.0-23 C:\Users\pgast\.gradle\caches\8.13\transforms\3c57d3a1807ed58021a0751becf5b251\transformed\emoji2-views-helper-1.3.0\res
+com.registro.empleados.app-hilt-navigation-compose-1.1.0-24 C:\Users\pgast\.gradle\caches\8.13\transforms\3d23580ef3927c240767e7f2b829c862\transformed\hilt-navigation-compose-1.1.0\res
+com.registro.empleados.app-hilt-navigation-1.1.0-25 C:\Users\pgast\.gradle\caches\8.13\transforms\4125d196150006aca2f488d78f9408ec\transformed\hilt-navigation-1.1.0\res
+com.registro.empleados.app-lifecycle-runtime-2.7.0-26 C:\Users\pgast\.gradle\caches\8.13\transforms\42bfb561ecb7c254cf3398eba61aa46a\transformed\lifecycle-runtime-2.7.0\res
+com.registro.empleados.app-material-icons-extended-release-27 C:\Users\pgast\.gradle\caches\8.13\transforms\52119ce78c1124ca5dbee81186c454a7\transformed\material-icons-extended-release\res
+com.registro.empleados.app-savedstate-ktx-1.2.1-28 C:\Users\pgast\.gradle\caches\8.13\transforms\55ecd16c06c1217d37f3501f492cb45e\transformed\savedstate-ktx-1.2.1\res
+com.registro.empleados.app-savedstate-1.2.1-29 C:\Users\pgast\.gradle\caches\8.13\transforms\5c8f5c8d5891222edf6a32a88c173bf3\transformed\savedstate-1.2.1\res
+com.registro.empleados.app-navigation-common-2.7.6-30 C:\Users\pgast\.gradle\caches\8.13\transforms\61d2fab0faf7c1a46c23212bb19ec43c\transformed\navigation-common-2.7.6\res
+com.registro.empleados.app-lifecycle-service-2.7.0-31 C:\Users\pgast\.gradle\caches\8.13\transforms\639c76d7a3c6d2023b1aae639c303ca8\transformed\lifecycle-service-2.7.0\res
+com.registro.empleados.app-animation-release-32 C:\Users\pgast\.gradle\caches\8.13\transforms\6ea035d60e9934ff2c225d47056ff8d4\transformed\animation-release\res
+com.registro.empleados.app-hilt-work-1.1.0-33 C:\Users\pgast\.gradle\caches\8.13\transforms\706bcae6a74d046c50561ed63c42b26e\transformed\hilt-work-1.1.0\res
+com.registro.empleados.app-lifecycle-livedata-2.7.0-34 C:\Users\pgast\.gradle\caches\8.13\transforms\71b3ad2b9088d7d9135fd501058ea40c\transformed\lifecycle-livedata-2.7.0\res
+com.registro.empleados.app-foundation-release-35 C:\Users\pgast\.gradle\caches\8.13\transforms\725e1bd3fb9afa0af53410dfa1edcadb\transformed\foundation-release\res
+com.registro.empleados.app-lifecycle-process-2.7.0-36 C:\Users\pgast\.gradle\caches\8.13\transforms\72f90a09461338eb1252aab70dbca641\transformed\lifecycle-process-2.7.0\res
+com.registro.empleados.app-runtime-saveable-release-37 C:\Users\pgast\.gradle\caches\8.13\transforms\7366253dddde6c1297ed7e1ef2b2ee5b\transformed\runtime-saveable-release\res
+com.registro.empleados.app-lifecycle-runtime-ktx-2.7.0-38 C:\Users\pgast\.gradle\caches\8.13\transforms\78e59dac6fec46c28361d9e78c9168e2\transformed\lifecycle-runtime-ktx-2.7.0\res
+com.registro.empleados.app-ui-geometry-release-39 C:\Users\pgast\.gradle\caches\8.13\transforms\7b6562492be0898b47bfcb502e4b86d2\transformed\ui-geometry-release\res
+com.registro.empleados.app-lifecycle-runtime-compose-2.7.0-40 C:\Users\pgast\.gradle\caches\8.13\transforms\804f7c5945d399f5100c6a30071d25dc\transformed\lifecycle-runtime-compose-2.7.0\res
+com.registro.empleados.app-material3-window-size-class-release-41 C:\Users\pgast\.gradle\caches\8.13\transforms\874b37c89febc21e84f10982747e945b\transformed\material3-window-size-class-release\res
+com.registro.empleados.app-navigation-common-ktx-2.7.6-42 C:\Users\pgast\.gradle\caches\8.13\transforms\95f9e4b8df9acc9595d02c5f8cc4f609\transformed\navigation-common-ktx-2.7.6\res
+com.registro.empleados.app-sqlite-2.4.0-43 C:\Users\pgast\.gradle\caches\8.13\transforms\98b5a5dedf14e588f4b70ae7f279fa92\transformed\sqlite-2.4.0\res
+com.registro.empleados.app-navigation-runtime-2.7.6-44 C:\Users\pgast\.gradle\caches\8.13\transforms\9aa2b28d9a3a051dccbf9e6a9b847a8c\transformed\navigation-runtime-2.7.6\res
+com.registro.empleados.app-material3-release-45 C:\Users\pgast\.gradle\caches\8.13\transforms\9d32737e75869cec443c7135c29f3449\transformed\material3-release\res
+com.registro.empleados.app-material-icons-core-release-46 C:\Users\pgast\.gradle\caches\8.13\transforms\a14601536c822ead2d6e2c2223b5449b\transformed\material-icons-core-release\res
+com.registro.empleados.app-lifecycle-viewmodel-2.7.0-47 C:\Users\pgast\.gradle\caches\8.13\transforms\a5d6b7e4daa5572956d13b43772b1562\transformed\lifecycle-viewmodel-2.7.0\res
+com.registro.empleados.app-runtime-release-48 C:\Users\pgast\.gradle\caches\8.13\transforms\aca752818beb83624fb17d14de1169cf\transformed\runtime-release\res
+com.registro.empleados.app-lifecycle-livedata-core-ktx-2.7.0-49 C:\Users\pgast\.gradle\caches\8.13\transforms\ade2e8b6641a11a44b5789ae12b02276\transformed\lifecycle-livedata-core-ktx-2.7.0\res
+com.registro.empleados.app-core-1.12.0-50 C:\Users\pgast\.gradle\caches\8.13\transforms\b2c250bd108ac93e533ebc3081865fb0\transformed\core-1.12.0\res
+com.registro.empleados.app-material-ripple-release-51 C:\Users\pgast\.gradle\caches\8.13\transforms\b35e87feb3deae795aef62af73a28ea1\transformed\material-ripple-release\res
+com.registro.empleados.app-navigation-runtime-ktx-2.7.6-52 C:\Users\pgast\.gradle\caches\8.13\transforms\b37b3b127d28acc3bc263307eea83cf4\transformed\navigation-runtime-ktx-2.7.6\res
+com.registro.empleados.app-sqlite-framework-2.4.0-53 C:\Users\pgast\.gradle\caches\8.13\transforms\baf90543a640383975eebdc8c3382c1d\transformed\sqlite-framework-2.4.0\res
+com.registro.empleados.app-emoji2-1.3.0-54 C:\Users\pgast\.gradle\caches\8.13\transforms\bc6f777b4f8109e05170311b79b360b8\transformed\emoji2-1.3.0\res
+com.registro.empleados.app-animation-core-release-55 C:\Users\pgast\.gradle\caches\8.13\transforms\bf59f5330901329800d1256921b90454\transformed\animation-core-release\res
+com.registro.empleados.app-ui-release-56 C:\Users\pgast\.gradle\caches\8.13\transforms\c7f1b1776bbae9b12885dc27df185ebb\transformed\ui-release\res
+com.registro.empleados.app-core-ktx-1.12.0-57 C:\Users\pgast\.gradle\caches\8.13\transforms\c824d4e0549fc66bd9d4e496d5d88028\transformed\core-ktx-1.12.0\res
+com.registro.empleados.app-lifecycle-livedata-core-2.7.0-58 C:\Users\pgast\.gradle\caches\8.13\transforms\c9517c153e7ddfcb67935704173f80e9\transformed\lifecycle-livedata-core-2.7.0\res
+com.registro.empleados.app-lifecycle-viewmodel-compose-2.7.0-59 C:\Users\pgast\.gradle\caches\8.13\transforms\cda8f3103e790c193bf93af268415abb\transformed\lifecycle-viewmodel-compose-2.7.0\res
+com.registro.empleados.app-room-ktx-2.6.1-60 C:\Users\pgast\.gradle\caches\8.13\transforms\d0f386398eb3a9aadffb0d0c95dbd034\transformed\room-ktx-2.6.1\res
+com.registro.empleados.app-startup-runtime-1.1.1-61 C:\Users\pgast\.gradle\caches\8.13\transforms\d18ce0080c19ed46320508bb0300d1cf\transformed\startup-runtime-1.1.1\res
+com.registro.empleados.app-room-runtime-2.6.1-62 C:\Users\pgast\.gradle\caches\8.13\transforms\d7dfb973688429ddaa0bb40a9f62ec81\transformed\room-runtime-2.6.1\res
+com.registro.empleados.app-annotation-experimental-1.4.0-63 C:\Users\pgast\.gradle\caches\8.13\transforms\d8431272dfb70bb7d27d534e8fc64f7a\transformed\annotation-experimental-1.4.0\res
+com.registro.empleados.app-activity-compose-1.8.2-64 C:\Users\pgast\.gradle\caches\8.13\transforms\f29ac6892d146b5a746a807a0d639d6a\transformed\activity-compose-1.8.2\res
+com.registro.empleados.app-customview-poolingcontainer-1.0.0-65 C:\Users\pgast\.gradle\caches\8.13\transforms\f498455ad2849c2a884594dde5fa92bc\transformed\customview-poolingcontainer-1.0.0\res
+com.registro.empleados.app-window-1.0.0-66 C:\Users\pgast\.gradle\caches\8.13\transforms\f562e5e22ad8340facb2e2069ba2598e\transformed\window-1.0.0\res
+com.registro.empleados.app-ui-util-release-67 C:\Users\pgast\.gradle\caches\8.13\transforms\f9501e133b408dbb2de68367b36dd22e\transformed\ui-util-release\res
+com.registro.empleados.app-work-runtime-ktx-2.9.0-68 C:\Users\pgast\.gradle\caches\8.13\transforms\fca6fce824f4a4d2233c36c3daafa5e7\transformed\work-runtime-ktx-2.9.0\res
+com.registro.empleados.app-activity-ktx-1.8.2-69 C:\Users\pgast\.gradle\caches\8.13\transforms\fd0726c7392c8a265669dd4268bc5abb\transformed\activity-ktx-1.8.2\res
