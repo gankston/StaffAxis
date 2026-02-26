@@ -51,10 +51,9 @@ class InsertEmpleadoUseCase @Inject constructor(
         sector: String,
         fechaIngreso: LocalDate
     ) {
-        // El legajo puede estar vacío, se generará automáticamente
-        // if (legajo.isBlank()) {
-        //     throw IllegalArgumentException("El legajo es obligatorio")
-        // }
+        if (legajo.isBlank()) {
+            throw IllegalArgumentException("El DNI es obligatorio")
+        }
         
         if (nombreCompleto.isBlank()) {
             throw IllegalArgumentException("El nombre completo es obligatorio")

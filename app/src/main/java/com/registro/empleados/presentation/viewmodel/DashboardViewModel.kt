@@ -303,7 +303,7 @@ class DashboardViewModel @Inject constructor(
             it.copy(
                 empleadoEncontrado = empleado,
                 fechaSeleccionada = LocalDate.now().format(DISPLAY_DATE_FORMATTER),
-                horasSeleccionadas = 0,
+                horasSeleccionadas = 8,
                 observaciones = "",
                 mostrarDialogoRegistroHoras = true,
                 error = null
@@ -338,7 +338,7 @@ class DashboardViewModel @Inject constructor(
                         // Limpiar selección para que la tarjeta no quede marcada
                         empleadoEncontrado = null,
                         fechaSeleccionada = "",
-                        horasSeleccionadas = 0,
+                        horasSeleccionadas = 8,
                         observaciones = "",
                         isLoading = false
                     )
@@ -435,19 +435,19 @@ class DashboardViewModel @Inject constructor(
                 val state = _uiState.value
                 val sectorSeleccionado = appPreferences.getSectorSeleccionado() ?: "RUTA 5"
                 
+                if (state.nuevoEmpleadoLegajo.isBlank()) {
+                    _uiState.value = state.copy(error = "El DNI es obligatorio")
+                    return@launch
+                }
                 if (state.nuevoEmpleadoNombre.isBlank() || state.nuevoEmpleadoApellido.isBlank()) {
                     _uiState.value = state.copy(error = "El nombre y apellido son obligatorios")
                     return@launch
                 }
 
-                val legajo = if (state.nuevoEmpleadoLegajo.isBlank()) {
-                    null
-                } else {
-                    state.nuevoEmpleadoLegajo
-                }
+                val legajo = state.nuevoEmpleadoLegajo.trim()
 
                 insertEmpleadoUseCase(
-                    legajo = legajo ?: "",
+                    legajo = legajo,
                     nombreCompleto = "${state.nuevoEmpleadoApellido.trim()} ${state.nuevoEmpleadoNombre.trim()}",
                     sector = sectorSeleccionado,
                     fechaIngreso = LocalDate.now()
@@ -459,7 +459,7 @@ class DashboardViewModel @Inject constructor(
                 _uiState.value = state.copy(
                     mostrarDialogoNuevoEmpleado = false,
                     mostrarMensajeEmpleadoCreado = true,
-                    mensajeEmpleadoCreado = "✅ Empleado creado: ${state.nuevoEmpleadoApellido.trim()} ${state.nuevoEmpleadoNombre.trim()} (DNI: ${legajo ?: "Sin DNI"})",
+                    mensajeEmpleadoCreado = "✅ Empleado creado: ${state.nuevoEmpleadoApellido.trim()} ${state.nuevoEmpleadoNombre.trim()} (DNI: $legajo)",
                     nuevoEmpleadoLegajo = "",
                     nuevoEmpleadoNombre = "",
                     nuevoEmpleadoApellido = "",
@@ -478,13 +478,24 @@ class DashboardViewModel @Inject constructor(
     }
 
     fun abrirDialogoEditarEmpleado(empleado: Empleado) {
-        _uiState.value = _uiState.value.copy(
-            mostrarDialogoEditarEmpleado = true,
-            empleadoParaEditar = empleado,
-            editarEmpleadoLegajo = empleado.legajo ?: "",
-            editarEmpleadoNombre = empleado.nombreCompleto,
-            editarEmpleadoSector = empleado.sector
-        )
+        viewModelScope.launch {
+            val legajoKey = empleado.legajo ?: "SIN_LEGAJO_${empleado.nombreCompleto.hashCode()}"
+            val hace6Meses = LocalDate.now().minusMonths(6)
+            val hoy = LocalDate.now()
+            val registros = registroAsistenciaRepository.getRegistrosByLegajoYRango(
+                legajoKey,
+                hace6Meses.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                hoy.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+            )
+            _uiState.value = _uiState.value.copy(
+                mostrarDialogoEditarEmpleado = true,
+                empleadoParaEditar = empleado,
+                editarEmpleadoLegajo = empleado.legajo ?: "",
+                editarEmpleadoNombre = empleado.nombreCompleto,
+                editarEmpleadoSector = empleado.sector,
+                registrosParaEditar = registros
+            )
+        }
     }
 
     fun cerrarDialogoEditarEmpleado() {
@@ -493,8 +504,57 @@ class DashboardViewModel @Inject constructor(
             empleadoParaEditar = null,
             editarEmpleadoLegajo = "",
             editarEmpleadoNombre = "",
-            editarEmpleadoSector = ""
+            editarEmpleadoSector = "",
+            registrosParaEditar = emptyList(),
+            registroEnEdicion = null
         )
+    }
+
+    fun abrirEdicionRegistroHoras(registro: RegistroAsistencia) {
+        _uiState.value = _uiState.value.copy(
+            registroEnEdicion = registro,
+            horasEdicion = registro.horasTrabajadas
+        )
+    }
+
+    fun cerrarEdicionRegistroHoras() {
+        _uiState.value = _uiState.value.copy(registroEnEdicion = null)
+    }
+
+    fun onHorasEdicionChanged(horas: Int) {
+        if (horas in 1..16) {
+            _uiState.value = _uiState.value.copy(horasEdicion = horas)
+        }
+    }
+
+    fun guardarEdicionRegistroHoras() {
+        val registro = _uiState.value.registroEnEdicion ?: return
+        val nuevasHoras = _uiState.value.horasEdicion
+        viewModelScope.launch {
+            try {
+                registroAsistenciaRepository.updateRegistro(
+                    registro.copy(horasTrabajadas = nuevasHoras)
+                )
+                val empleado = _uiState.value.empleadoParaEditar ?: return@launch
+                val legajoKey = empleado.legajo ?: "SIN_LEGAJO_${empleado.nombreCompleto.hashCode()}"
+                val hace6Meses = LocalDate.now().minusMonths(6)
+                val hoy = LocalDate.now()
+                val registros = registroAsistenciaRepository.getRegistrosByLegajoYRango(
+                    legajoKey,
+                    hace6Meses.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                    hoy.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                )
+                _uiState.value = _uiState.value.copy(
+                    registroEnEdicion = null,
+                    registrosParaEditar = registros,
+                    mostrarMensajeEmpleadoEditado = true,
+                    mensajeEmpleadoEditado = "✅ Horas actualizadas: ${registro.fecha} - ${nuevasHoras}h"
+                )
+                recalcularColoresEmpleados()
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(error = "Error al actualizar: ${e.message}")
+            }
+        }
     }
 
     fun onEditarEmpleadoLegajoChanged(legajo: String) {
@@ -731,6 +791,9 @@ data class DashboardUiState(
     val editarEmpleadoLegajo: String = "",
     val editarEmpleadoNombre: String = "",
     val editarEmpleadoSector: String = "",
+    val registrosParaEditar: List<RegistroAsistencia> = emptyList(),
+    val registroEnEdicion: RegistroAsistencia? = null,
+    val horasEdicion: Int = 8,
     val mostrarDialogoConfirmarEliminar: Boolean = false,
     val empleadoParaEliminar: Empleado? = null,
     val mostrarMensajeEliminacion: Boolean = false,

@@ -570,8 +570,8 @@ CABANA
 translateX
 okhttp.OkHttpClient
 $onDismiss
-TextView
 $fechaInicio$delegate
+TextView
 setEpicenterBounds
 android.view.accessibility.extra.DATA...
 ImageView
@@ -878,7 +878,6 @@ peerSettings
 .immediate
 SecureOff
 char
-$motivo$delegate
 /index.html
 None
 ESTEBAN
@@ -1046,6 +1045,7 @@ busqueda
 tail
 22492209
 0.00
+abrirEdicionRegistroHoras
 currentView
 CESPEDES
 $diasLaborales
@@ -1136,6 +1136,7 @@ sQLiteOpenHelper
 strokeMiterLimit
 DROP_OLDEST
 SetText
+Motivo
 Seleccionado
 android.net.Uri
 buscarEmpleadoSimpleUseCase
@@ -1353,8 +1354,8 @@ workManagerInitializer
 Expand
 ALBERTO
 unique
-0h
 TLS_ECDHE_ECDSA_WITH_NULL_SHA
+0h
 setCurrentState
 NICOLAS
 Retry
@@ -1790,6 +1791,7 @@ GR
 message
 ausentes
 ACTION_DRAG_DROP
+guardarEdicionRegistroHoras
 Mouse
 Offset.Unspecified
 Measuring
@@ -1924,9 +1926,9 @@ systemGestures
 HTTP_1_1
 onNuevoEmpleadoApellidoChanged
 OpenSSLSocketImpl
-MagnifierPositionInRoot
 IBAÑEZ
 newInstance
+MagnifierPositionInRoot
 clock
 MenuItemWrapper
 LocalAutofillTree
@@ -2267,6 +2269,7 @@ AUTO_AYLAN
 proxyAuthenticator
 _reusableCancellableContinuation
 android.view.View
+onHorasEdicionChanged
 java.lang.Byte
 keyboardActions
 $mostrarDatePickerFin$delegate
@@ -2289,8 +2292,8 @@ PUSH_PROMISE
 kotlin.collections.Iterator
 CLOSED_EMPTY
 TEVEZ
-SecureOn
 res/
+SecureOn
 job
 3964
 SetTextSubstitution
@@ -2395,8 +2398,8 @@ $this$Card
 PageLeft
 :memory:
 icon
-ImageButton
 $empleado
+ImageButton
 fechaInicio
 TLSv1
 ANGEL
@@ -2639,6 +2642,7 @@ ACTION_SCROLL_LEFT
 kotlin.Comparable
 HTTP/1.
 groupSlotIndex
+registrosParaEditar
 baseKey
 android.app.ActivityThread
 horas_trabajadas
@@ -2696,6 +2700,7 @@ $listenersList
 39364061
 CONDITION_FALSE
 SOURCE_DRAG_AND_DROP
+cerrarEdicionRegistroHoras
 UnicodeLittle
 starting
 HideKeyboard

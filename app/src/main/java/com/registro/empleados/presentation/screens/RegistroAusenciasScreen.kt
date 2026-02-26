@@ -664,7 +664,7 @@ fun DialogoAgregarAusencia(
     var empleadoSeleccionado by remember { mutableStateOf<com.registro.empleados.domain.model.Empleado?>(null) }
     var fechaInicio by remember { mutableStateOf(LocalDate.now()) }
     var fechaFin by remember { mutableStateOf(LocalDate.now()) }
-    var motivo by remember { mutableStateOf("") }
+    val motivoFijo = "Accidente laboral"
     var expandido by remember { mutableStateOf(false) }
     var mostrarDatePickerInicio by remember { mutableStateOf(false) }
     var mostrarDatePickerFin by remember { mutableStateOf(false) }
@@ -815,16 +815,18 @@ fun DialogoAgregarAusencia(
                 
                 Spacer(modifier = Modifier.height(16.dp))
                 
-                // Motivo (opcional)
+                // Motivo fijo: Accidente laboral
                 OutlinedTextField(
-                    value = motivo,
-                    onValueChange = { motivo = it },
-                    label = { Text("Motivo (opcional)") },
+                    value = motivoFijo,
+                    onValueChange = { },
+                    label = { Text("Motivo") },
                     modifier = Modifier.fillMaxWidth(),
-                    maxLines = 3,
+                    readOnly = true,
+                    enabled = false,
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedTextColor = Color.White,
-                        unfocusedTextColor = Color.White
+                        disabledTextColor = Color.White,
+                        disabledBorderColor = Color(0xFF555555),
+                        disabledContainerColor = Color(0xFF2A2A3E)
                     )
                 )
             }
@@ -838,7 +840,7 @@ fun DialogoAgregarAusencia(
                             nombreEmpleado = empleadoSeleccionado!!.nombreCompleto,
                             fechaInicio = fechaInicio,
                             fechaFin = fechaFin,
-                            motivo = motivo.ifBlank { null }
+                            motivo = motivoFijo
                         )
                         onAusenciaCreada()
                     }
@@ -935,7 +937,6 @@ fun DialogoEditarAusencia(
 ) {
     var fechaInicio by remember { mutableStateOf(ausencia.fechaInicio) }
     var fechaFin by remember { mutableStateOf(ausencia.fechaFin) }
-    var motivo by remember { mutableStateOf(ausencia.motivo ?: "") }
     var mostrarDatePickerInicio by remember { mutableStateOf(false) }
     var mostrarDatePickerFin by remember { mutableStateOf(false) }
     
@@ -1019,16 +1020,18 @@ fun DialogoEditarAusencia(
                 
                 Spacer(modifier = Modifier.height(16.dp))
                 
-                // Motivo (opcional)
+                // Motivo fijo: Accidente laboral
                 OutlinedTextField(
-                    value = motivo,
-                    onValueChange = { motivo = it },
-                    label = { Text("Motivo (opcional)") },
+                    value = "Accidente laboral",
+                    onValueChange = { },
+                    label = { Text("Motivo") },
                     modifier = Modifier.fillMaxWidth(),
-                    maxLines = 3,
+                    readOnly = true,
+                    enabled = false,
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedTextColor = Color.White,
-                        unfocusedTextColor = Color.White
+                        disabledTextColor = Color.White,
+                        disabledBorderColor = Color(0xFF555555),
+                        disabledContainerColor = Color(0xFF2A2A3E)
                     )
                 )
             }
@@ -1036,7 +1039,7 @@ fun DialogoEditarAusencia(
         confirmButton = {
             Button(
                 onClick = {
-                    onGuardar(fechaInicio, fechaFin, motivo.ifBlank { null })
+                    onGuardar(fechaInicio, fechaFin, "Accidente laboral")
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFF26C6DA)

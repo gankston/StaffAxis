@@ -1,6 +1,8 @@
 package com.registro.empleados.presentation.components
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.background
@@ -50,6 +52,10 @@ fun ResponsiveDashboard(
     onEditarEmpleadoSectorChanged: (String) -> Unit = {},
     onGuardarEmpleadoEditado: () -> Unit = {},
     onCerrarDialogoEditarEmpleado: () -> Unit = {},
+    onEditarRegistroHoras: (com.registro.empleados.domain.model.RegistroAsistencia) -> Unit = {},
+    onCerrarEdicionRegistroHoras: () -> Unit = {},
+    onHorasEdicionChanged: (Int) -> Unit = {},
+    onGuardarEdicionRegistroHoras: () -> Unit = {},
     onAbrirDialogoConfirmarEliminar: (Empleado) -> Unit = {},
     onCerrarDialogoConfirmarEliminar: () -> Unit = {},
     onEliminarEmpleadoConfirmado: () -> Unit = {},
@@ -236,7 +242,11 @@ fun ResponsiveDashboard(
                 onConfirm = onGuardarEmpleadoEditado,
                 onDelete = {
                     onAbrirDialogoConfirmarEliminar(uiState.empleadoParaEditar)
-                }
+                },
+                onEditarRegistroHoras = onEditarRegistroHoras,
+                onCerrarEdicionRegistroHoras = onCerrarEdicionRegistroHoras,
+                onHorasEdicionChanged = onHorasEdicionChanged,
+                onGuardarEdicionRegistroHoras = onGuardarEdicionRegistroHoras
             )
         }
         
@@ -321,9 +331,10 @@ private fun NuevoEmpleadoDialog(
                 OutlinedTextField(
                     value = uiState.nuevoEmpleadoLegajo,
                     onValueChange = onLegajoChanged,
-                    label = { Text("DNI (opcional)") },
-                    placeholder = { Text("Se generará automáticamente") },
-                    modifier = Modifier.fillMaxWidth()
+                    label = { Text("DNI *") },
+                    placeholder = { Text("Ingrese el DNI") },
+                    modifier = Modifier.fillMaxWidth(),
+                    isError = uiState.nuevoEmpleadoLegajo.isBlank()
                 )
                 OutlinedTextField(
                     value = uiState.nuevoEmpleadoNombre,
@@ -351,7 +362,7 @@ private fun NuevoEmpleadoDialog(
         confirmButton = {
             Button(
                 onClick = onConfirm,
-                enabled = uiState.nuevoEmpleadoNombre.isNotBlank() && uiState.nuevoEmpleadoApellido.isNotBlank()
+                enabled = uiState.nuevoEmpleadoLegajo.isNotBlank() && uiState.nuevoEmpleadoNombre.isNotBlank() && uiState.nuevoEmpleadoApellido.isNotBlank()
             ) {
                 Text("Crear")
             }
@@ -488,16 +499,54 @@ private fun EditarEmpleadoDialog(
     onNombreChanged: (String) -> Unit,
     onSectorChanged: (String) -> Unit,
     onConfirm: () -> Unit,
-    onDelete: () -> Unit
+    onDelete: () -> Unit,
+    onEditarRegistroHoras: (com.registro.empleados.domain.model.RegistroAsistencia) -> Unit = {},
+    onCerrarEdicionRegistroHoras: () -> Unit = {},
+    onHorasEdicionChanged: (Int) -> Unit = {},
+    onGuardarEdicionRegistroHoras: () -> Unit = {}
 ) {
+    val scrollState = rememberScrollState()
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text("Editar Empleado") },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(max = 400.dp)
+                    .verticalScroll(scrollState),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
                 OutlinedTextField(value = uiState.editarEmpleadoLegajo, onValueChange = onLegajoChanged, label = { Text("DNI") }, modifier = Modifier.fillMaxWidth())
                 OutlinedTextField(value = uiState.editarEmpleadoNombre, onValueChange = onNombreChanged, label = { Text("Nombre Completo") }, isError = uiState.editarEmpleadoNombre.isBlank(), modifier = Modifier.fillMaxWidth())
                 OutlinedTextField(value = uiState.editarEmpleadoSector, onValueChange = onSectorChanged, label = { Text("Sector") }, modifier = Modifier.fillMaxWidth())
+                Spacer(modifier = Modifier.height(8.dp))
+                Text("Horas cargadas", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                if (uiState.registrosParaEditar.isEmpty()) {
+                    Text("No hay horas registradas en los últimos 6 meses", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                } else {
+                    uiState.registrosParaEditar.forEach { registro ->
+                        val fechaFormato = try {
+                            val d = java.time.LocalDate.parse(registro.fecha)
+                            d.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                        } catch (_: Exception) { registro.fecha }
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 4.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(fechaFormato, style = MaterialTheme.typography.bodyMedium)
+                                Text("${registro.horasTrabajadas}h", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
+                            }
+                            IconButton(onClick = { onEditarRegistroHoras(registro) }, modifier = Modifier.size(36.dp)) {
+                                Icon(Icons.Default.Edit, "Editar horas", tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(20.dp))
+                            }
+                        }
+                    }
+                }
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(
                     onClick = onDelete,
@@ -517,6 +566,29 @@ private fun EditarEmpleadoDialog(
         },
         dismissButton = { TextButton(onClick = onDismiss) { Text("Cancelar") } }
     )
+    if (uiState.registroEnEdicion != null) {
+        AlertDialog(
+            onDismissRequest = onCerrarEdicionRegistroHoras,
+            title = { Text("Editar Horas") },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                    Text("Fecha: ${uiState.registroEnEdicion!!.fecha}", style = MaterialTheme.typography.bodyMedium)
+                    Text("Horas: ${uiState.horasEdicion}h", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                    Slider(
+                        value = uiState.horasEdicion.toFloat(),
+                        onValueChange = { onHorasEdicionChanged(it.roundToInt().coerceIn(1, 16)) },
+                        valueRange = 1f..16f,
+                        steps = 14,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            },
+            confirmButton = {
+                Button(onClick = onGuardarEdicionRegistroHoras) { Text("Guardar") }
+            },
+            dismissButton = { TextButton(onClick = onCerrarEdicionRegistroHoras) { Text("Cancelar") } }
+        )
+    }
 }
 
 @Composable

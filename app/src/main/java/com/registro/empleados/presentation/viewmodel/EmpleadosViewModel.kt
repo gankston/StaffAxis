@@ -273,7 +273,13 @@ class EmpleadosViewModel @Inject constructor(
                     intentoGuardar = true
                 )
                 
-                // Validar SOLO el nombre (legajo es opcional)
+                // Validar DNI, nombre y apellido obligatorios
+                if (_uiState.value.legajo.isNullOrBlank()) {
+                    _uiState.value = _uiState.value.copy(
+                        error = "El DNI es obligatorio"
+                    )
+                    return@launch
+                }
                 if (_uiState.value.nombreCompleto.isBlank()) {
                     _uiState.value = _uiState.value.copy(
                         error = "El nombre completo es obligatorio"
@@ -281,8 +287,9 @@ class EmpleadosViewModel @Inject constructor(
                     return@launch
                 }
                 
+                val legajoTrimmed = _uiState.value.legajo!!.trim()
                 val nuevoEmpleado = Empleado(
-                    legajo = _uiState.value.legajo?.trim() ?: "",
+                    legajo = legajoTrimmed,
                     nombreCompleto = _uiState.value.nombreCompleto.trim(),
                     sector = _uiState.value.sector.ifBlank { "Sin especificar" },
                     fechaIngreso = LocalDate.now(),
@@ -290,7 +297,7 @@ class EmpleadosViewModel @Inject constructor(
                 )
                 
                 insertEmpleadoUseCase(
-                    legajo = nuevoEmpleado.legajo ?: "",
+                    legajo = legajoTrimmed,
                     nombreCompleto = nuevoEmpleado.nombreCompleto,
                     sector = nuevoEmpleado.sector,
                     fechaIngreso = nuevoEmpleado.fechaIngreso

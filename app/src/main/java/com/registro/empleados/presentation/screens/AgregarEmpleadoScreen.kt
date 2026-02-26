@@ -69,16 +69,21 @@ fun AgregarEmpleadoScreen(
                     fontWeight = FontWeight.Bold
                 )
 
-                // Campo DNI (opcional)
+                // Campo DNI (obligatorio)
                 OutlinedTextField(
-                    value = uiState.legajo ?: "",  // Manejar null
-                    onValueChange = { viewModel.onLegajoChanged(it.ifBlank { null }) },  // null si vacío
-                    label = { Text("DNI (Opcional)") },  // CAMBIAR LABEL
-                    placeholder = { Text("Dejar vacío si no tiene") },
+                    value = uiState.legajo ?: "",
+                    onValueChange = { viewModel.onLegajoChanged(it.ifBlank { null }) },
+                    label = { Text("DNI *") },
+                    placeholder = { Text("Ingrese el DNI") },
                     modifier = Modifier.fillMaxWidth(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                     singleLine = true,
-                    isError = uiState.error?.contains("legajo") == true
+                    isError = (uiState.legajo.isNullOrBlank() && uiState.intentoGuardar) || uiState.error?.contains("legajo") == true,
+                    supportingText = {
+                        if (uiState.legajo.isNullOrBlank() && uiState.intentoGuardar) {
+                            Text("El DNI es obligatorio", color = MaterialTheme.colorScheme.error)
+                        }
+                    }
                 )
 
                 // Campo Nombre Completo
@@ -122,7 +127,8 @@ fun AgregarEmpleadoScreen(
                     },
                     modifier = Modifier.fillMaxWidth(),
                     enabled = !uiState.isLoading && 
-                             uiState.nombreCompleto.isNotBlank()
+                             uiState.nombreCompleto.isNotBlank() &&
+                             !uiState.legajo.isNullOrBlank()
                 ) {
                     if (uiState.isLoading) {
                         CircularProgressIndicator(
@@ -159,7 +165,7 @@ fun AgregarEmpleadoScreen(
                             style = MaterialTheme.typography.bodySmall
                         )
                         Text(
-                            text = "• El DNI es opcional y se puede asignar después",
+                            text = "• El DNI es obligatorio",
                             style = MaterialTheme.typography.bodySmall
                         )
                         Text(
