@@ -57,7 +57,6 @@ Marking string:switch_role:2131558550 reachable: referenced from in_memory_r8_ba
 Marking id:view_tree_on_back_pressed_dispatcher_owner:2131230906 reachable: referenced from in_memory_r8_base_classes0.dex
 Marking string:m3c_dropdown_menu_expanded:2131558510 reachable: referenced from in_memory_r8_base_classes0.dex
 Marking string:m3c_dropdown_menu_collapsed:2131558509 reachable: referenced from in_memory_r8_base_classes0.dex
-Marking id:pooling_container_listener_holder_tag:2131230842 reachable: referenced from in_memory_r8_base_classes0.dex
 Marking string:m3c_date_picker_scroll_to_earlier_years:2131558489 reachable: referenced from in_memory_r8_base_classes0.dex
 Marking string:m3c_date_picker_scroll_to_later_years:2131558490 reachable: referenced from in_memory_r8_base_classes0.dex
 Marking string:m3c_date_picker_year_picker_pane_title:2131558499 reachable: referenced from in_memory_r8_base_classes0.dex
@@ -79,6 +78,7 @@ Marking dimen:abc_search_view_preferred_width:2131099703 reachable: referenced f
 Marking attr:radioButtonStyle:2130903268 reachable: referenced from in_memory_r8_base_classes0.dex
 Marking string:m3c_date_picker_switch_to_day_selection:2131558492 reachable: referenced from in_memory_r8_base_classes0.dex
 Marking string:m3c_date_picker_switch_to_year_selection:2131558496 reachable: referenced from in_memory_r8_base_classes0.dex
+Marking id:pooling_container_listener_holder_tag:2131230842 reachable: referenced from in_memory_r8_base_classes0.dex
 Marking bool:workmanager_test_configuration:2130968581 reachable: referenced from in_memory_r8_base_classes0.dex
 Marking drawable:abc_textfield_default_mtrl_alpha:2131165258 reachable: referenced from in_memory_r8_base_classes0.dex
 Marking drawable:abc_ab_share_pack_mtrl_alpha:2131165184 reachable: referenced from in_memory_r8_base_classes0.dex
@@ -158,7 +158,6 @@ Marking layout:abc_popup_menu_item_layout:2131427347 reachable: referenced from 
 Marking dimen:abc_config_prefDialogWidth:2131099671 reachable: referenced from in_memory_r8_base_classes0.dex
 Marking layout:abc_popup_menu_header_item_layout:2131427346 reachable: referenced from in_memory_r8_base_classes0.dex
 Marking attr:seekBarStyle:2130903279 reachable: referenced from in_memory_r8_base_classes0.dex
-Marking id:tag_unhandled_key_event_manager:2131230888 reachable: referenced from in_memory_r8_base_classes0.dex
 Marking attr:alpha:2130903084 reachable: referenced from in_memory_r8_base_classes0.dex
 Marking attr:lStar:2130903210 reachable: referenced from in_memory_r8_base_classes0.dex
 Marking drawable:abc_cab_background_top_material:2131165200 reachable: referenced from in_memory_r8_base_classes0.dex
@@ -185,7 +184,6 @@ Marking string:m3c_dialog:2131558508 reachable: referenced from in_memory_r8_bas
 Marking id:action_bar_activity_content:2131230760 reachable: referenced from in_memory_r8_base_classes0.dex
 Marking attr:nestedScrollViewStyle:2130903241 reachable: referenced from in_memory_r8_base_classes0.dex
 Marking attr:spinnerStyle:2130903290 reachable: referenced from in_memory_r8_base_classes0.dex
-Marking drawable:logo_staffaxis:2131165277 reachable: referenced from in_memory_r8_base_classes0.dex
 Marking layout:abc_dialog_title_material:2131427340 reachable: referenced from in_memory_r8_base_classes0.dex
 Marking layout:abc_screen_toolbar:2131427351 reachable: referenced from in_memory_r8_base_classes0.dex
 Marking layout:abc_screen_simple_overlay_action_mode:2131427350 reachable: referenced from in_memory_r8_base_classes0.dex
@@ -215,10 +213,12 @@ Marking string:m3c_date_input_title:2131558484 reachable: referenced from in_mem
 Marking color:abc_decor_view_status_guard_light:2131034118 reachable: referenced from in_memory_r8_base_classes0.dex
 Marking color:abc_decor_view_status_guard:2131034117 reachable: referenced from in_memory_r8_base_classes0.dex
 Marking id:spacer:2131230869 reachable: referenced from in_memory_r8_base_classes0.dex
+Marking id:tag_unhandled_key_event_manager:2131230888 reachable: referenced from in_memory_r8_base_classes0.dex
 Marking id:tag_on_receive_content_mime_types:2131230884 reachable: referenced from in_memory_r8_base_classes0.dex
 Marking id:tag_accessibility_pane_title:2131230881 reachable: referenced from in_memory_r8_base_classes0.dex
 Marking id:tag_on_receive_content_listener:2131230883 reachable: referenced from in_memory_r8_base_classes0.dex
 Marking string:m3c_date_picker_today_description:2131558498 reachable: referenced from in_memory_r8_base_classes0.dex
+Marking id:view_tree_saved_state_registry_owner:2131230907 reachable: referenced from in_memory_r8_base_classes0.dex
 Marking id:tag_accessibility_actions:2131230878 reachable: referenced from in_memory_r8_base_classes0.dex
 Marking id:accessibility_action_clickable_span:2131230726 reachable: referenced from in_memory_r8_base_classes0.dex
 Marking id:tag_accessibility_clickable_spans:2131230879 reachable: referenced from in_memory_r8_base_classes0.dex
@@ -227,11 +227,11 @@ Marking string:navigation_menu:2131558532 reachable: referenced from in_memory_r
 Marking string:close_drawer:2131558441 reachable: referenced from in_memory_r8_base_classes0.dex
 Marking attr:checkboxStyle:2130903119 reachable: referenced from in_memory_r8_base_classes0.dex
 Marking id:split_action_bar:2131230871 reachable: referenced from in_memory_r8_base_classes0.dex
+Marking drawable:logo_staffaxis:2131165277 reachable: referenced from in_memory_r8_base_classes0.dex
 Marking attr:actionOverflowButtonStyle:2130903072 reachable: referenced from in_memory_r8_base_classes0.dex
 Marking attr:toolbarStyle:2130903344 reachable: referenced from in_memory_r8_base_classes0.dex
 Marking attr:toolbarNavigationButtonStyle:2130903343 reachable: referenced from in_memory_r8_base_classes0.dex
 Marking string:abc_action_bar_up_description:2131558401 reachable: referenced from in_memory_r8_base_classes0.dex
-Marking id:view_tree_saved_state_registry_owner:2131230907 reachable: referenced from in_memory_r8_base_classes0.dex
 Marking attr:buttonStyle:2130903112 reachable: referenced from in_memory_r8_base_classes0.dex
 Marking id:tag_state_description:2131230886 reachable: referenced from in_memory_r8_base_classes0.dex
 Marking id:accessibility_custom_action_0:2131230727 reachable: referenced from in_memory_r8_base_classes0.dex
@@ -320,8 +320,8 @@ Selection
 displayName
 BEGIN_OBJECT
 mm:ss
-2331
 H
+2331
 record.loggerName
 Prefix
 N
@@ -346,8 +346,8 @@ _
 a
 Center
 b
-address
 user_query
+address
 SUCCESS
 c
 ACTION_CLEAR_ACCESSIBILITY_FOCUS
@@ -361,7 +361,6 @@ h
 AUTO_TORO
 2341
 kotlin.String
-l
 RESUMING_BY_EB
 OnClick
 cookieJar
@@ -394,7 +393,6 @@ KEY_FOREGROUND_SERVICE_TYPE
 Checkbox
 Multiply
 removeMethod
-sectorSeleccionado
 AUTO_REINALDO
 SANDRO
 ACTION_SCROLL_FORWARD
@@ -430,8 +428,8 @@ SDK_INT
 WordBreak.None
 expanded
 2369
-unsupported
 http2Connection
+unsupported
 2368
 2367
 provider
@@ -457,8 +455,8 @@ org.bouncycastle.jsse.provider.Bouncy...
 ForceStopRunnable$Rcvr
 nuevoEmpleadoLegajo
 legajoEmpleado
-CARLOS
 Filled.FilterListOff
+CARLOS
 SearchView
 2378
 2377
@@ -494,8 +492,8 @@ serverProviderClass
 TLS_KRB5_WITH_DES_CBC_SHA
 toggleableState
 EmojiSupportMatch.Default
-byte
 TextSubstitution
+byte
 $this$Button
 ExcelExport
 31496973
@@ -529,6 +527,7 @@ es_laboral
 mandatory
 HEADERS
 ACTION_PAGE_UP
+$encargado
 FloatAnimation
 Totales
 %2e
@@ -536,8 +535,8 @@ java.lang.String
 $uiState
 %40
 HorizontalScrollAxisRange
-SSL_RSA_WITH_RC4_128_MD5
 $context
+SSL_RSA_WITH_RC4_128_MD5
 Unspecified
 cerrarDialogoConfirmarEliminar
 flex_duration
@@ -547,7 +546,6 @@ Filled.Search
 LookaheadMeasuring
 multipart/alternative
 VILLAGRAN
-palabra
 bytes_so_far
 AM/PM
 android.intent.action.TIME_TICK
@@ -723,8 +721,8 @@ Dashboard
 20877325
 source
 secure
-SelectionStart
 36621974
+SelectionStart
 FIN_DE_SEMANA
 Compose:Composer.dispose
 android.intent.action.BATTERY_CHANGED
@@ -779,7 +777,6 @@ Password
 TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384
 SeekBar
 Fab
-Bienvenido
 EXTRA_SKIP_FILE_OPERATION
 rotation
 onInstall
@@ -793,9 +790,8 @@ endY
 endX
 KEY_BATTERY_NOT_LOW_PROXY_ENABLED
 UTF_16BE
-short
-Sentences
 fechaCreacion
+short
 FALSE
 startY
 3a56c5caadd4f1da2acaa21764bbf432
@@ -857,9 +853,9 @@ className
 promedioDiario
 CRUZ
 migrationContainer
-unknown
 mensajeRegistroExitoso
 undefined
+unknown
 proxySelector
 android.widget.SeekBar
 ALDERETE
@@ -912,8 +908,8 @@ CLOSE_HANDLER_INVOKED
 group
 java.lang.Cloneable
 com.registro.empleados.presentation.v...
-publicKey.encoded
 getConstructorId
+publicKey.encoded
 Compose:deactivate
 format
 Arial
@@ -953,8 +949,8 @@ kotlin.String.Companion
 SSL_NULL_WITH_NULL_NULL
 padding
 VEGA
-process
 LocalDensity
+process
 ActiveParent
 empleadosConHorasHoy
 okhttp.MockWebServer
@@ -1114,8 +1110,8 @@ ProfileInstaller
 BURGOS
 LOWER_CASE_WITH_DOTS
 java.lang.Boolean
-selector
 TLS
+selector
 Leading
 socketAddress
 classSimpleName
@@ -1191,8 +1187,8 @@ DpSize.Unspecified
 LLAMANI
 file
 Confirmar
-jxl.nopropertysets
 typeConverters
+jxl.nopropertysets
 traversalIndex
 Filled.People
 4228
@@ -1200,8 +1196,8 @@ CancellableContinuation
 COHAN
 Final
 map
-TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA
 $this$OutlinedButton
+TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA
 okhttp.Http2
 SSL_RSA_WITH_NULL_SHA
 max
@@ -1216,8 +1212,8 @@ menu
 uri
 url
 sslSocket.enabledCipherSuites
-Italic
 focusManager
+Italic
 entities
 ROBLE
 304
@@ -1388,7 +1384,6 @@ activity.windowManager.currentWindowM...
 supports
 getBoolean
 empleadosFiltrados
-valor
 p.second
 UPPER_CAMEL_CASE_WITH_SPACES
 :method
@@ -1456,7 +1451,6 @@ TLS_
 android.intent.action.BATTERY_LOW
 Compose:applyChanges
 ColorBurn
-$sector
 Empty
 androidx.work.util.id
 onBackPressedCallback
@@ -1544,8 +1538,8 @@ JUAREZ
 AUTO_SEGUNDO_MAR
 _availablePermits
 $downloadedApkPath$delegate
-Error:
 TLS_EMPTY_RENEGOTIATION_INFO_SCSV
+Error:
 SummaryInformation
 Continuar
 PENDING
@@ -1566,7 +1560,6 @@ BLOB
 Done
 minimum_retention_duration
 hostLifecycleState
-Characters
 GERARDO
 float
 Cursor
@@ -1608,8 +1601,8 @@ AndroidOwner:measureAndLayout
 ime
 $onBackInvoked
 android.text.EmojiConsistency
-.font
 configuration
+.font
 localRect
 ACTION_CUT
 cerrarMensajeEliminacion
@@ -1745,12 +1738,11 @@ delegateFactory
 index_
 trimPathEnd
 RadioButton
-Filled.Work
 encoding
 ES
 %02d/%02d
-TypefaceCompatUtil
 2119
+TypefaceCompatUtil
 warnIfOpen
 CheckBox
 AUTO_PONCE
@@ -1777,8 +1769,8 @@ $updateInfo$delegate
 WordBreak.Phrase
 2124
 android.graphics.drawable.VectorDrawable
-strokeLineCap
 index_Dependency_work_spec_id
+strokeLineCap
 oldValue
 next_job_scheduler_id
 Compact
@@ -1850,8 +1842,8 @@ PROPPATCH
 navigatorProvider
 Snackbar
 .xml
-RESULT_INSTALL_SKIP_FILE_SUCCESS
 CLAUDIO
+RESULT_INSTALL_SKIP_FILE_SUCCESS
 Strictness.Loose
 other
 viewModelStore
@@ -1932,9 +1924,9 @@ systemGestures
 HTTP_1_1
 onNuevoEmpleadoApellidoChanged
 OpenSSLSocketImpl
+MagnifierPositionInRoot
 IBAÑEZ
 newInstance
-MagnifierPositionInRoot
 clock
 MenuItemWrapper
 LocalAutofillTree
@@ -2002,8 +1994,8 @@ SystemAlarmService
 LineHeightStyle.Alignment.Proportional
 VIALSA
 suggest_intent_extra_data
-getAppBounds
 sqLiteDatabase
+getAppBounds
 nombreCompleto
 layoutResult
 AccessibilityNodeInfo.roleDescription
@@ -2265,8 +2257,8 @@ coroutineContext
 ThemeUtils
 backStackEntryId
 out_of_quota_policy
-notification
 Filled.FilterList
+notification
 AnimatedVisibility
 protocol
 SSL_DH_anon_EXPORT_WITH_RC4_40_MD5
@@ -2343,6 +2335,7 @@ ensureImeVisible
 $this$DatePickerDialog
 androidx.lifecycle.savedstate.vm.tag
 versionCode
+a0
 onConfiguracionCompletada
 AUTO_CEJAS
 WindowInsetsCompat
@@ -2748,10 +2741,9 @@ TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256
 te
 SSL_RSA_WITH_NULL_MD5
 android.speech.action.WEB_SEARCH
-Words
 closed
-to
 compressed
+to
 BRIZUELA
 _prev
 android.os.action.POWER_SAVE_MODE_CHA...
@@ -2841,8 +2833,8 @@ AUTO_MEDINA
 run_attempt_count
 none
 type
-jxl.country
 LocalView
+jxl.country
 STREAM_CLOSED
 statusBars
 connection
@@ -2878,8 +2870,8 @@ Next
 NOT_CROSSED
 SALDRIA
 ACTION_FOCUS
-jxl.nogc
 35778402
+jxl.nogc
 java.lang.Double
 columns
 range
@@ -2912,8 +2904,8 @@ BENJAMIN
 backoff_delay_duration
 strokeAlpha
 URI_MASKABLE
-SelectionEnd
 ON_CREATE
+SelectionEnd
 date
 dashed
 ENQUEUED
@@ -2944,8 +2936,8 @@ retrofit2.KotlinExtensions
 LocalHapticFeedback
 kotlin.jvm.internal.EnumCompanionObject
 TextMotion.Static
-RESULT_UNSUPPORTED_ART_VERSION
 MAXIMILIANO
+RESULT_UNSUPPORTED_ART_VERSION
 ACTION_COPY
 Pragma
 ACTION_FORCE_STOP_RESCHEDULE
@@ -2997,8 +2989,8 @@ Parcelizer
 ON_STOP
 kotlin.CharSequence
 BEGIN_ARRAY
-RESULT_IO_EXCEPTION
 ROQUE
+RESULT_IO_EXCEPTION
 intent
 .path
 IN_PROGRESS
