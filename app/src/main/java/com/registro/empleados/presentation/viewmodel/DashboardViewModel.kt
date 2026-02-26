@@ -6,6 +6,7 @@ import com.registro.empleados.domain.model.Empleado
 import com.registro.empleados.domain.model.RegistroAsistencia
 import com.registro.empleados.domain.usecase.empleado.BuscarEmpleadoSimpleUseCase
 import com.registro.empleados.domain.usecase.empleado.GetAllEmpleadosActivosUseCase
+import com.registro.empleados.domain.usecase.empleado.GetEmpleadoByLegajoUseCase
 import com.registro.empleados.domain.usecase.empleado.InsertEmpleadoUseCase
 import com.registro.empleados.domain.usecase.empleado.TieneHorasCargadasHoyUseCase
 import com.registro.empleados.domain.usecase.ausencia.EmpleadoTieneAusenciaEnFechaUseCase
@@ -32,6 +33,7 @@ import javax.inject.Inject
 class DashboardViewModel @Inject constructor(
     private val buscarEmpleadoSimpleUseCase: BuscarEmpleadoSimpleUseCase,
     private val getAllEmpleadosActivosUseCase: GetAllEmpleadosActivosUseCase,
+    private val getEmpleadoByLegajoUseCase: GetEmpleadoByLegajoUseCase,
     private val insertEmpleadoUseCase: InsertEmpleadoUseCase,
     private val tieneHorasCargadasHoyUseCase: TieneHorasCargadasHoyUseCase,
     private val empleadoTieneAusenciaEnFechaUseCase: EmpleadoTieneAusenciaEnFechaUseCase,
@@ -330,7 +332,7 @@ class DashboardViewModel @Inject constructor(
                 // VERIFICAR SI YA TIENE HORAS PARA ESTA FECHA ESPECÍFICA
                 val registrosExistentes = registroAsistenciaRepository.getRegistrosByLegajoAndFecha(legajoKey, fecha)
                 if (registrosExistentes.isNotEmpty()) {
-                    val mensaje = "Ya tiene ${registrosExistentes.first().horasTrabajadas}h cargadas para ${fechaStr}. Edite o elimine el registro existente."
+                    val mensaje = "Este empleado ya tiene ${registrosExistentes.first().horasTrabajadas}h cargadas para esta fecha. Puede haber sido cargado por otro capataz en otro sector. Use 'Editar horas' en la ficha del empleado para corregir."
                     _uiState.value = _uiState.value.copy(
                         mostrarDialogoRegistroHoras = false,
                         mostrarMensajeRegistroDuplicado = true,
@@ -444,22 +446,32 @@ class DashboardViewModel @Inject constructor(
                     return@launch
                 }
 
-                val legajo = state.nuevoEmpleadoLegajo.trim()
+                val legajo = state.nuevoEmpleadoLegajo.trim().uppercase()
+                val nombreCompleto = "${state.nuevoEmpleadoApellido.trim()} ${state.nuevoEmpleadoNombre.trim()}"
+
+                val empleadoExistente = getEmpleadoByLegajoUseCase(legajo)
+                if (empleadoExistente != null) {
+                    if (empleadoExistente.sector.equals(sectorSeleccionado, ignoreCase = true)) {
+                        _uiState.value = state.copy(error = "El empleado ya existe en su sector")
+                        return@launch
+                    }
+                    _uiState.value = state.copy(empleadoExistenteParaTraspaso = empleadoExistente)
+                    return@launch
+                }
 
                 insertEmpleadoUseCase(
                     legajo = legajo,
-                    nombreCompleto = "${state.nuevoEmpleadoApellido.trim()} ${state.nuevoEmpleadoNombre.trim()}",
+                    nombreCompleto = nombreCompleto,
                     sector = sectorSeleccionado,
                     fechaIngreso = LocalDate.now()
                 )
                 
-                // Recalcular colores después de crear empleado
                 recalcularColoresEmpleados()
                 
                 _uiState.value = state.copy(
                     mostrarDialogoNuevoEmpleado = false,
                     mostrarMensajeEmpleadoCreado = true,
-                    mensajeEmpleadoCreado = "✅ Empleado creado: ${state.nuevoEmpleadoApellido.trim()} ${state.nuevoEmpleadoNombre.trim()} (DNI: $legajo)",
+                    mensajeEmpleadoCreado = "✅ Empleado creado: $nombreCompleto (DNI: $legajo)",
                     nuevoEmpleadoLegajo = "",
                     nuevoEmpleadoNombre = "",
                     nuevoEmpleadoApellido = "",
@@ -475,6 +487,37 @@ class DashboardViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    fun confirmarTraspasoEmpleado() {
+        val empleado = _uiState.value.empleadoExistenteParaTraspaso ?: return
+        val sectorSeleccionado = appPreferences.getSectorSeleccionado() ?: "RUTA 5"
+        viewModelScope.launch {
+            try {
+                updateEmpleadoUseCase(empleado.copy(sector = sectorSeleccionado))
+                recalcularColoresEmpleados()
+                cargarEmpleados()
+                _uiState.value = _uiState.value.copy(
+                    empleadoExistenteParaTraspaso = null,
+                    mostrarDialogoNuevoEmpleado = false,
+                    mostrarMensajeEmpleadoCreado = true,
+                    mensajeEmpleadoCreado = "✅ Empleado traspasado a $sectorSeleccionado",
+                    nuevoEmpleadoLegajo = "",
+                    nuevoEmpleadoNombre = "",
+                    nuevoEmpleadoApellido = "",
+                    nuevoEmpleadoSector = sectorSeleccionado
+                )
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(
+                    empleadoExistenteParaTraspaso = null,
+                    error = "Error al traspasar: ${e.message}"
+                )
+            }
+        }
+    }
+
+    fun cancelarTraspasoEmpleado() {
+        _uiState.value = _uiState.value.copy(empleadoExistenteParaTraspaso = null)
     }
 
     fun abrirDialogoEditarEmpleado(empleado: Empleado) {
@@ -785,6 +828,7 @@ data class DashboardUiState(
     val nuevoEmpleadoNombre: String = "",
     val nuevoEmpleadoApellido: String = "",
     val nuevoEmpleadoSector: String = "",
+    val empleadoExistenteParaTraspaso: Empleado? = null,
     val mostrarDialogoRegistroHoras: Boolean = false,
     val mostrarDialogoEditarEmpleado: Boolean = false,
     val empleadoParaEditar: Empleado? = null,

@@ -5,8 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.registro.empleados.data.local.preferences.AppPreferences
 import com.registro.empleados.domain.model.Empleado
 import com.registro.empleados.domain.usecase.empleado.GetAllEmpleadosActivosUseCase
+import com.registro.empleados.domain.usecase.empleado.GetEmpleadoByLegajoUseCase
 import com.registro.empleados.domain.usecase.empleado.InsertEmpleadoUseCase
 import com.registro.empleados.domain.usecase.empleado.TieneHorasCargadasHoyUseCase
+import com.registro.empleados.domain.usecase.empleado.UpdateEmpleadoUseCase
 import com.registro.empleados.domain.usecase.ausencia.EmpleadoTieneAusenciaEnFechaUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,7 +25,9 @@ import javax.inject.Inject
 @HiltViewModel
 class EmpleadosViewModel @Inject constructor(
     private val getAllEmpleadosActivosUseCase: GetAllEmpleadosActivosUseCase,
+    private val getEmpleadoByLegajoUseCase: GetEmpleadoByLegajoUseCase,
     private val insertEmpleadoUseCase: InsertEmpleadoUseCase,
+    private val updateEmpleadoUseCase: UpdateEmpleadoUseCase,
     private val tieneHorasCargadasHoyUseCase: TieneHorasCargadasHoyUseCase,
     private val empleadoTieneAusenciaEnFechaUseCase: EmpleadoTieneAusenciaEnFechaUseCase,
     private val appPreferences: AppPreferences
@@ -273,37 +277,41 @@ class EmpleadosViewModel @Inject constructor(
                     intentoGuardar = true
                 )
                 
-                // Validar DNI, nombre y apellido obligatorios
                 if (_uiState.value.legajo.isNullOrBlank()) {
-                    _uiState.value = _uiState.value.copy(
-                        error = "El DNI es obligatorio"
-                    )
+                    _uiState.value = _uiState.value.copy(isLoading = false, error = "El DNI es obligatorio")
                     return@launch
                 }
                 if (_uiState.value.nombreCompleto.isBlank()) {
+                    _uiState.value = _uiState.value.copy(isLoading = false, error = "El nombre completo es obligatorio")
+                    return@launch
+                }
+                
+                val legajoTrimmed = _uiState.value.legajo!!.trim().uppercase()
+                val sectorActual = _uiState.value.sector.ifBlank { "Sin especificar" }
+                
+                val empleadoExistente = getEmpleadoByLegajoUseCase(legajoTrimmed)
+                if (empleadoExistente != null) {
+                    if (empleadoExistente.sector.equals(sectorActual, ignoreCase = true)) {
+                        _uiState.value = _uiState.value.copy(
+                            isLoading = false,
+                            error = "El empleado ya existe en su sector"
+                        )
+                        return@launch
+                    }
                     _uiState.value = _uiState.value.copy(
-                        error = "El nombre completo es obligatorio"
+                        isLoading = false,
+                        empleadoExistenteParaTraspaso = empleadoExistente
                     )
                     return@launch
                 }
                 
-                val legajoTrimmed = _uiState.value.legajo!!.trim()
-                val nuevoEmpleado = Empleado(
-                    legajo = legajoTrimmed,
-                    nombreCompleto = _uiState.value.nombreCompleto.trim(),
-                    sector = _uiState.value.sector.ifBlank { "Sin especificar" },
-                    fechaIngreso = LocalDate.now(),
-                    activo = true
-                )
-                
                 insertEmpleadoUseCase(
                     legajo = legajoTrimmed,
-                    nombreCompleto = nuevoEmpleado.nombreCompleto,
-                    sector = nuevoEmpleado.sector,
-                    fechaIngreso = nuevoEmpleado.fechaIngreso
+                    nombreCompleto = _uiState.value.nombreCompleto.trim(),
+                    sector = sectorActual,
+                    fechaIngreso = LocalDate.now()
                 )
                 
-                // LIMPIAR FORMULARIO COMPLETAMENTE
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
                     empleadoCreadoExitosamente = true,
@@ -322,6 +330,39 @@ class EmpleadosViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    fun confirmarTraspasoEmpleado() {
+        val empleado = _uiState.value.empleadoExistenteParaTraspaso ?: return
+        val sectorActual = _uiState.value.sector.ifBlank { "Sin especificar" }
+        viewModelScope.launch {
+            try {
+                _uiState.value = _uiState.value.copy(isLoading = true)
+                updateEmpleadoUseCase(empleado.copy(sector = sectorActual))
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    empleadoExistenteParaTraspaso = null,
+                    empleadoCreadoExitosamente = true,
+                    mensaje = "✅ Empleado traspasado a $sectorActual",
+                    legajo = null,
+                    nombreCompleto = "",
+                    sector = "",
+                    intentoGuardar = false,
+                    formularioNuevoEmpleado = FormularioNuevoEmpleado()
+                )
+                loadEmpleados()
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    empleadoExistenteParaTraspaso = null,
+                    error = "Error al traspasar: ${e.message}"
+                )
+            }
+        }
+    }
+
+    fun cancelarTraspasoEmpleado() {
+        _uiState.value = _uiState.value.copy(empleadoExistenteParaTraspaso = null)
     }
 
     fun resetEmpleadoCreado() {
@@ -381,6 +422,7 @@ data class EmpleadosUiState(
     val error: String? = null,
     val mensaje: String? = null,
     val empleadoCreadoExitosamente: Boolean? = null,
+    val empleadoExistenteParaTraspaso: Empleado? = null,
     val legajo: String? = null,
     val nombreCompleto: String = "",
     val sector: String = "",

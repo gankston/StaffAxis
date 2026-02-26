@@ -40,6 +40,7 @@ import com.registro.empleados.di.UseCaseModule_ProvideGetAllEmpleadosActivosUseC
 import com.registro.empleados.di.UseCaseModule_ProvideGetAusenciasByFechaUseCaseFactory;
 import com.registro.empleados.di.UseCaseModule_ProvideGetAusenciasByRangoUseCaseFactory;
 import com.registro.empleados.di.UseCaseModule_ProvideGetDiasLaboralesUseCaseFactory;
+import com.registro.empleados.di.UseCaseModule_ProvideGetEmpleadoByLegajoUseCaseFactory;
 import com.registro.empleados.di.UseCaseModule_ProvideGetPeriodoActualUseCaseFactory;
 import com.registro.empleados.di.UseCaseModule_ProvideGetRegistrosByRangoUseCaseFactory;
 import com.registro.empleados.di.UseCaseModule_ProvideInsertEmpleadoUseCaseFactory;
@@ -65,6 +66,7 @@ import com.registro.empleados.domain.usecase.empleado.BuscarEmpleadoSimpleUseCas
 import com.registro.empleados.domain.usecase.empleado.CargarEmpleadosPorSectorUseCase;
 import com.registro.empleados.domain.usecase.empleado.DarDeBajaEmpleadoUseCase;
 import com.registro.empleados.domain.usecase.empleado.GetAllEmpleadosActivosUseCase;
+import com.registro.empleados.domain.usecase.empleado.GetEmpleadoByLegajoUseCase;
 import com.registro.empleados.domain.usecase.empleado.InsertEmpleadoUseCase;
 import com.registro.empleados.domain.usecase.empleado.TieneHorasCargadasHoyUseCase;
 import com.registro.empleados.domain.usecase.empleado.UpdateEmpleadoUseCase;
@@ -627,10 +629,10 @@ public final class DaggerAsistenciaApplication_HiltComponents_SingletonC {
           return (T) new CalendarioViewModel(singletonCImpl.provideGetDiasLaboralesUseCaseProvider.get(), singletonCImpl.provideGetPeriodoActualUseCaseProvider.get(), singletonCImpl.provideGenerarDiasLaboralesBasicosUseCaseProvider.get(), singletonCImpl.registroAsistenciaRepositoryImplProvider.get());
 
           case 3: // com.registro.empleados.presentation.viewmodel.DashboardViewModel 
-          return (T) new DashboardViewModel(singletonCImpl.provideBuscarEmpleadoSimpleUseCaseProvider.get(), singletonCImpl.provideGetAllEmpleadosActivosUseCaseProvider.get(), singletonCImpl.provideInsertEmpleadoUseCaseProvider.get(), singletonCImpl.provideTieneHorasCargadasHoyUseCaseProvider.get(), singletonCImpl.provideEmpleadoTieneAusenciaEnFechaUseCaseProvider.get(), viewModelCImpl.limpiarTodosLosRegistrosUseCase(), viewModelCImpl.corregirEmpleadosDBDirectoUseCase(), singletonCImpl.provideUpdateEmpleadoUseCaseProvider.get(), singletonCImpl.provideDarDeBajaEmpleadoUseCaseProvider.get(), viewModelCImpl.updateEstadoEmpleadoUseCase(), singletonCImpl.registroAsistenciaRepositoryImplProvider.get(), singletonCImpl.horasEmpleadoMesRepositoryImplProvider.get(), singletonCImpl.provideAppPreferencesProvider.get());
+          return (T) new DashboardViewModel(singletonCImpl.provideBuscarEmpleadoSimpleUseCaseProvider.get(), singletonCImpl.provideGetAllEmpleadosActivosUseCaseProvider.get(), singletonCImpl.provideGetEmpleadoByLegajoUseCaseProvider.get(), singletonCImpl.provideInsertEmpleadoUseCaseProvider.get(), singletonCImpl.provideTieneHorasCargadasHoyUseCaseProvider.get(), singletonCImpl.provideEmpleadoTieneAusenciaEnFechaUseCaseProvider.get(), viewModelCImpl.limpiarTodosLosRegistrosUseCase(), viewModelCImpl.corregirEmpleadosDBDirectoUseCase(), singletonCImpl.provideUpdateEmpleadoUseCaseProvider.get(), singletonCImpl.provideDarDeBajaEmpleadoUseCaseProvider.get(), viewModelCImpl.updateEstadoEmpleadoUseCase(), singletonCImpl.registroAsistenciaRepositoryImplProvider.get(), singletonCImpl.horasEmpleadoMesRepositoryImplProvider.get(), singletonCImpl.provideAppPreferencesProvider.get());
 
           case 4: // com.registro.empleados.presentation.viewmodel.EmpleadosViewModel 
-          return (T) new EmpleadosViewModel(singletonCImpl.provideGetAllEmpleadosActivosUseCaseProvider.get(), singletonCImpl.provideInsertEmpleadoUseCaseProvider.get(), singletonCImpl.provideTieneHorasCargadasHoyUseCaseProvider.get(), singletonCImpl.provideEmpleadoTieneAusenciaEnFechaUseCaseProvider.get(), singletonCImpl.provideAppPreferencesProvider.get());
+          return (T) new EmpleadosViewModel(singletonCImpl.provideGetAllEmpleadosActivosUseCaseProvider.get(), singletonCImpl.provideGetEmpleadoByLegajoUseCaseProvider.get(), singletonCImpl.provideInsertEmpleadoUseCaseProvider.get(), singletonCImpl.provideUpdateEmpleadoUseCaseProvider.get(), singletonCImpl.provideTieneHorasCargadasHoyUseCaseProvider.get(), singletonCImpl.provideEmpleadoTieneAusenciaEnFechaUseCaseProvider.get(), singletonCImpl.provideAppPreferencesProvider.get());
 
           case 5: // com.registro.empleados.presentation.viewmodel.ReportesViewModel 
           return (T) new ReportesViewModel(singletonCImpl.provideGetRegistrosByRangoUseCaseProvider.get(), singletonCImpl.provideGetAllEmpleadosActivosUseCaseProvider.get(), singletonCImpl.provideExportarRegistrosAsistenciaUseCaseProvider.get(), singletonCImpl.provideLimpiarBaseDatosUseCaseProvider.get(), singletonCImpl.provideAppPreferencesProvider.get());
@@ -748,6 +750,8 @@ public final class DaggerAsistenciaApplication_HiltComponents_SingletonC {
 
     private Provider<BuscarEmpleadoSimpleUseCase> provideBuscarEmpleadoSimpleUseCaseProvider;
 
+    private Provider<GetEmpleadoByLegajoUseCase> provideGetEmpleadoByLegajoUseCaseProvider;
+
     private Provider<InsertEmpleadoUseCase> provideInsertEmpleadoUseCaseProvider;
 
     private Provider<TieneHorasCargadasHoyUseCase> provideTieneHorasCargadasHoyUseCaseProvider;
@@ -803,17 +807,18 @@ public final class DaggerAsistenciaApplication_HiltComponents_SingletonC {
       this.provideCargarEmpleadosPorSectorUseCaseProvider = DoubleCheck.provider(new SwitchingProvider<CargarEmpleadosPorSectorUseCase>(singletonCImpl, 13));
       this.registroAsistenciaRepositoryImplProvider = DoubleCheck.provider(new SwitchingProvider<RegistroAsistenciaRepositoryImpl>(singletonCImpl, 14));
       this.provideBuscarEmpleadoSimpleUseCaseProvider = DoubleCheck.provider(new SwitchingProvider<BuscarEmpleadoSimpleUseCase>(singletonCImpl, 15));
-      this.provideInsertEmpleadoUseCaseProvider = DoubleCheck.provider(new SwitchingProvider<InsertEmpleadoUseCase>(singletonCImpl, 16));
-      this.provideTieneHorasCargadasHoyUseCaseProvider = DoubleCheck.provider(new SwitchingProvider<TieneHorasCargadasHoyUseCase>(singletonCImpl, 17));
-      this.provideEmpleadoTieneAusenciaEnFechaUseCaseProvider = DoubleCheck.provider(new SwitchingProvider<EmpleadoTieneAusenciaEnFechaUseCase>(singletonCImpl, 18));
-      this.provideUpdateEmpleadoUseCaseProvider = DoubleCheck.provider(new SwitchingProvider<UpdateEmpleadoUseCase>(singletonCImpl, 19));
-      this.provideDarDeBajaEmpleadoUseCaseProvider = DoubleCheck.provider(new SwitchingProvider<DarDeBajaEmpleadoUseCase>(singletonCImpl, 20));
-      this.horasEmpleadoMesRepositoryImplProvider = DoubleCheck.provider(new SwitchingProvider<HorasEmpleadoMesRepositoryImpl>(singletonCImpl, 21));
-      this.provideGetRegistrosByRangoUseCaseProvider = DoubleCheck.provider(new SwitchingProvider<GetRegistrosByRangoUseCase>(singletonCImpl, 22));
-      this.provideExcelExportServiceProvider = DoubleCheck.provider(new SwitchingProvider<ExcelExportService>(singletonCImpl, 24));
-      this.provideCsvExportServiceProvider = DoubleCheck.provider(new SwitchingProvider<CsvExportService>(singletonCImpl, 25));
-      this.provideExportarRegistrosAsistenciaUseCaseProvider = DoubleCheck.provider(new SwitchingProvider<ExportarRegistrosAsistenciaUseCase>(singletonCImpl, 23));
-      this.provideLimpiarBaseDatosUseCaseProvider = DoubleCheck.provider(new SwitchingProvider<LimpiarBaseDatosUseCase>(singletonCImpl, 26));
+      this.provideGetEmpleadoByLegajoUseCaseProvider = DoubleCheck.provider(new SwitchingProvider<GetEmpleadoByLegajoUseCase>(singletonCImpl, 16));
+      this.provideInsertEmpleadoUseCaseProvider = DoubleCheck.provider(new SwitchingProvider<InsertEmpleadoUseCase>(singletonCImpl, 17));
+      this.provideTieneHorasCargadasHoyUseCaseProvider = DoubleCheck.provider(new SwitchingProvider<TieneHorasCargadasHoyUseCase>(singletonCImpl, 18));
+      this.provideEmpleadoTieneAusenciaEnFechaUseCaseProvider = DoubleCheck.provider(new SwitchingProvider<EmpleadoTieneAusenciaEnFechaUseCase>(singletonCImpl, 19));
+      this.provideUpdateEmpleadoUseCaseProvider = DoubleCheck.provider(new SwitchingProvider<UpdateEmpleadoUseCase>(singletonCImpl, 20));
+      this.provideDarDeBajaEmpleadoUseCaseProvider = DoubleCheck.provider(new SwitchingProvider<DarDeBajaEmpleadoUseCase>(singletonCImpl, 21));
+      this.horasEmpleadoMesRepositoryImplProvider = DoubleCheck.provider(new SwitchingProvider<HorasEmpleadoMesRepositoryImpl>(singletonCImpl, 22));
+      this.provideGetRegistrosByRangoUseCaseProvider = DoubleCheck.provider(new SwitchingProvider<GetRegistrosByRangoUseCase>(singletonCImpl, 23));
+      this.provideExcelExportServiceProvider = DoubleCheck.provider(new SwitchingProvider<ExcelExportService>(singletonCImpl, 25));
+      this.provideCsvExportServiceProvider = DoubleCheck.provider(new SwitchingProvider<CsvExportService>(singletonCImpl, 26));
+      this.provideExportarRegistrosAsistenciaUseCaseProvider = DoubleCheck.provider(new SwitchingProvider<ExportarRegistrosAsistenciaUseCase>(singletonCImpl, 24));
+      this.provideLimpiarBaseDatosUseCaseProvider = DoubleCheck.provider(new SwitchingProvider<LimpiarBaseDatosUseCase>(singletonCImpl, 27));
     }
 
     @Override
@@ -903,37 +908,40 @@ public final class DaggerAsistenciaApplication_HiltComponents_SingletonC {
           case 15: // com.registro.empleados.domain.usecase.empleado.BuscarEmpleadoSimpleUseCase 
           return (T) UseCaseModule_ProvideBuscarEmpleadoSimpleUseCaseFactory.provideBuscarEmpleadoSimpleUseCase(singletonCImpl.empleadoRepositoryImplProvider.get());
 
-          case 16: // com.registro.empleados.domain.usecase.empleado.InsertEmpleadoUseCase 
+          case 16: // com.registro.empleados.domain.usecase.empleado.GetEmpleadoByLegajoUseCase 
+          return (T) UseCaseModule_ProvideGetEmpleadoByLegajoUseCaseFactory.provideGetEmpleadoByLegajoUseCase(singletonCImpl.empleadoRepositoryImplProvider.get());
+
+          case 17: // com.registro.empleados.domain.usecase.empleado.InsertEmpleadoUseCase 
           return (T) UseCaseModule_ProvideInsertEmpleadoUseCaseFactory.provideInsertEmpleadoUseCase(singletonCImpl.empleadoRepositoryImplProvider.get());
 
-          case 17: // com.registro.empleados.domain.usecase.empleado.TieneHorasCargadasHoyUseCase 
+          case 18: // com.registro.empleados.domain.usecase.empleado.TieneHorasCargadasHoyUseCase 
           return (T) UseCaseModule_ProvideTieneHorasCargadasHoyUseCaseFactory.provideTieneHorasCargadasHoyUseCase(singletonCImpl.registroAsistenciaRepositoryImplProvider.get());
 
-          case 18: // com.registro.empleados.domain.usecase.ausencia.EmpleadoTieneAusenciaEnFechaUseCase 
+          case 19: // com.registro.empleados.domain.usecase.ausencia.EmpleadoTieneAusenciaEnFechaUseCase 
           return (T) UseCaseModule_ProvideEmpleadoTieneAusenciaEnFechaUseCaseFactory.provideEmpleadoTieneAusenciaEnFechaUseCase(singletonCImpl.bindAusenciaRepositoryProvider.get());
 
-          case 19: // com.registro.empleados.domain.usecase.empleado.UpdateEmpleadoUseCase 
+          case 20: // com.registro.empleados.domain.usecase.empleado.UpdateEmpleadoUseCase 
           return (T) UseCaseModule_ProvideUpdateEmpleadoUseCaseFactory.provideUpdateEmpleadoUseCase(singletonCImpl.empleadoRepositoryImplProvider.get());
 
-          case 20: // com.registro.empleados.domain.usecase.empleado.DarDeBajaEmpleadoUseCase 
+          case 21: // com.registro.empleados.domain.usecase.empleado.DarDeBajaEmpleadoUseCase 
           return (T) UseCaseModule_ProvideDarDeBajaEmpleadoUseCaseFactory.provideDarDeBajaEmpleadoUseCase(singletonCImpl.empleadoRepositoryImplProvider.get());
 
-          case 21: // com.registro.empleados.data.repository.HorasEmpleadoMesRepositoryImpl 
+          case 22: // com.registro.empleados.data.repository.HorasEmpleadoMesRepositoryImpl 
           return (T) new HorasEmpleadoMesRepositoryImpl(singletonCImpl.provideAppDatabaseProvider.get());
 
-          case 22: // com.registro.empleados.domain.usecase.asistencia.GetRegistrosByRangoUseCase 
+          case 23: // com.registro.empleados.domain.usecase.asistencia.GetRegistrosByRangoUseCase 
           return (T) UseCaseModule_ProvideGetRegistrosByRangoUseCaseFactory.provideGetRegistrosByRangoUseCase(singletonCImpl.registroAsistenciaRepositoryImplProvider.get());
 
-          case 23: // com.registro.empleados.domain.usecase.export.ExportarRegistrosAsistenciaUseCase 
+          case 24: // com.registro.empleados.domain.usecase.export.ExportarRegistrosAsistenciaUseCase 
           return (T) UseCaseModule_ProvideExportarRegistrosAsistenciaUseCaseFactory.provideExportarRegistrosAsistenciaUseCase(singletonCImpl.provideExcelExportServiceProvider.get(), singletonCImpl.provideCsvExportServiceProvider.get(), singletonCImpl.empleadoRepositoryImplProvider.get(), singletonCImpl.registroAsistenciaRepositoryImplProvider.get(), singletonCImpl.bindAusenciaRepositoryProvider.get());
 
-          case 24: // com.registro.empleados.data.export.ExcelExportService 
+          case 25: // com.registro.empleados.data.export.ExcelExportService 
           return (T) ExportModule_ProvideExcelExportServiceFactory.provideExcelExportService(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule));
 
-          case 25: // com.registro.empleados.data.export.CsvExportService 
+          case 26: // com.registro.empleados.data.export.CsvExportService 
           return (T) ExportModule_ProvideCsvExportServiceFactory.provideCsvExportService(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule));
 
-          case 26: // com.registro.empleados.domain.usecase.database.LimpiarBaseDatosUseCase 
+          case 27: // com.registro.empleados.domain.usecase.database.LimpiarBaseDatosUseCase 
           return (T) UseCaseModule_ProvideLimpiarBaseDatosUseCaseFactory.provideLimpiarBaseDatosUseCase(singletonCImpl.empleadoRepositoryImplProvider.get(), singletonCImpl.registroAsistenciaRepositoryImplProvider.get());
 
           default: throw new AssertionError(id);

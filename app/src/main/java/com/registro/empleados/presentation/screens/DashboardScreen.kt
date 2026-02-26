@@ -60,6 +60,8 @@ fun DashboardScreen(
             onNuevoEmpleadoApellidoChanged = viewModel::onNuevoEmpleadoApellidoChanged,
             onCrearNuevoEmpleado = viewModel::crearNuevoEmpleado,
             onCerrarDialogoNuevoEmpleado = viewModel::cerrarDialogoNuevoEmpleado,
+            onConfirmarTraspasoEmpleado = viewModel::confirmarTraspasoEmpleado,
+            onCancelarTraspasoEmpleado = viewModel::cancelarTraspasoEmpleado,
             onCerrarDialogoRegistroHoras = viewModel::cerrarDialogoRegistroHoras,
             onEditarEmpleado = viewModel::abrirDialogoEditarEmpleado,
             onEditarEmpleadoLegajoChanged = viewModel::onEditarEmpleadoLegajoChanged,

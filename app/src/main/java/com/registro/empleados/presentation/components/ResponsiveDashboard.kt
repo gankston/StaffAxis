@@ -45,6 +45,8 @@ fun ResponsiveDashboard(
     onNuevoEmpleadoApellidoChanged: (String) -> Unit = {},
     onCrearNuevoEmpleado: () -> Unit = {},
     onCerrarDialogoNuevoEmpleado: () -> Unit = {},
+    onConfirmarTraspasoEmpleado: () -> Unit = {},
+    onCancelarTraspasoEmpleado: () -> Unit = {},
     onCerrarDialogoRegistroHoras: () -> Unit = {},
     onEditarEmpleado: (Empleado) -> Unit = {},
     onEditarEmpleadoLegajoChanged: (String) -> Unit = {},
@@ -95,13 +97,19 @@ fun ResponsiveDashboard(
             verticalArrangement = Arrangement.spacedBy(spacing.dp)
         ) {
             item {
-                // Título
                 Text(
                     text = "Carga de Horas",
                     style = MaterialTheme.typography.headlineMedium,
                     fontWeight = FontWeight.Bold
                 )
-                
+                Spacer(modifier = Modifier.height(8.dp))
+                Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer), modifier = Modifier.fillMaxWidth()) {
+                    Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Icon(Icons.Default.Info, null, tint = MaterialTheme.colorScheme.tertiary, modifier = Modifier.size(20.dp))
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text("Una sola carga por día. Use 'Editar horas' en la ficha del empleado para corregir.", style = MaterialTheme.typography.bodySmall)
+                    }
+                }
                 Spacer(modifier = Modifier.height(spacing.dp))
                 
                 // Campo de búsqueda global
@@ -218,6 +226,24 @@ fun ResponsiveDashboard(
                 onNombreChanged = onNuevoEmpleadoNombreChanged,
                 onApellidoChanged = onNuevoEmpleadoApellidoChanged,
                 onConfirm = onCrearNuevoEmpleado
+            )
+        }
+        if (uiState.empleadoExistenteParaTraspaso != null) {
+            AlertDialog(
+                onDismissRequest = onCancelarTraspasoEmpleado,
+                title = { Text("Empleado ya registrado") },
+                text = {
+                    Column {
+                        val emp = uiState.empleadoExistenteParaTraspaso!!
+                        Text("El empleado ${emp.nombreCompleto} (DNI: ${emp.legajo}) ya está dado de alta en el sector ${emp.sector}.")
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Text("¿Desea agregarlo a su sector (${uiState.nuevoEmpleadoSector})?", fontWeight = FontWeight.Medium)
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text("Aviso: No se eliminará del otro sector, se traspasará a su sector.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
+                    }
+                },
+                confirmButton = { Button(onClick = onConfirmarTraspasoEmpleado) { Text("Sí, traspasar") } },
+                dismissButton = { TextButton(onClick = onCancelarTraspasoEmpleado) { Text("Cancelar") } }
             )
         }
         
@@ -390,6 +416,13 @@ private fun RegistroHorasDialog(
         title = { Text("Registrar Horas", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer)) {
+                    Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Icon(Icons.Default.Info, contentDescription = null, tint = MaterialTheme.colorScheme.tertiary, modifier = Modifier.size(24.dp))
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text("Solo se permite una carga de horas por día. Use 'Editar horas' en la ficha del empleado para corregir en caso de equivocación.", style = MaterialTheme.typography.bodySmall)
+                    }
+                }
                 Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)) {
                     Column(modifier = Modifier.padding(12.dp).fillMaxWidth()) {
                         Text(empleado.nombreCompleto, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)

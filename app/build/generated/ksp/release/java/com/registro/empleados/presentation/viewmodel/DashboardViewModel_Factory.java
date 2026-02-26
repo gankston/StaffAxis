@@ -9,6 +9,7 @@ import com.registro.empleados.domain.usecase.database.CorregirEmpleadosDBDirecto
 import com.registro.empleados.domain.usecase.empleado.BuscarEmpleadoSimpleUseCase;
 import com.registro.empleados.domain.usecase.empleado.DarDeBajaEmpleadoUseCase;
 import com.registro.empleados.domain.usecase.empleado.GetAllEmpleadosActivosUseCase;
+import com.registro.empleados.domain.usecase.empleado.GetEmpleadoByLegajoUseCase;
 import com.registro.empleados.domain.usecase.empleado.InsertEmpleadoUseCase;
 import com.registro.empleados.domain.usecase.empleado.TieneHorasCargadasHoyUseCase;
 import com.registro.empleados.domain.usecase.empleado.UpdateEmpleadoUseCase;
@@ -38,6 +39,8 @@ public final class DashboardViewModel_Factory implements Factory<DashboardViewMo
 
   private final Provider<GetAllEmpleadosActivosUseCase> getAllEmpleadosActivosUseCaseProvider;
 
+  private final Provider<GetEmpleadoByLegajoUseCase> getEmpleadoByLegajoUseCaseProvider;
+
   private final Provider<InsertEmpleadoUseCase> insertEmpleadoUseCaseProvider;
 
   private final Provider<TieneHorasCargadasHoyUseCase> tieneHorasCargadasHoyUseCaseProvider;
@@ -63,6 +66,7 @@ public final class DashboardViewModel_Factory implements Factory<DashboardViewMo
   public DashboardViewModel_Factory(
       Provider<BuscarEmpleadoSimpleUseCase> buscarEmpleadoSimpleUseCaseProvider,
       Provider<GetAllEmpleadosActivosUseCase> getAllEmpleadosActivosUseCaseProvider,
+      Provider<GetEmpleadoByLegajoUseCase> getEmpleadoByLegajoUseCaseProvider,
       Provider<InsertEmpleadoUseCase> insertEmpleadoUseCaseProvider,
       Provider<TieneHorasCargadasHoyUseCase> tieneHorasCargadasHoyUseCaseProvider,
       Provider<EmpleadoTieneAusenciaEnFechaUseCase> empleadoTieneAusenciaEnFechaUseCaseProvider,
@@ -76,6 +80,7 @@ public final class DashboardViewModel_Factory implements Factory<DashboardViewMo
       Provider<AppPreferences> appPreferencesProvider) {
     this.buscarEmpleadoSimpleUseCaseProvider = buscarEmpleadoSimpleUseCaseProvider;
     this.getAllEmpleadosActivosUseCaseProvider = getAllEmpleadosActivosUseCaseProvider;
+    this.getEmpleadoByLegajoUseCaseProvider = getEmpleadoByLegajoUseCaseProvider;
     this.insertEmpleadoUseCaseProvider = insertEmpleadoUseCaseProvider;
     this.tieneHorasCargadasHoyUseCaseProvider = tieneHorasCargadasHoyUseCaseProvider;
     this.empleadoTieneAusenciaEnFechaUseCaseProvider = empleadoTieneAusenciaEnFechaUseCaseProvider;
@@ -91,12 +96,13 @@ public final class DashboardViewModel_Factory implements Factory<DashboardViewMo
 
   @Override
   public DashboardViewModel get() {
-    return newInstance(buscarEmpleadoSimpleUseCaseProvider.get(), getAllEmpleadosActivosUseCaseProvider.get(), insertEmpleadoUseCaseProvider.get(), tieneHorasCargadasHoyUseCaseProvider.get(), empleadoTieneAusenciaEnFechaUseCaseProvider.get(), limpiarTodosLosRegistrosUseCaseProvider.get(), corregirEmpleadosDBDirectoUseCaseProvider.get(), updateEmpleadoUseCaseProvider.get(), darDeBajaEmpleadoUseCaseProvider.get(), updateEstadoEmpleadoUseCaseProvider.get(), registroAsistenciaRepositoryProvider.get(), horasEmpleadoMesRepositoryProvider.get(), appPreferencesProvider.get());
+    return newInstance(buscarEmpleadoSimpleUseCaseProvider.get(), getAllEmpleadosActivosUseCaseProvider.get(), getEmpleadoByLegajoUseCaseProvider.get(), insertEmpleadoUseCaseProvider.get(), tieneHorasCargadasHoyUseCaseProvider.get(), empleadoTieneAusenciaEnFechaUseCaseProvider.get(), limpiarTodosLosRegistrosUseCaseProvider.get(), corregirEmpleadosDBDirectoUseCaseProvider.get(), updateEmpleadoUseCaseProvider.get(), darDeBajaEmpleadoUseCaseProvider.get(), updateEstadoEmpleadoUseCaseProvider.get(), registroAsistenciaRepositoryProvider.get(), horasEmpleadoMesRepositoryProvider.get(), appPreferencesProvider.get());
   }
 
   public static DashboardViewModel_Factory create(
       Provider<BuscarEmpleadoSimpleUseCase> buscarEmpleadoSimpleUseCaseProvider,
       Provider<GetAllEmpleadosActivosUseCase> getAllEmpleadosActivosUseCaseProvider,
+      Provider<GetEmpleadoByLegajoUseCase> getEmpleadoByLegajoUseCaseProvider,
       Provider<InsertEmpleadoUseCase> insertEmpleadoUseCaseProvider,
       Provider<TieneHorasCargadasHoyUseCase> tieneHorasCargadasHoyUseCaseProvider,
       Provider<EmpleadoTieneAusenciaEnFechaUseCase> empleadoTieneAusenciaEnFechaUseCaseProvider,
@@ -108,12 +114,13 @@ public final class DashboardViewModel_Factory implements Factory<DashboardViewMo
       Provider<RegistroAsistenciaRepository> registroAsistenciaRepositoryProvider,
       Provider<HorasEmpleadoMesRepository> horasEmpleadoMesRepositoryProvider,
       Provider<AppPreferences> appPreferencesProvider) {
-    return new DashboardViewModel_Factory(buscarEmpleadoSimpleUseCaseProvider, getAllEmpleadosActivosUseCaseProvider, insertEmpleadoUseCaseProvider, tieneHorasCargadasHoyUseCaseProvider, empleadoTieneAusenciaEnFechaUseCaseProvider, limpiarTodosLosRegistrosUseCaseProvider, corregirEmpleadosDBDirectoUseCaseProvider, updateEmpleadoUseCaseProvider, darDeBajaEmpleadoUseCaseProvider, updateEstadoEmpleadoUseCaseProvider, registroAsistenciaRepositoryProvider, horasEmpleadoMesRepositoryProvider, appPreferencesProvider);
+    return new DashboardViewModel_Factory(buscarEmpleadoSimpleUseCaseProvider, getAllEmpleadosActivosUseCaseProvider, getEmpleadoByLegajoUseCaseProvider, insertEmpleadoUseCaseProvider, tieneHorasCargadasHoyUseCaseProvider, empleadoTieneAusenciaEnFechaUseCaseProvider, limpiarTodosLosRegistrosUseCaseProvider, corregirEmpleadosDBDirectoUseCaseProvider, updateEmpleadoUseCaseProvider, darDeBajaEmpleadoUseCaseProvider, updateEstadoEmpleadoUseCaseProvider, registroAsistenciaRepositoryProvider, horasEmpleadoMesRepositoryProvider, appPreferencesProvider);
   }
 
   public static DashboardViewModel newInstance(
       BuscarEmpleadoSimpleUseCase buscarEmpleadoSimpleUseCase,
       GetAllEmpleadosActivosUseCase getAllEmpleadosActivosUseCase,
+      GetEmpleadoByLegajoUseCase getEmpleadoByLegajoUseCase,
       InsertEmpleadoUseCase insertEmpleadoUseCase,
       TieneHorasCargadasHoyUseCase tieneHorasCargadasHoyUseCase,
       EmpleadoTieneAusenciaEnFechaUseCase empleadoTieneAusenciaEnFechaUseCase,
@@ -124,6 +131,6 @@ public final class DashboardViewModel_Factory implements Factory<DashboardViewMo
       UpdateEstadoEmpleadoUseCase updateEstadoEmpleadoUseCase,
       RegistroAsistenciaRepository registroAsistenciaRepository,
       HorasEmpleadoMesRepository horasEmpleadoMesRepository, AppPreferences appPreferences) {
-    return new DashboardViewModel(buscarEmpleadoSimpleUseCase, getAllEmpleadosActivosUseCase, insertEmpleadoUseCase, tieneHorasCargadasHoyUseCase, empleadoTieneAusenciaEnFechaUseCase, limpiarTodosLosRegistrosUseCase, corregirEmpleadosDBDirectoUseCase, updateEmpleadoUseCase, darDeBajaEmpleadoUseCase, updateEstadoEmpleadoUseCase, registroAsistenciaRepository, horasEmpleadoMesRepository, appPreferences);
+    return new DashboardViewModel(buscarEmpleadoSimpleUseCase, getAllEmpleadosActivosUseCase, getEmpleadoByLegajoUseCase, insertEmpleadoUseCase, tieneHorasCargadasHoyUseCase, empleadoTieneAusenciaEnFechaUseCase, limpiarTodosLosRegistrosUseCase, corregirEmpleadosDBDirectoUseCase, updateEmpleadoUseCase, darDeBajaEmpleadoUseCase, updateEstadoEmpleadoUseCase, registroAsistenciaRepository, horasEmpleadoMesRepository, appPreferences);
   }
 }

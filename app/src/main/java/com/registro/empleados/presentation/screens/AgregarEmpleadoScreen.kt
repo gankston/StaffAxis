@@ -177,6 +177,26 @@ fun AgregarEmpleadoScreen(
             }
         }
         
-        // Sistema de mensajes eliminado
+        if (uiState.empleadoExistenteParaTraspaso != null) {
+            AlertDialog(
+                onDismissRequest = { viewModel.cancelarTraspasoEmpleado() },
+                title = { Text("Empleado ya registrado") },
+                text = {
+                    Column {
+                        Text("El empleado ${uiState.empleadoExistenteParaTraspaso!!.nombreCompleto} (DNI: ${uiState.empleadoExistenteParaTraspaso!!.legajo}) ya está dado de alta en el sector ${uiState.empleadoExistenteParaTraspaso!!.sector}.")
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Text("¿Desea agregarlo a su sector (${uiState.sector})?", fontWeight = FontWeight.Medium)
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text("Aviso: No se eliminará del otro sector, se traspasará a su sector.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
+                    }
+                },
+                confirmButton = {
+                    Button(onClick = { viewModel.confirmarTraspasoEmpleado() }) { Text("Sí, traspasar") }
+                },
+                dismissButton = {
+                    TextButton(onClick = { viewModel.cancelarTraspasoEmpleado() }) { Text("Cancelar") }
+                }
+            )
+        }
     }
 }
