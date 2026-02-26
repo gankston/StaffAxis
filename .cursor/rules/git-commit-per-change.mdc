@@ -1,0 +1,15 @@
+---
+description: Hacer commit y push a GitHub después de cada cambio lógico
+alwaysApply: true
+---
+
+# Git: un commit por cambio
+
+- Después de **cada cambio lógico** en el código (una feature, un fix, una refactor), hacer **un commit** con mensaje claro en español y **push a origin**.
+- Un cambio lógico = una unidad que tenga sentido por sí sola (ej.: "Añadir capa API para empleados", "Corregir cálculo de horas en reportes").
+- No acumular varios cambios no relacionados en un solo commit.
+- Comando típico en PowerShell desde la raíz del proyecto:
+  - `git add .`
+  - `git commit -m "Descripción breve del cambio"`
+  - `git push origin main`
+- Remoto: https://github.com/gankston/StaffAxis (branch main).
