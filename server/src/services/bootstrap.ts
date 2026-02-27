@@ -1,9 +1,10 @@
 import { db } from "../db/turso.js";
+import { hashPassword } from "../utils/security.js";
 import { logger } from "../utils/logger.js";
 
 /**
  * Crear admin inicial si no existe, usando ADMIN_BOOTSTRAP_USER y ADMIN_BOOTSTRAP_PASS.
- * El hash debe generarse con bcrypt/argon2 en producción.
+ * Password hasheado con bcrypt.
  */
 export async function bootstrapAdmin(): Promise<void> {
   const user = process.env.ADMIN_BOOTSTRAP_USER;
@@ -25,9 +26,7 @@ export async function bootstrapAdmin(): Promise<void> {
       return;
     }
 
-    // TODO: usar bcrypt.hash(pass, 10) en producción
-    // Por ahora placeholder - reemplazar por hash real
-    const passwordHash = `placeholder_${Buffer.from(pass).toString("base64")}`;
+    const passwordHash = await hashPassword(pass);
 
     const id = crypto.randomUUID();
     const now = Math.floor(Date.now() / 1000);
