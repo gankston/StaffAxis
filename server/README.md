@@ -62,3 +62,5 @@ npm run start  # Ejecutar dist/main.js
 - `POST /api/submissions` - Crear submission (X-Device-Token, body: `{ employee_id, date, minutes_worked?, check_in?, check_out?, notes? }`) → 201 o 200 si idempotente
 - `GET /api/submissions/mine?since=timestamp` - Listar submissions del device (X-Device-Token)
 - `GET /api/approved?since=timestamp` - Attendances del sector (X-Device-Token), updated_at > since, incluye deleted
+- `GET /api/admin/submissions?status=&sector_id=&date=&limit=&offset=` - Lista paginada (admin JWT)
+- `POST /api/admin/submissions/:id/approve` - Aprobar submission, upsert attendances (admin JWT, body opcional)
