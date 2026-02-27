@@ -56,5 +56,6 @@ npm run start  # Ejecutar dist/main.js
 - `POST /api/auth/login` - Admin login (body: `{ username, password }`) → `{ token }`
 - `POST /api/auth/admin/login` - Admin login (body: `{ username, password }`) → `{ token }`
 - `GET /api/auth/me` - Admin actual (requiere JWT)
-- `POST /api/auth/device/register` - Registrar dispositivo (requiere JWT admin) → token
-- `GET /api/auth/device/ping` - Ping con device token (requiere X-Device-Token)
+- `POST /api/auth/device/register` - Crear/actualizar device (body: `{ device_id, sector_id, encargado_name }`) → `{ token }`
+- `POST /api/auth/device/login` - Rotar token (body: `{ device_id }`) → `{ token }` o 404
+- `GET /api/auth/device/ping` - Ping con X-Device-Token → `{ device }`

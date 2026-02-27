@@ -53,7 +53,7 @@ authRouter.get("/me", requireAdminAuth, (req, res) => {
   res.json({ admin: req.adminUser });
 });
 
-/** POST /api/auth/device/register — requiere admin JWT, crea device y retorna token (una sola vez) */
+/** POST /api/auth/device/register — crear o actualizar device, retorna token (solo hash en DB) */
 const registerDeviceSchema = z.object({
   device_id: z.string().min(1),
   sector_id: z.string().min(1),
@@ -61,44 +61,74 @@ const registerDeviceSchema = z.object({
 });
 authRouter.post(
   "/device/register",
-  requireAdminAuth,
   validate(registerDeviceSchema),
   async (req, res) => {
     const { device_id, sector_id, encargado_name } = req.body as z.infer<
       typeof registerDeviceSchema
     >;
 
+    const rawToken = generateDeviceToken();
+    const apiTokenHash = await hashDeviceToken(rawToken);
+    const now = Math.floor(Date.now() / 1000);
+
     const existing = await db.execute({
-      sql: "SELECT id FROM devices WHERE device_id = ? AND sector_id = ?",
-      args: [device_id, sector_id],
+      sql: "SELECT id FROM devices WHERE device_id = ?",
+      args: [device_id],
     });
-    if (existing.rows.length > 0) {
-      throw new AppError(400, "Dispositivo ya registrado en ese sector");
+
+    if (existing.rows.length === 0) {
+      const id = crypto.randomUUID();
+      await db.execute({
+        sql: `
+          INSERT INTO devices (id, device_id, sector_id, encargado_name, api_token_hash, created_at, updated_at)
+          VALUES (?, ?, ?, ?, ?, ?, ?)
+        `,
+        args: [id, device_id, sector_id, encargado_name, apiTokenHash, now, now],
+      });
+    } else {
+      await db.execute({
+        sql: `
+          UPDATE devices SET sector_id = ?, encargado_name = ?, api_token_hash = ?, updated_at = ? WHERE device_id = ?
+        `,
+        args: [sector_id, encargado_name, apiTokenHash, now, device_id],
+      });
+    }
+
+    res.json({ token: rawToken });
+  }
+);
+
+/** POST /api/auth/device/login — rotar token si device existe, 404 si no */
+const deviceLoginSchema = z.object({
+  device_id: z.string().min(1),
+});
+authRouter.post(
+  "/device/login",
+  validate(deviceLoginSchema),
+  async (req, res) => {
+    const { device_id } = req.body as z.infer<typeof deviceLoginSchema>;
+
+    const existing = await db.execute({
+      sql: "SELECT id FROM devices WHERE device_id = ?",
+      args: [device_id],
+    });
+    if (existing.rows.length === 0) {
+      throw new AppError(404, "Dispositivo no encontrado");
     }
 
     const rawToken = generateDeviceToken();
     const apiTokenHash = await hashDeviceToken(rawToken);
-    const id = crypto.randomUUID();
     const now = Math.floor(Date.now() / 1000);
-
     await db.execute({
-      sql: `
-        INSERT INTO devices (id, device_id, sector_id, encargado_name, api_token_hash, created_at, updated_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-      `,
-      args: [id, device_id, sector_id, encargado_name, apiTokenHash, now, now],
+      sql: "UPDATE devices SET api_token_hash = ?, updated_at = ? WHERE device_id = ?",
+      args: [apiTokenHash, now, device_id],
     });
 
-    res.status(201).json({
-      token: rawToken,
-      device_id,
-      sector_id,
-      message: "Guardá el token: solo se muestra una vez",
-    });
+    res.json({ token: rawToken });
   }
 );
 
-/** GET /api/auth/device/ping — requiere device token, retorna device_id + sector_id */
+/** GET /api/auth/device/ping — requiere device token (X-Device-Token), retorna device_id + sector_id */
 authRouter.get("/device/ping", requireDeviceAuth, (req, res) => {
   res.json({ device: req.deviceAuth });
 });
