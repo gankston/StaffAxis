@@ -159,12 +159,12 @@ class ExportarRegistrosAsistenciaUseCase @Inject constructor(
         formato: FormatoExportacion = FormatoExportacion.EXCEL
     ): ResultadoExportacion {
         return try {
-            // Obtener registros del empleado en el período
-            val todosLosRegistros = registroAsistenciaRepository.getRegistrosByRango(
-                fechaInicio.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), 
-                fechaFin.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+            // Obtener registros del empleado en el período (query directa por legajo, más eficiente)
+            val fechaInicioStr = fechaInicio.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+            val fechaFinStr = fechaFin.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+            val registros = registroAsistenciaRepository.getRegistrosByLegajoYRango(
+                legajoEmpleado, fechaInicioStr, fechaFinStr
             )
-            val registros = todosLosRegistros.filter { it.legajoEmpleado == legajoEmpleado }
             
             if (registros.isEmpty()) {
                 return ResultadoExportacion(

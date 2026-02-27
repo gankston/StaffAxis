@@ -10,7 +10,7 @@ Documento de contexto para continuar el desarrollo en otra computadora o con otr
 
 - **Repositorio**: https://github.com/gankston/StaffAxis
 - **Usuario GitHub**: gankston
-- **Versión actual**: 1.7.2 (versionCode: 9)
+- **Versión actual**: 1.7.7 (versionCode: 14)
 - **Package**: `com.registro.empleados`
 
 ---
@@ -33,10 +33,10 @@ Documento de contexto para continuar el desarrollo en otra computadora o con otr
 
 ## 3. Reglas Obligatorias al Compilar
 
-**SIEMPRE** antes de generar una nueva versión:
-
-1. **versionCode**: Incrementar obligatoriamente (+1 o más) en `app/build.gradle.kts`
-2. **versionName**: Actualizar (ej: "1.7.2" → "1.7.3")
+**PRIMER PASO SIEMPRE - NO OLVIDAR:** Antes de compilar, actualizar versiones en `app/build.gradle.kts`:
+1. **versionCode**: Incrementar obligatoriamente (+1). Último: 14. Próximo: 15.
+2. **versionName**: Incrementar (ej: "1.7.7" → "1.7.8"). Última: 1.7.7.
+3. Si no se hace esto, NO ejecutar assembleRelease.
 3. **Firma**: Usar SIEMPRE la misma keystore. La app tiene sistema de actualizaciones internas; si cambia la firma, los usuarios no podrán actualizar.
 
 **Keystore**:

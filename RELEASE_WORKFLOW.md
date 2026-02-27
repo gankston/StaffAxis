@@ -2,6 +2,13 @@
 
 **IMPORTANTE:** Seguir SIEMPRE estos pasos al generar una nueva versión.
 
+## ⚠️ ANTES DE COMPILAR - OBLIGATORIO
+
+**Primer paso SIEMPRE:** Actualizar `versionCode` y `versionName` en `app/build.gradle.kts`.
+- versionCode: incrementar +1 (ej: 13 → 14)
+- versionName: incrementar versión (ej: "1.7.6" → "1.7.7")
+- Si no se hace esto, NO compilar. La versión anterior fue 1.7.6 (versionCode 13). Siguiente: 1.7.7 (14).
+
 ## Pasos obligatorios
 
 1. **Actualizar versión** en `app/build.gradle.kts`:

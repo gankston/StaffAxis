@@ -228,6 +228,10 @@ Integración con la API de feriados argentinos:
 - Entrada previa para salida
 - Rango de fechas válido
 
+## 📋 Pruebas manuales
+
+Checklist de flujo de sincronización (device register → outbox → push submissions → pull approved) e instrucciones para ver logs en Android Studio: **[docs/MANUAL_TEST_CHECKLIST.md](docs/MANUAL_TEST_CHECKLIST.md)**.
+
 ## 🔧 Mantenimiento
 
 - Base de datos optimizada con índices

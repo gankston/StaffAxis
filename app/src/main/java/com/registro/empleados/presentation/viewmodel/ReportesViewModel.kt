@@ -242,103 +242,56 @@ class ReportesViewModel @Inject constructor(
      * Inicia la exportación a Excel.
      */
     fun exportarAExcel() {
-        android.util.Log.d("ReportesViewModel", "=== INICIANDO EXPORTACIÓN EXCEL ===")
-        
-        _uiState.value = _uiState.value.copy(
-            exportandoExcel = true,
-            error = null,
-            mensaje = null
-        )
-        
-        viewModelScope.launch {
-            try {
-                android.util.Log.d("ReportesViewModel", "Llamando a exportarRegistrosAsistenciaUseCase...")
-                
-                val resultado = exportarRegistrosAsistenciaUseCase(
-                    fechaInicio = _uiState.value.fechaInicio,
-                    fechaFin = _uiState.value.fechaFin,
-                    formato = ExportarRegistrosAsistenciaUseCase.FormatoExportacion.EXCEL,
-                    nombreEncargado = _uiState.value.nombreEncargado,
-                    nombreSector = _uiState.value.sectorActual ?: ""
-                )
-                
-                android.util.Log.d("ReportesViewModel", "Resultado Excel - Exito: ${resultado.exito}")
-                android.util.Log.d("ReportesViewModel", "Resultado Excel - Mensaje: ${resultado.mensaje}")
-                android.util.Log.d("ReportesViewModel", "Resultado Excel - Archivos: ${resultado.archivosGenerados}")
-                
-                _uiState.value = _uiState.value.copy(
-                    exportandoExcel = false,
-                    mensaje = if (resultado.exito) resultado.mensaje else resultado.mensaje,
-                    mostrarOpcionesExportacion = false,
-                    archivoParaCompartir = if (resultado.exito) resultado.archivosGenerados.firstOrNull() else null
-                )
-                
-                // Evitar que el cartel de compartir quede persistente si el usuario vuelve
-                if (resultado.exito) {
-                    kotlinx.coroutines.delay(100)
-                    _uiState.value = _uiState.value.copy(archivoParaCompartir = null)
-                }
-
-                android.util.Log.d("ReportesViewModel", "=== EXPORTACIÓN EXCEL COMPLETADA ===")
-                
-            } catch (e: Exception) {
-                android.util.Log.e("ReportesViewModel", "ERROR en exportación Excel", e)
-                _uiState.value = _uiState.value.copy(
-                    exportandoExcel = false,
-                    error = "Error al exportar a Excel: ${e.message ?: "Error desconocido"}"
-                )
-            }
-        }
+        ejecutarExportacion(ExportarRegistrosAsistenciaUseCase.FormatoExportacion.EXCEL)
     }
 
     /**
      * Inicia la exportación a CSV.
      */
     fun exportarACSV() {
-        android.util.Log.d("ReportesViewModel", "=== INICIANDO EXPORTACIÓN CSV ===")
-        
+        ejecutarExportacion(ExportarRegistrosAsistenciaUseCase.FormatoExportacion.CSV)
+    }
+
+    /**
+     * Lógica común de exportación (Excel o CSV). Evita duplicación.
+     */
+    private fun ejecutarExportacion(formato: ExportarRegistrosAsistenciaUseCase.FormatoExportacion) {
+        val isExcel = formato == ExportarRegistrosAsistenciaUseCase.FormatoExportacion.EXCEL
+        val nombreFormato = if (isExcel) "Excel" else "CSV"
         _uiState.value = _uiState.value.copy(
-            exportandoCSV = true,
+            exportandoExcel = isExcel,
+            exportandoCSV = !isExcel,
             error = null,
             mensaje = null
         )
-        
+
         viewModelScope.launch {
             try {
-                android.util.Log.d("ReportesViewModel", "Llamando a exportarRegistrosAsistenciaUseCase...")
-                
                 val resultado = exportarRegistrosAsistenciaUseCase(
                     fechaInicio = _uiState.value.fechaInicio,
                     fechaFin = _uiState.value.fechaFin,
-                    formato = ExportarRegistrosAsistenciaUseCase.FormatoExportacion.CSV,
+                    formato = formato,
                     nombreEncargado = _uiState.value.nombreEncargado,
                     nombreSector = _uiState.value.sectorActual ?: ""
                 )
-                
-                android.util.Log.d("ReportesViewModel", "Resultado CSV - Exito: ${resultado.exito}")
-                android.util.Log.d("ReportesViewModel", "Resultado CSV - Mensaje: ${resultado.mensaje}")
-                android.util.Log.d("ReportesViewModel", "Resultado CSV - Archivos: ${resultado.archivosGenerados}")
-                
+
                 _uiState.value = _uiState.value.copy(
+                    exportandoExcel = false,
                     exportandoCSV = false,
-                    mensaje = if (resultado.exito) resultado.mensaje else resultado.mensaje,
+                    mensaje = resultado.mensaje,
                     mostrarOpcionesExportacion = false,
                     archivoParaCompartir = if (resultado.exito) resultado.archivosGenerados.firstOrNull() else null
                 )
-                
-                // Evitar que el cartel de compartir quede persistente si el usuario vuelve
+
                 if (resultado.exito) {
                     kotlinx.coroutines.delay(100)
                     _uiState.value = _uiState.value.copy(archivoParaCompartir = null)
                 }
-
-                android.util.Log.d("ReportesViewModel", "=== EXPORTACIÓN CSV COMPLETADA ===")
-                
             } catch (e: Exception) {
-                android.util.Log.e("ReportesViewModel", "ERROR en exportación CSV", e)
                 _uiState.value = _uiState.value.copy(
+                    exportandoExcel = false,
                     exportandoCSV = false,
-                    error = "Error al exportar a CSV: ${e.message ?: "Error desconocido"}"
+                    error = "Error al exportar a $nombreFormato: ${e.message ?: "Error desconocido"}"
                 )
             }
         }

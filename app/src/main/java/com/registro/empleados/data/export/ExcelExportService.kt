@@ -243,7 +243,7 @@ class ExcelExportService @Inject constructor(
                                     val f = java.time.LocalDate.parse(reg.fecha)
                                     String.format("%02d/%02d", f.dayOfMonth, f.monthValue)
                                 } catch (e: Exception) { "--/--" }
-                                "$fecha: ${reg.observaciones!!.trim()}"
+                                "$fecha: ${(reg.observaciones ?: "").trim()}"
                             }
                             .filter { it.isNotEmpty() }
                             .distinct()
