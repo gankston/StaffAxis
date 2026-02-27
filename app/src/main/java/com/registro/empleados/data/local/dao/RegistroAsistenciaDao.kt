@@ -37,6 +37,9 @@ interface RegistroAsistenciaDao {
     
     @Query("DELETE FROM registros_asistencia WHERE id = :id")
     suspend fun deleteRegistro(id: Long)
+
+    @Query("DELETE FROM registros_asistencia WHERE legajo_empleado = :legajo AND fecha = :fecha")
+    suspend fun deleteRegistroByLegajoYFecha(legajo: String, fecha: String)
     
     // NUEVA QUERY: Sumar total de horas en un período
     @Query("SELECT SUM(horas_trabajadas) FROM registros_asistencia WHERE legajo_empleado = :legajo AND fecha BETWEEN :fechaInicio AND :fechaFin")

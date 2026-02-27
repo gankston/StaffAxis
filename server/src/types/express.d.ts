@@ -15,6 +15,8 @@ declare global {
         exp?: number;
       };
       deviceAuth?: DeviceAuth;
+      /** Query validada por validateQuery (zod). Tipado por cada ruta. */
+      validatedQuery?: Record<string, unknown>;
     }
   }
 }

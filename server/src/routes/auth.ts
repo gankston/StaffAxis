@@ -27,12 +27,12 @@ async function adminLoginHandler(req: import("express").Request, res: import("ex
 
   const row = result.rows[0] as Record<string, unknown> | undefined;
   if (!row) {
-    throw new AppError(401, "Credenciales inválidas");
+    throw new AppError(401, "Credenciales inválidas", "unauthorized");
   }
 
   const match = await verifyPassword(password, row.password_hash as string);
   if (!match) {
-    throw new AppError(401, "Credenciales inválidas");
+    throw new AppError(401, "Credenciales inválidas", "unauthorized");
   }
 
   const token = generateAdminToken({
@@ -113,7 +113,7 @@ authRouter.post(
       args: [device_id],
     });
     if (existing.rows.length === 0) {
-      throw new AppError(404, "Dispositivo no encontrado");
+      throw new AppError(404, "Dispositivo no encontrado", "not_found");
     }
 
     const rawToken = generateDeviceToken();

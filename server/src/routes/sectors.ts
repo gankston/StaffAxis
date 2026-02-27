@@ -2,6 +2,7 @@ import { Router } from "express";
 import { z } from "zod";
 import { db } from "../db/turso.js";
 import { validate } from "../middleware/validate.js";
+import { AppError } from "../middleware/errorHandler.js";
 
 export const sectorsRouter = Router();
 
@@ -20,10 +21,18 @@ sectorsRouter.post(
   async (req, res) => {
     const { name } = req.body as z.infer<typeof createSectorSchema>;
     const id = crypto.randomUUID();
-    await db.execute({
-      sql: "INSERT INTO sectors (id, name) VALUES (?, ?)",
-      args: [id, name],
-    });
+    try {
+      await db.execute({
+        sql: "INSERT INTO sectors (id, name) VALUES (?, ?)",
+        args: [id, name],
+      });
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      if (msg.includes("UNIQUE") || msg.includes("unique")) {
+        throw new AppError(409, "Sector con ese nombre ya existe", "conflict");
+      }
+      throw err;
+    }
     res.status(201).json({ id, name });
   }
 );

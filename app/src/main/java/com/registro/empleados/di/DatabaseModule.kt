@@ -4,6 +4,9 @@ import android.content.Context
 import com.registro.empleados.data.local.database.AppDatabase
 import com.registro.empleados.data.local.dao.AusenciaDao
 import com.registro.empleados.data.local.dao.EmpleadoDao
+import com.registro.empleados.data.local.dao.ApprovedAttendanceDao
+import com.registro.empleados.data.local.dao.OutboxSubmissionDao
+import com.registro.empleados.data.local.dao.RegistroAsistenciaDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -41,5 +44,20 @@ object DatabaseModule {
     @Provides
     fun provideEmpleadoDao(database: AppDatabase): EmpleadoDao {
         return database.empleadoDao()
+    }
+
+    @Provides
+    fun provideOutboxSubmissionDao(database: AppDatabase): OutboxSubmissionDao {
+        return database.outboxSubmissionDao()
+    }
+
+    @Provides
+    fun provideApprovedAttendanceDao(database: AppDatabase): ApprovedAttendanceDao {
+        return database.approvedAttendanceDao()
+    }
+
+    @Provides
+    fun provideRegistroAsistenciaDao(database: AppDatabase): RegistroAsistenciaDao {
+        return database.registroAsistenciaDao()
     }
 }

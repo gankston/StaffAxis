@@ -13,14 +13,14 @@ export function requireAdminAuth(
   try {
     const auth = req.headers.authorization;
     if (!auth?.startsWith("Bearer ")) {
-      throw new AppError(401, "Token de admin requerido");
+      throw new AppError(401, "Token de admin requerido", "unauthorized");
     }
     const token = auth.slice(7);
     req.adminUser = verifyAdminToken(token);
     next();
   } catch (err) {
     if (err instanceof AppError) next(err);
-    else next(new AppError(401, "Token de admin inválido"));
+    else next(new AppError(401, "Token de admin inválido", "unauthorized"));
   }
 }
 
@@ -33,7 +33,7 @@ export async function requireDeviceAuth(
   try {
     const token = req.headers["x-device-token"];
     if (typeof token !== "string" || !token.startsWith("sk_")) {
-      throw new AppError(401, "Token de dispositivo requerido (X-Device-Token)");
+      throw new AppError(401, "Token de dispositivo requerido (X-Device-Token)", "unauthorized");
     }
 
     const devices = await query(
@@ -55,9 +55,9 @@ export async function requireDeviceAuth(
       }
     }
 
-    throw new AppError(401, "Token de dispositivo inválido");
+    throw new AppError(401, "Token de dispositivo inválido", "unauthorized");
   } catch (err) {
     if (err instanceof AppError) next(err);
-    else next(new AppError(401, "Token de dispositivo inválido"));
+    else next(new AppError(401, "Token de dispositivo inválido", "unauthorized"));
   }
 }

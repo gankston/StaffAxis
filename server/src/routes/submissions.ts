@@ -2,10 +2,14 @@ import { Router } from "express";
 import { z } from "zod";
 import { db } from "../db/turso.js";
 import { requireDeviceAuth } from "../middleware/auth.js";
-import { validate } from "../middleware/validate.js";
+import { validate, validateQuery } from "../middleware/validate.js";
 import { AppError } from "../middleware/errorHandler.js";
 
 export const submissionsRouter = Router();
+
+const mineQuerySchema = z.object({
+  since: z.coerce.number().int().min(0).optional().default(0),
+});
 
 const createSubmissionSchema = z.object({
   employee_id: z.string().min(1),
@@ -84,21 +88,26 @@ submissionsRouter.post(
   }
 );
 
+type MineQuery = z.infer<typeof mineQuerySchema>;
+
 /** GET /submissions/mine?since=timestamp — submissions del device desde since */
-submissionsRouter.get("/mine", requireDeviceAuth, async (req, res) => {
-  const device = req.deviceAuth!;
-  const since = req.query.since;
-  const sinceNum = since ? Number(since) : 0;
-  const sinceValid = Number.isInteger(sinceNum) && sinceNum > 0 ? sinceNum : 0;
+submissionsRouter.get(
+  "/mine",
+  requireDeviceAuth,
+  validateQuery(mineQuerySchema),
+  async (req, res) => {
+    const device = req.deviceAuth!;
+    const { since: sinceValid } = req.validatedQuery as MineQuery;
 
-  const result = await db.execute({
-    sql: `
-      SELECT * FROM attendance_submissions
-      WHERE device_id = ? AND updated_at >= ?
-      ORDER BY updated_at ASC
-    `,
-    args: [device.device_id, sinceValid],
-  });
+    const result = await db.execute({
+      sql: `
+        SELECT * FROM attendance_submissions
+        WHERE device_id = ? AND updated_at >= ?
+        ORDER BY updated_at ASC
+      `,
+      args: [device.device_id, sinceValid],
+    });
 
-  res.json({ submissions: result.rows });
-});
+    res.json({ submissions: result.rows });
+  }
+);

@@ -5,6 +5,7 @@ import { authRouter } from "./auth.js";
 import { submissionsRouter } from "./submissions.js";
 import { approvedRouter } from "./approved.js";
 import { adminRouter } from "./admin.js";
+import { devRouter } from "./dev.js";
 
 export const router = Router();
 
@@ -14,3 +15,7 @@ router.use("/auth", authRouter);
 router.use("/submissions", submissionsRouter);
 router.use("/approved", approvedRouter);
 router.use("/admin", adminRouter);
+
+if (process.env.NODE_ENV === "development") {
+  router.use("/dev", devRouter);
+}
