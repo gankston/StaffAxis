@@ -53,7 +53,8 @@ npm run start  # Ejecutar dist/main.js
 - `GET /api/health/db` - Health check + consulta `SELECT 1` a Turso
 - `GET /api/sectors` - Listar sectores
 - `POST /api/sectors` - Crear sector (body: `{ "name": "..." }`)
-- `POST /api/auth/login` - Admin login (body: `{ username, password }`) → JWT
+- `POST /api/auth/login` - Admin login (body: `{ username, password }`) → `{ token }`
+- `POST /api/auth/admin/login` - Admin login (body: `{ username, password }`) → `{ token }`
 - `GET /api/auth/me` - Admin actual (requiere JWT)
 - `POST /api/auth/device/register` - Registrar dispositivo (requiere JWT admin) → token
 - `GET /api/auth/device/ping` - Ping con device token (requiere X-Device-Token)

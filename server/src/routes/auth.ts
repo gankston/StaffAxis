@@ -18,8 +18,7 @@ const loginSchema = z.object({
   password: z.string().min(1),
 });
 
-/** POST /api/auth/login — admin login, retorna JWT */
-authRouter.post("/login", validate(loginSchema), async (req, res) => {
+async function adminLoginHandler(req: import("express").Request, res: import("express").Response): Promise<void> {
   const { username, password } = req.body as z.infer<typeof loginSchema>;
   const result = await db.execute({
     sql: "SELECT id, username, password_hash FROM admin_users WHERE username = ?",
@@ -41,7 +40,13 @@ authRouter.post("/login", validate(loginSchema), async (req, res) => {
     username: row.username as string,
   });
   res.json({ token });
-});
+}
+
+/** POST /api/auth/login — admin login, retorna JWT */
+authRouter.post("/login", validate(loginSchema), adminLoginHandler);
+
+/** POST /api/auth/admin/login — admin login, retorna JWT */
+authRouter.post("/admin/login", validate(loginSchema), adminLoginHandler);
 
 /** GET /api/auth/me — requiere JWT, retorna admin actual */
 authRouter.get("/me", requireAdminAuth, (req, res) => {

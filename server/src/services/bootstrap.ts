@@ -3,7 +3,7 @@ import { hashPassword } from "../utils/security.js";
 import { logger } from "../utils/logger.js";
 
 /**
- * Crear admin inicial si no existe, usando ADMIN_BOOTSTRAP_USER y ADMIN_BOOTSTRAP_PASS.
+ * Si no existe ningún admin, crea uno con ADMIN_BOOTSTRAP_USER y ADMIN_BOOTSTRAP_PASS.
  * Password hasheado con bcrypt.
  */
 export async function bootstrapAdmin(): Promise<void> {
@@ -11,18 +11,19 @@ export async function bootstrapAdmin(): Promise<void> {
   const pass = process.env.ADMIN_BOOTSTRAP_PASS;
 
   if (!user || !pass) {
-    logger.warn("ADMIN_BOOTSTRAP_USER o ADMIN_BOOTSTRAP_PASS no configurados. Saltando bootstrap.");
+    logger.warn("Bootstrap admin: variables no configuradas.");
     return;
   }
 
   try {
-    const existing = await db.execute({
-      sql: "SELECT id FROM admin_users WHERE username = ?",
-      args: [user],
+    const count = await db.execute({
+      sql: "SELECT COUNT(*) as n FROM admin_users",
+      args: [],
     });
-
-    if (existing.rows.length > 0) {
-      logger.info("Admin ya existe, omitiendo bootstrap.");
+    const row = count.rows[0] as Record<string, unknown> | undefined;
+    const n = Number(row?.["n"] ?? 0);
+    if (n > 0) {
+      logger.info("Bootstrap admin: ya existen usuarios.");
       return;
     }
 
@@ -38,9 +39,9 @@ export async function bootstrapAdmin(): Promise<void> {
       args: [id, user, passwordHash, now, now],
     });
 
-    logger.info("Admin bootstrap creado:", user);
+    logger.info("Bootstrap admin: usuario inicial creado.");
   } catch (err) {
-    logger.error("Error en bootstrap admin:", err);
+    logger.error("Bootstrap admin: error al crear usuario.", err);
     // No lanzar - permitir que el servidor arranque aunque falle el bootstrap
   }
 }
