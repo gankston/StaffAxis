@@ -404,6 +404,78 @@ class DashboardViewModel @Inject constructor(
         )
     }
 
+    fun abrirDialogoConfirmarCargaMasiva() {
+        _uiState.update { it.copy(mostrarDialogoConfirmarCargaMasiva = true) }
+    }
+
+    fun cerrarDialogoConfirmarCargaMasiva() {
+        _uiState.update { it.copy(mostrarDialogoConfirmarCargaMasiva = false) }
+    }
+
+    /**
+     * Carga masiva: 8h a todos los empleados del sector que NO estén ausentes hoy.
+     * Solo disponible cuando el sector tiene más de 150 empleados (campos grandes).
+     */
+    fun cargaMasivaCamposGrandes() {
+        val empleados = _uiState.value.empleados
+        val ausentesHoy = _uiState.value.empleadosAusentesHoy
+        if (empleados.size <= 150) return
+
+        viewModelScope.launch {
+            try {
+                _uiState.update { it.copy(isLoading = true, error = null) }
+                val hoy = LocalDate.now()
+                val fechaStr = hoy.format(DATE_FORMATTER)
+                var cargados = 0
+                var omitidos = 0
+
+                for (empleado in empleados) {
+                    val legajoKey = empleado.legajo ?: "SIN_LEGAJO_${empleado.nombreCompleto.hashCode()}"
+                    if (legajoKey in ausentesHoy) {
+                        omitidos++
+                        continue
+                    }
+                    val existentes = registroAsistenciaRepository.getRegistrosByLegajoAndFecha(legajoKey, hoy)
+                    if (existentes.isNotEmpty()) {
+                        omitidos++
+                        continue
+                    }
+                    val registro = RegistroAsistencia(
+                        id = 0,
+                        legajoEmpleado = legajoKey,
+                        fecha = fechaStr,
+                        horasTrabajadas = 8,
+                        observaciones = null
+                    )
+                    registroAsistenciaRepository.insertRegistro(registro)
+                    cargados++
+                }
+
+                recalcularColoresEmpleados()
+
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        mostrarDialogoConfirmarCargaMasiva = false,
+                        mostrarMensajeRegistroExitoso = true,
+                        mensajeRegistroExitoso = "✅ Carga masiva: $cargados empleados con 8h. Omitidos: $omitidos (ausentes o ya con horas)."
+                    )
+                }
+                delay(3000)
+                _uiState.update { it.copy(mostrarMensajeRegistroExitoso = false) }
+            } catch (e: Exception) {
+                Log.e("DashboardVM", "Error carga masiva", e)
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        mostrarDialogoConfirmarCargaMasiva = false,
+                        error = "Error en carga masiva: ${e.message}"
+                    )
+                }
+            }
+        }
+    }
+
     fun mostrarDialogoNuevoEmpleado() {
         _uiState.value = _uiState.value.copy(mostrarDialogoNuevoEmpleado = true)
     }
@@ -850,6 +922,7 @@ data class DashboardUiState(
     // Cartel cuando se intenta cargar horas duplicadas en el mismo día
     val mostrarMensajeRegistroDuplicado: Boolean = false,
     val mensajeRegistroDuplicado: String = "",
+    val mostrarDialogoConfirmarCargaMasiva: Boolean = false,
 ) {
     val puedeRegistrarEntrada: Boolean = false
     val puedeRegistrarSalida: Boolean = false

@@ -66,6 +66,9 @@ fun ResponsiveDashboard(
     onCerrarMensajeRegistroDuplicado: () -> Unit = {},
     onCerrarMensajeEmpleadoCreado: () -> Unit = {},
     onCerrarMensajeEmpleadoEditado: () -> Unit = {},
+    onCargaMasivaCamposGrandes: () -> Unit = {},
+    onConfirmarCargaMasiva: () -> Unit = {},
+    onCerrarDialogoConfirmarCargaMasiva: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val padding = remember(windowSizeClass.widthSizeClass) {
@@ -102,14 +105,6 @@ fun ResponsiveDashboard(
                     style = MaterialTheme.typography.headlineMedium,
                     fontWeight = FontWeight.Bold
                 )
-                Spacer(modifier = Modifier.height(8.dp))
-                Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer), modifier = Modifier.fillMaxWidth()) {
-                    Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
-                        Icon(Icons.Default.Info, null, tint = MaterialTheme.colorScheme.tertiary, modifier = Modifier.size(20.dp))
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text("Una sola carga por día. Use 'Editar horas' en la ficha del empleado para corregir.", style = MaterialTheme.typography.bodySmall)
-                    }
-                }
                 Spacer(modifier = Modifier.height(spacing.dp))
                 
                 // Campo de búsqueda global
@@ -121,6 +116,21 @@ fun ResponsiveDashboard(
                     modifier = Modifier.fillMaxWidth(),
                     leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) }
                 )
+                
+                // Botón Campos grandes: carga 8h a todos (solo si sector > 150 empleados)
+                val totalEmpleadosSector = uiState.empleados.size
+                val habilitarCamposGrandes = totalEmpleadosSector > 150
+                FilledTonalButton(
+                    onClick = onCargaMasivaCamposGrandes,
+                    enabled = habilitarCamposGrandes && !uiState.isLoading,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = spacing.dp)
+                ) {
+                    Icon(Icons.Default.People, contentDescription = null, modifier = Modifier.size(20.dp))
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(if (habilitarCamposGrandes) "Campos grandes - Cargar 8h a todos" else "Campos grandes (sector con +150 empleados)")
+                }
             }
             
             // Lista de empleados
@@ -284,6 +294,22 @@ fun ResponsiveDashboard(
             )
         }
         
+        if (uiState.mostrarDialogoConfirmarCargaMasiva) {
+            AlertDialog(
+                onDismissRequest = onCerrarDialogoConfirmarCargaMasiva,
+                title = { Text("Confirmar carga masiva") },
+                text = {
+                    Text("¿Cargar 8 horas a todos los empleados (excepto ausentes) para hoy? Se omitirán los que ya tengan horas cargadas.")
+                },
+                confirmButton = {
+                    Button(onClick = onConfirmarCargaMasiva) { Text("Sí, cargar") }
+                },
+                dismissButton = {
+                    TextButton(onClick = onCerrarDialogoConfirmarCargaMasiva) { Text("Cancelar") }
+                }
+            )
+        }
+        
         // --- CARTELES FLOTANTES ---
         
         if (uiState.mostrarMensajeEliminacion) {
@@ -416,13 +442,6 @@ private fun RegistroHorasDialog(
         title = { Text("Registrar Horas", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer)) {
-                    Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
-                        Icon(Icons.Default.Info, contentDescription = null, tint = MaterialTheme.colorScheme.tertiary, modifier = Modifier.size(24.dp))
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text("Solo se permite una carga de horas por día. Use 'Editar horas' en la ficha del empleado para corregir en caso de equivocación.", style = MaterialTheme.typography.bodySmall)
-                    }
-                }
                 Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)) {
                     Column(modifier = Modifier.padding(12.dp).fillMaxWidth()) {
                         Text(empleado.nombreCompleto, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
@@ -558,7 +577,11 @@ private fun EditarEmpleadoDialog(
                 if (uiState.registrosParaEditar.isEmpty()) {
                     Text("No hay horas registradas en los últimos 6 meses", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 } else {
-                    uiState.registrosParaEditar.forEach { registro ->
+                    var expandido by remember { mutableStateOf(false) }
+                    val registrosVisibles = if (expandido) uiState.registrosParaEditar else uiState.registrosParaEditar.take(5)
+                    val hayMas = uiState.registrosParaEditar.size > 5
+                    val cantidadOculta = uiState.registrosParaEditar.size - 5
+                    registrosVisibles.forEach { registro ->
                         val fechaFormato = try {
                             val d = java.time.LocalDate.parse(registro.fecha)
                             d.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy"))
@@ -572,11 +595,19 @@ private fun EditarEmpleadoDialog(
                         ) {
                             Column(modifier = Modifier.weight(1f)) {
                                 Text(fechaFormato, style = MaterialTheme.typography.bodyMedium)
-                                Text("${registro.horasTrabajadas}h", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
+                                Text("${registro.horasTrabajadas}h", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = Color(0xFF4CAF50))
                             }
                             IconButton(onClick = { onEditarRegistroHoras(registro) }, modifier = Modifier.size(36.dp)) {
                                 Icon(Icons.Default.Edit, "Editar horas", tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(20.dp))
                             }
+                        }
+                    }
+                    if (hayMas) {
+                        TextButton(
+                            onClick = { expandido = !expandido },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(if (expandido) "Ver menos" else "Ver todas ($cantidadOculta más)")
                         }
                     }
                 }

@@ -242,6 +242,23 @@ class CsvExportService @Inject constructor(
                 }
             }
             
+            // Fila del encargado al final (como empleado, 8h por día automático)
+            val nombreEncargadoMostrar = nombreEncargado.ifBlank { "Encargado" }
+            val horasPorDiaEncargado = 8
+            val totalHorasEncargado = horasPorDiaEncargado * diasDelPeriodo.size
+            val filaEncargado = mutableListOf<String>()
+            filaEncargado.add(filaIndex.toString())
+            filaEncargado.add("")
+            filaEncargado.add("\"$nombreEncargadoMostrar\"")
+            diasDelPeriodo.forEach { _ ->
+                filaEncargado.add(horasPorDiaEncargado.toString())
+            }
+            filaEncargado.add(totalHorasEncargado.toString())
+            filaEncargado.add("")
+            fileWriter.append(filaEncargado.joinToString(","))
+            fileWriter.append("\n")
+            Log.d("CsvExport", "Fila encargado agregada: $nombreEncargadoMostrar - $totalHorasEncargado horas (8h/día)")
+            
             Log.d("CsvExport", "Todos los empleados procesados: ${registrosPorEmpleado.size}")
             
             // Cerrar archivo

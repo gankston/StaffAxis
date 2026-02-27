@@ -261,6 +261,22 @@ class ExcelExportService @Inject constructor(
                     }
                 }
                 
+                // Fila del encargado al final (como empleado, 8h por día automático)
+                val nombreEncargadoMostrar = nombreEncargado.ifBlank { "Encargado" }
+                val horasPorDiaEncargado = 8
+                val totalHorasEncargado = horasPorDiaEncargado * diasDelPeriodo.size
+                sheet.addCell(Number(0, filaIndex, filaIndex.toDouble()))
+                sheet.addCell(Label(1, filaIndex, ""))
+                sheet.addCell(Label(2, filaIndex, nombreEncargadoMostrar))
+                diasDelPeriodo.forEachIndexed { colIndex, _ ->
+                    sheet.addCell(Number(3 + colIndex, filaIndex, horasPorDiaEncargado.toDouble()))
+                }
+                sheet.addCell(Number(3 + diasDelPeriodo.size, filaIndex, totalHorasEncargado.toDouble()))
+                sheet.addCell(Label(4 + diasDelPeriodo.size, filaIndex, ""))
+                totalHorasGeneral += totalHorasEncargado
+                filaIndex++
+                android.util.Log.d("ExcelExport", "Fila encargado agregada: $nombreEncargadoMostrar - $totalHorasEncargado horas (8h/día)")
+                
                 // Fila de totales al final
                 sheet.addCell(Label(0, filaIndex, "")) // N vacío
                 sheet.addCell(Label(1, filaIndex, "")) // DNI vacío

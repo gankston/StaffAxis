@@ -80,6 +80,9 @@ fun DashboardScreen(
             onCerrarMensajeRegistroExitoso = viewModel::cerrarMensajeRegistroExitoso,
             onCerrarMensajeEmpleadoCreado = viewModel::cerrarMensajeEmpleadoCreado,
             onCerrarMensajeEmpleadoEditado = viewModel::cerrarMensajeEmpleadoEditado,
+            onCargaMasivaCamposGrandes = viewModel::abrirDialogoConfirmarCargaMasiva,
+            onConfirmarCargaMasiva = viewModel::cargaMasivaCamposGrandes,
+            onCerrarDialogoConfirmarCargaMasiva = viewModel::cerrarDialogoConfirmarCargaMasiva,
             modifier = Modifier.padding(16.dp)
         )
 }
