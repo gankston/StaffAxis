@@ -129,6 +129,7 @@ authRouter.post(
 );
 
 /** GET /api/auth/device/ping — requiere device token (X-Device-Token), retorna device_id + sector_id */
+/** GET /api/auth/device/ping — requiere X-Device-Token, retorna device_id + sector_id + encargado_name */
 authRouter.get("/device/ping", requireDeviceAuth, (req, res) => {
   res.json({ device: req.deviceAuth });
 });

@@ -37,7 +37,7 @@ export async function requireDeviceAuth(
     }
 
     const devices = await query(
-      "SELECT id, device_id, sector_id, api_token_hash FROM devices"
+      "SELECT id, device_id, sector_id, encargado_name, api_token_hash FROM devices"
     );
 
     for (const row of devices.rows) {
@@ -48,6 +48,7 @@ export async function requireDeviceAuth(
         req.deviceAuth = {
           device_id: r.device_id as string,
           sector_id: r.sector_id as string,
+          encargado_name: r.encargado_name as string,
           device_db_id: r.id as string,
         };
         return next();

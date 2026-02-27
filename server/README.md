@@ -59,3 +59,5 @@ npm run start  # Ejecutar dist/main.js
 - `POST /api/auth/device/register` - Crear/actualizar device (body: `{ device_id, sector_id, encargado_name }`) → `{ token }`
 - `POST /api/auth/device/login` - Rotar token (body: `{ device_id }`) → `{ token }` o 404
 - `GET /api/auth/device/ping` - Ping con X-Device-Token → `{ device }`
+- `POST /api/submissions` - Crear submission (X-Device-Token, body: `{ employee_id, date, minutes_worked?, check_in?, check_out?, notes? }`) → 201 o 200 si idempotente
+- `GET /api/submissions/mine?since=timestamp` - Listar submissions del device (X-Device-Token)

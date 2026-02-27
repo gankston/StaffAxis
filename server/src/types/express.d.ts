@@ -1,6 +1,7 @@
 export type DeviceAuth = {
   device_id: string;
   sector_id: string;
+  encargado_name: string;
   device_db_id: string;
 };
 
