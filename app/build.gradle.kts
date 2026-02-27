@@ -27,8 +27,8 @@ android {
         //    - Es la versión visible para el usuario
         // 3. El APK se firmará automáticamente con la misma keystore configurada
         // ============================================
-        versionCode = 12
-        versionName = "1.7.5"
+        versionCode = 13
+        versionName = "1.7.6"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
