@@ -13,11 +13,10 @@
    .\gradlew assembleRelease
    ```
 
-3. **Copiar APK al Escritorio** con nombre en formato obligatorio:
+3. **Copiar APK al Escritorio** con nombre en formato:
    - Origen: `app\build\outputs\apk\release\app-release.apk`
-   - Destino: `C:\Users\pgast\Desktop\StaffAxis_{versionName}.apk`
-   - Formato: **StaffAxis_1.7.6** (guión bajo, sin extensión en el nombre base)
-   - Ejemplo: `StaffAxis_1.7.6.apk`
+   - Destino: `C:\Users\pgast\Desktop\StaffAxis_v{versionName}.apk`
+   - Ejemplo: `StaffAxis_v1.7.6.apk`
 
 4. **Subir a GitHub:**
    - `git add` (archivos modificados + build.gradle.kts)
