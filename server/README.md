@@ -61,3 +61,4 @@ npm run start  # Ejecutar dist/main.js
 - `GET /api/auth/device/ping` - Ping con X-Device-Token → `{ device }`
 - `POST /api/submissions` - Crear submission (X-Device-Token, body: `{ employee_id, date, minutes_worked?, check_in?, check_out?, notes? }`) → 201 o 200 si idempotente
 - `GET /api/submissions/mine?since=timestamp` - Listar submissions del device (X-Device-Token)
+- `GET /api/approved?since=timestamp` - Attendances del sector (X-Device-Token), updated_at > since, incluye deleted
