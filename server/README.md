@@ -40,6 +40,7 @@ npm run start  # Ejecutar dist/main.js
 ## Endpoints
 
 - `GET /` - Info API
-- `GET /api/health` - Health check + DB
+- `GET /api/health` - Health check básico
+- `GET /api/health/db` - Health check + consulta `SELECT 1` a Turso
 - `GET /api/sectors` - Listar sectores
 - `POST /api/sectors` - Crear sector (body: `{ "name": "..." }`)

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { z } from "zod";
-import { db } from "../db/client.js";
+import { db } from "../db/turso.js";
 import { validate } from "../middleware/validate.js";
 
 export const sectorsRouter = Router();

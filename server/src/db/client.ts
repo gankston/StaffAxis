@@ -1,15 +1,5 @@
-import { createClient } from "@libsql/client";
-
-const url = process.env.TURSO_DATABASE_URL;
-const authToken = process.env.TURSO_AUTH_TOKEN;
-
-if (!url || !authToken) {
-  throw new Error(
-    "TURSO_DATABASE_URL y TURSO_AUTH_TOKEN son obligatorios en .env"
-  );
-}
-
-export const db = createClient({
-  url,
-  authToken,
-});
+/**
+ * Re-export del cliente Turso para compatibilidad.
+ * Usar db, query() o transaction() desde turso.ts
+ */
+export { db, query, transaction } from "./turso.js";

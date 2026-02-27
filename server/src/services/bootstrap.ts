@@ -1,4 +1,4 @@
-import { db } from "../db/client.js";
+import { db } from "../db/turso.js";
 import { logger } from "../utils/logger.js";
 
 /**
