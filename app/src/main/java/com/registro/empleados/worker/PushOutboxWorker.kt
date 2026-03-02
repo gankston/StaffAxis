@@ -36,14 +36,16 @@ class PushOutboxWorker @AssistedInject constructor(
 ) : CoroutineWorker(context, params) {
 
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
-        Log.i("StaffAxis", "PushOutboxWorker -> start")
+        Log.i("StaffAxis", "PushOutboxWorker START")
         if (!deviceIdentityManager.ensureDeviceToken()) {
             Log.w("StaffAxis", "PushOutboxWorker -> no token, retry later")
+            Log.i("StaffAxis", "PushOutboxWorker END result=retry sent=0 failed=0")
             return@withContext Result.retry()
         }
         val pending = outboxDao.getNextPending(limit = BATCH_SIZE)
         Log.i("StaffAxis", "PushOutboxWorker -> outbox count=" + pending.size)
         if (pending.isEmpty()) {
+            Log.i("StaffAxis", "PushOutboxWorker END result=success sent=0 failed=0")
             return@withContext Result.success()
         }
         Log.i("StaffAxis", "BASE_URL=" + BuildConfig.BASE_URL)
@@ -156,14 +158,17 @@ class PushOutboxWorker @AssistedInject constructor(
         when {
             anyPermanentFailure -> {
                 Log.e("StaffAxis", "PushOutboxWorker permanent failure (no retry) sent=$sentCount failed=$failedCount$statusInfo")
+                Log.i("StaffAxis", "PushOutboxWorker END result=failure sent=$sentCount failed=$failedCount")
                 Result.failure()
             }
             anyRetriableFailure && !anySuccess -> {
                 Log.e("StaffAxis", "PushOutboxWorker -> fail sent=$sentCount failed=$failedCount$statusInfo")
+                Log.i("StaffAxis", "PushOutboxWorker END result=retry sent=$sentCount failed=$failedCount")
                 Result.retry()
             }
             else -> {
                 Log.i("StaffAxis", "PushOutboxWorker -> success")
+                Log.i("StaffAxis", "PushOutboxWorker END result=success sent=$sentCount failed=$failedCount")
                 if (sentCount > 0) {
                     schedulePullApproved()
                 }
