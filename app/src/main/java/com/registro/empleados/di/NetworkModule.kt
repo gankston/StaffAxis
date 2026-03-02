@@ -8,6 +8,7 @@ import com.registro.empleados.data.remote.api.FeriadosApiService
 import com.registro.empleados.data.remote.api.SectorsApiService
 import com.registro.empleados.data.remote.api.SubmissionsApiService
 import com.registro.empleados.data.remote.datasource.FeriadosRemoteDataSource
+import com.registro.empleados.data.remote.network.RawPeekInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -116,6 +117,7 @@ object NetworkModule {
         }
 
         return OkHttpClient.Builder()
+            .addInterceptor(RawPeekInterceptor())
             .addInterceptor(userAgentInterceptor)
             .addInterceptor(authInterceptor)
             .addInterceptor(sectorsDebugInterceptor)
