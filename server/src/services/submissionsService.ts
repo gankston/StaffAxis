@@ -45,8 +45,8 @@ export async function createSubmission(
   const now = Math.floor(Date.now() / 1000);
   await db.execute({
     sql: `INSERT INTO employees (id, sector_id, first_name, last_name, external_code, is_active, created_at, updated_at)
-          VALUES (?, ?, 'Sin nombre', '', ?, 1, ?, ?) ON CONFLICT(id) DO NOTHING`,
-    args: [employee_id, sector_id, employee_id, now, now],
+          VALUES (?, ?, '', '', NULL, 1, ?, ?) ON CONFLICT(id) DO NOTHING`,
+    args: [employee_id, sector_id, now, now],
   });
   logger.info("[StaffAxis] ensured employee exists", { employee_id });
 
