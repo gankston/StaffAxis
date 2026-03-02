@@ -16,7 +16,6 @@ data class EncargadoSector(
  */
 object EncargadosDisponibles {
     val ENCARGADOS_SECTORES: List<EncargadoSector> = listOf(
-        EncargadoSector("Dev", "sector-dev-001"),
         EncargadoSector("HECTOR BARROZO", "RUTA 5"),
         EncargadoSector("DIEGO BERNARD", "CUCHUY"),
         EncargadoSector("SERGIO GODOY", "CONSTRUCCION"),
