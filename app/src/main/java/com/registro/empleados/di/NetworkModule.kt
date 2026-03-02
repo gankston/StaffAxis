@@ -81,6 +81,21 @@ object NetworkModule {
             }
         }
 
+        val sectorsDebugInterceptor = Interceptor { chain ->
+            val request = chain.request()
+            if (request.url.encodedPath.contains("/api/sectors") || request.url.toString().contains("/sectors")) {
+                Log.i("StaffAxis", "GET sectors url=" + request.url)
+                val response = chain.proceed(request)
+                Log.i("StaffAxis", "GET sectors status=" + response.code)
+                Log.i("StaffAxis", "GET sectors contentType=" + response.header("content-type"))
+                val peek = response.peekBody(512).string().take(200)
+                Log.i("StaffAxis", "GET sectors peek=" + peek)
+                response
+            } else {
+                chain.proceed(request)
+            }
+        }
+
         val submissionsLoggingInterceptor = Interceptor { chain ->
             val request = chain.request()
             val response = chain.proceed(request)
@@ -103,6 +118,7 @@ object NetworkModule {
         return OkHttpClient.Builder()
             .addInterceptor(userAgentInterceptor)
             .addInterceptor(authInterceptor)
+            .addInterceptor(sectorsDebugInterceptor)
             .addInterceptor(staffaxisLoggingInterceptor)
             .addInterceptor(submissionsLoggingInterceptor)
             .addInterceptor(urlLoggingInterceptor)

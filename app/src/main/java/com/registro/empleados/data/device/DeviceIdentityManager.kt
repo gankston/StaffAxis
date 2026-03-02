@@ -104,6 +104,11 @@ class DeviceIdentityManager @Inject constructor(
     private suspend fun resolveSectorId(wanted: String): String? {
         return try {
             val response = sectorsApiService.getSectors()
+            Log.i("StaffAxis", "GET sectors url=" + response.raw().request.url)
+            Log.i("StaffAxis", "GET sectors status=" + response.code())
+            Log.i("StaffAxis", "GET sectors contentType=" + response.headers()["content-type"])
+            val peek = response.raw().peekBody(512).string().take(200)
+            Log.i("StaffAxis", "GET sectors peek=" + peek)
             val body = response.body()
             if (response.isSuccessful && body != null) {
                 val sectors = body.sectors
@@ -127,7 +132,7 @@ class DeviceIdentityManager @Inject constructor(
                 null
             }
         } catch (e: Exception) {
-            Log.e("StaffAxis", "registerDevice -> fail code=-1 msg=get sectors ${e.javaClass.simpleName}", e)
+            Log.e("StaffAxis", "getSectors catch: ${e.javaClass.simpleName} msg=${e.message}", e)
             null
         }
     }
