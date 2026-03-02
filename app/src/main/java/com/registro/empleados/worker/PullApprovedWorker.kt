@@ -3,10 +3,10 @@ package com.registro.empleados.worker
 import android.content.Context
 import android.util.Log
 import androidx.hilt.work.HiltWorker
-import com.registro.empleados.BuildConfig
 import androidx.work.BackoffPolicy
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.registro.empleados.data.device.DeviceIdentityManager
 import com.registro.empleados.data.local.dao.ApprovedAttendanceDao
 import com.registro.empleados.data.local.dao.RegistroAsistenciaDao
 import com.registro.empleados.data.local.entity.ApprovedAttendanceEntity
@@ -30,6 +30,7 @@ import java.util.concurrent.TimeUnit
 class PullApprovedWorker @AssistedInject constructor(
     @Assisted private val context: Context,
     @Assisted params: WorkerParameters,
+    private val deviceIdentityManager: DeviceIdentityManager,
     private val approvedAttendanceDao: ApprovedAttendanceDao,
     private val registroAsistenciaDao: RegistroAsistenciaDao,
     private val submissionsApi: SubmissionsApiService,
@@ -37,15 +38,21 @@ class PullApprovedWorker @AssistedInject constructor(
 ) : CoroutineWorker(context, params) {
 
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
+        Log.i("StaffAxis", "PullApprovedWorker -> start")
+        if (!deviceIdentityManager.ensureDeviceToken()) {
+            Log.w("StaffAxis", "PullApprovedWorker -> no token, retry later")
+            return@withContext Result.retry()
+        }
         try {
             val since = syncStatePrefs.getLastApprovedSyncAt()
             val response = submissionsApi.getApproved(since)
             if (!response.isSuccessful) {
+                Log.e("StaffAxis", "PullApprovedWorker -> fail code=${response.code()}")
                 return@withContext Result.retry()
             }
             val body = response.body()
             val attendances = body?.attendances ?: emptyList()
-            if (BuildConfig.DEBUG) Log.d(TAG, "pull approved: ${attendances.size} recibidos")
+            Log.i("StaffAxis", "PullApprovedWorker -> received=" + attendances.size)
             var maxUpdatedAt = since
             var mergedCount = 0
             for (att in attendances) {
@@ -73,7 +80,7 @@ class PullApprovedWorker @AssistedInject constructor(
                     maxUpdatedAt = att.updatedAt
                 }
             }
-            if (BuildConfig.DEBUG) Log.d(TAG, "PullApprovedWorker merged $mergedCount records into registros_asistencia")
+            Log.i("StaffAxis", "PullApprovedWorker -> merged into registros_asistencia=" + mergedCount)
             val newSyncAt = if (attendances.isEmpty()) {
                 System.currentTimeMillis() / 1000
             } else {
@@ -82,6 +89,7 @@ class PullApprovedWorker @AssistedInject constructor(
             syncStatePrefs.setLastApprovedSyncAt(newSyncAt)
             Result.success()
         } catch (e: Exception) {
+            Log.e("StaffAxis", "PullApprovedWorker -> fail", e)
             Result.retry()
         }
     }

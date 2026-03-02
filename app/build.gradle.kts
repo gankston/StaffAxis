@@ -27,8 +27,8 @@ android {
         //    - Es la versión visible para el usuario
         // 3. El APK se firmará automáticamente con la misma keystore configurada
         // ============================================
-        versionCode = 14
-        versionName = "1.7.7"
+        versionCode = 17
+        versionName = "1.7.8.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -88,7 +88,8 @@ android {
             // Debug sin minify/shrink para builds rápidas y depuración estable
             isMinifyEnabled = false
             isShrinkResources = false
-            buildConfigField("String", "BASE_URL", "\"http://10.0.2.2:3000/\"")
+            buildConfigField("String", "BASE_URL", "\"https://staffaxis-api-prod.pgastonor.workers.dev/\"")
+            signingConfig = signingConfigs.getByName("release")
         }
         release {
             isMinifyEnabled = true

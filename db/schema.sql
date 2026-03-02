@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS sectors (
 );
 
 -- -----------------------------------------------------------------------------
--- EMPLOYEES
+-- EMPLOYEES (id = DNI/legajo como TEXT, ej "26401152")
 -- -----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS employees (
     id              TEXT PRIMARY KEY,

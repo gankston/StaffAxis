@@ -1,0 +1,22 @@
+name = "staffaxis-api"
+main = "src/worker.ts"
+compatibility_date = "2026-02-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Variables (non-secret)
+[vars]
+NODE_ENV = "production"
+
+# Secrets: configurar con wrangler secret put
+# TURSO_DATABASE_URL, TURSO_AUTH_TOKEN, JWT_SECRET, ADMIN_BOOTSTRAP_USER, ADMIN_BOOTSTRAP_PASS
+
+[env.staging]
+name = "staffaxis-api-staging"
+vars = { NODE_ENV = "staging" }
+
+[env.production]
+name = "staffaxis-api-prod"
+compatibility_flags = ["nodejs_compat", "enable_nodejs_http_server_modules"]
+
+[env.production.vars]
+NODE_ENV = "production"

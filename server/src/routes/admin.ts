@@ -2,6 +2,7 @@ import { Router } from "express";
 import { z } from "zod";
 import { db, transaction } from "../db/turso.js";
 import { requireAdminAuth } from "../middleware/auth.js";
+import { resetAdminPassword } from "../services/authService.js";
 import { validate, validateQuery, validateParams } from "../middleware/validate.js";
 import { AppError } from "../middleware/errorHandler.js";
 
@@ -38,7 +39,31 @@ const updateAttendanceSchema = z.object({
   notes: z.string().nullable().optional(),
 });
 
+const resetPasswordSchema = z.object({
+  username: z.string().min(1),
+  new_password: z.string().min(1),
+});
+
 type SubmissionsQuery = z.infer<typeof submissionsQuerySchema>;
+
+/** POST /admin/reset-password — resetea contraseña admin (requiere X-Admin-Reset-Key) */
+adminRouter.post(
+  "/reset-password",
+  validate(resetPasswordSchema),
+  async (req, res) => {
+    const resetKey = process.env.ADMIN_RESET_KEY;
+    if (!resetKey || resetKey.length === 0) {
+      throw new AppError(404, "Not found", "not_found");
+    }
+    const headerKey = req.header("X-Admin-Reset-Key");
+    if (headerKey !== resetKey) {
+      throw new AppError(401, "Unauthorized", "unauthorized");
+    }
+    const body = req.body as z.infer<typeof resetPasswordSchema>;
+    const result = await resetAdminPassword(body);
+    res.status(200).json(result);
+  }
+);
 
 /** GET /admin/submissions — lista paginada, filtros: status, sector_id, date */
 adminRouter.get(

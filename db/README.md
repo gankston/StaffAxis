@@ -93,3 +93,37 @@ Dentro del shell:
 DATABASE_URL=libsql://staffaxis-xxxxx-xxxxx.turso.io
 AUTH_TOKEN=eyJ...
 ```
+
+---
+
+## Schema: employees.id (DNI como TEXT)
+
+La tabla `employees` usa `id TEXT PRIMARY KEY` para almacenar DNI como string (ej: `"26401152"`). Esto está definido en `db/schema.sql` líneas 20-28.
+
+### Verificar en Turso
+
+```bash
+turso db shell staffaxis
+```
+
+```sql
+PRAGMA table_info(employees);
+```
+
+Si la columna `id` muestra `type=TEXT`, el schema es correcto. No hace falta migración.
+
+### Migraciones
+
+Si tu base fue creada con un schema antiguo donde `employees.id` era INTEGER, ejecutar:
+
+```bash
+turso db shell staffaxis < db/migrations/001_employees_id_text.sql
+```
+
+O desde shell interactivo:
+
+```sql
+.read db/migrations/001_employees_id_text.sql
+```
+
+La migración crea `employees_new` con `id TEXT`, copia datos con `CAST(id AS TEXT)`, elimina la tabla vieja y renombra. Los índices y el trigger se recrean.

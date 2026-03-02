@@ -6,22 +6,32 @@
   "scripts": {
     "dev": "tsx watch src/main.ts",
     "build": "tsc",
-    "start": "node dist/main.js"
+    "start": "node dist/main.js",
+    "embed-schema": "node scripts/embed-schema.js",
+    "cf:dev": "npm run embed-schema && wrangler dev",
+    "cf:deploy:staging": "npm run embed-schema && wrangler deploy --env staging",
+    "cf:deploy:prod": "npm run embed-schema && wrangler deploy --env production"
   },
   "dependencies": {
+    "@hono/zod-validator": "^0.7.6",
     "@libsql/client": "^0.14.0",
+    "@types/bcryptjs": "^2.4.6",
     "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.3",
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
+    "hono": "^4.12.3",
     "jsonwebtoken": "^9.0.3",
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260305.0",
     "@types/bcrypt": "^6.0.0",
     "@types/express": "^4.17.21",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^22.9.0",
     "tsx": "^4.19.2",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "wrangler": "^4.69.0"
   }
 }

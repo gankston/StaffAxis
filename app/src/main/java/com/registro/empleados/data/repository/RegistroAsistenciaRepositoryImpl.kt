@@ -1,12 +1,22 @@
 package com.registro.empleados.data.repository
 
+import androidx.work.BackoffPolicy
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.registro.empleados.data.local.database.AppDatabase
+import com.registro.empleados.data.local.dao.OutboxSubmissionDao
 import com.registro.empleados.data.local.dao.RegistroAsistenciaDao
+import com.registro.empleados.data.local.entity.OutboxSubmissionEntity
 import com.registro.empleados.data.local.mapper.RegistroAsistenciaMapper
 import com.registro.empleados.domain.model.RegistroAsistencia
 import com.registro.empleados.domain.repository.RegistroAsistenciaRepository
+import com.registro.empleados.worker.PushOutboxWorker
 import kotlinx.coroutines.flow.map
 import java.time.LocalDate
+import java.util.UUID
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -16,10 +26,12 @@ import javax.inject.Singleton
  */
 @Singleton
 class RegistroAsistenciaRepositoryImpl @Inject constructor(
-    private val database: AppDatabase
+    private val database: AppDatabase,
+    private val workManager: WorkManager
 ) : RegistroAsistenciaRepository {
     
     private val registroDao: RegistroAsistenciaDao = database.registroAsistenciaDao()
+    private val outboxDao: OutboxSubmissionDao = database.outboxSubmissionDao()
 
     override suspend fun getRegistrosByLegajoYRango(
         legajo: String, 
@@ -48,12 +60,62 @@ class RegistroAsistenciaRepositoryImpl @Inject constructor(
 
     override suspend fun insertRegistro(registro: RegistroAsistencia): Long {
         val entity = RegistroAsistenciaMapper.toEntity(registro)
-        return registroDao.insertRegistro(entity)
+        val id = registroDao.insertRegistro(entity)
+        addToOutboxIfNeeded(registro)
+        schedulePushOutbox()
+        return id
     }
 
     override suspend fun updateRegistro(registro: RegistroAsistencia) {
         val entity = RegistroAsistenciaMapper.toEntity(registro)
         registroDao.updateRegistro(entity)
+        addToOutboxIfNeeded(registro)
+        schedulePushOutbox()
+    }
+
+    private suspend fun addToOutboxIfNeeded(registro: RegistroAsistencia) {
+        val employeeId = registro.legajoEmpleado
+        val date = registro.fecha
+        val minutesWorked = registro.horasTrabajadas * 60
+        val checkIn = null
+        val checkOut = null
+        val checkInOrEmpty = checkIn ?: ""
+        val checkOutOrEmpty = checkOut ?: ""
+        val minutesWorkedOrSentinel = minutesWorked
+        if (outboxDao.countPendingWithSameKey(
+                employeeId,
+                date,
+                checkInOrEmpty,
+                checkOutOrEmpty,
+                minutesWorkedOrSentinel
+            ) > 0
+        ) return
+        val outbox = OutboxSubmissionEntity(
+            id = UUID.randomUUID().toString(),
+            employeeId = employeeId,
+            date = date,
+            minutesWorked = minutesWorked,
+            checkIn = checkIn,
+            checkOut = checkOut,
+            notes = registro.observaciones,
+            createdAt = System.currentTimeMillis(),
+            attempts = 0,
+            lastError = null,
+            status = "pending"
+        )
+        outboxDao.insert(outbox)
+    }
+
+    private fun schedulePushOutbox() {
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+        val work = OneTimeWorkRequestBuilder<PushOutboxWorker>()
+            .setConstraints(constraints)
+            .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, PushOutboxWorker.BACKOFF_DELAY, PushOutboxWorker.BACKOFF_UNIT)
+            .addTag(PushOutboxWorker.WORK_TAG)
+            .build()
+        workManager.enqueue(work)
     }
 
     override suspend fun deleteRegistro(id: Long) {

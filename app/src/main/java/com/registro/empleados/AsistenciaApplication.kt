@@ -1,6 +1,7 @@
 package com.registro.empleados
 
 import android.app.Application
+import android.util.Log
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import com.registro.empleados.data.device.DeviceIdentityManager
@@ -37,7 +38,9 @@ class AsistenciaApplication : Application(), Configuration.Provider {
 
     override fun onCreate() {
         super.onCreate()
-        
+        Log.i("StaffAxis", "BASE_URL=" + BuildConfig.BASE_URL)
+        Log.i("StaffAxis", "BUILD_TYPE=" + BuildConfig.BUILD_TYPE + " VERSION=" + BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")")
+
         // Inicializar WorkManager para tareas en segundo plano
         workManagerInitializer.initialize()
         

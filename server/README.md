@@ -57,9 +57,82 @@ Al arrancar, el servidor:
 
 ## Comandos
 
-- `npm run dev` — desarrollo con hot-reload
+- `npm run dev` — desarrollo local con hot-reload (Express en Node)
 - `npm run build` — compila TypeScript a `dist/`
 - `npm start` — ejecuta `dist/main.js`
+- `npm run cf:dev` — desarrollo local con Wrangler (Hono en Cloudflare Workers)
+- `npm run cf:deploy:staging` — deploy a staging (staffaxis-api-staging)
+- `npm run cf:deploy:prod` — deploy a producción (staffaxis-api-prod)
+
+## Cloudflare Workers
+
+El backend se despliega en Cloudflare Workers usando **Hono** (fetch-native), evitando body-parser/iconv-lite de Express. Entornos: `staging` y `production`.
+
+- **Local**: `npm run dev` → Express en Node
+- **Workers**: `npm run cf:dev` / `cf:deploy:staging` / `cf:deploy:prod` → Hono
+
+### Variables y secrets
+
+En `wrangler.toml` hay placeholders para las variables. Los secrets se configuran con:
+
+```bash
+# Staging
+wrangler secret put TURSO_DATABASE_URL --env staging
+wrangler secret put TURSO_AUTH_TOKEN --env staging
+wrangler secret put JWT_SECRET --env staging
+wrangler secret put ADMIN_BOOTSTRAP_USER --env staging
+wrangler secret put ADMIN_BOOTSTRAP_PASS --env staging
+
+# Producción
+wrangler secret put TURSO_DATABASE_URL --env production
+wrangler secret put TURSO_AUTH_TOKEN --env production
+wrangler secret put JWT_SECRET --env production
+wrangler secret put ADMIN_BOOTSTRAP_USER --env production
+wrangler secret put ADMIN_BOOTSTRAP_PASS --env production
+wrangler secret put ADMIN_RESET_KEY --env production
+```
+
+Para desarrollo local con Wrangler, las variables se leen de `.env` automáticamente.
+
+### Reset admin password (producción)
+
+Para resetear la contraseña del admin cuando el bootstrap no lo sobreescribe (porque ya existe en la DB):
+
+1. Configurar el secret `ADMIN_RESET_KEY` en producción:
+
+```bash
+wrangler secret put ADMIN_RESET_KEY --env production
+```
+
+Al ejecutar, wrangler pedirá el valor. Usar una clave larga y aleatoria (ej: `openssl rand -hex 32`).
+
+2. Ejemplo cURL:
+
+```bash
+# Reemplazar URL_BASE, ADMIN_RESET_KEY y credenciales
+curl -X POST "https://staffaxis-api-prod.workers.dev/api/admin/reset-password" \
+  -H "Content-Type: application/json" \
+  -H "X-Admin-Reset-Key: TU_ADMIN_RESET_KEY" \
+  -d '{"username":"admin","new_password":"NuevaPassFuerte123!"}'
+```
+
+Respuesta 200: `{ "ok": true }`
+
+**Postman:** Método POST, URL base + `/api/admin/reset-password`, header `X-Admin-Reset-Key`, body raw JSON con `username` y `new_password`.
+
+**Importante:** El endpoint solo existe si `ADMIN_RESET_KEY` está configurado. No loguear ni exponer ni el password ni la reset key.
+
+## Checklist de endpoints para validar
+
+| Endpoint | Método | Auth | Descripción |
+|----------|--------|------|-------------|
+| `/health` | GET | — | Estado básico |
+| `/health/db` | GET | — | Conexión a base de datos |
+| `/api/auth/device/register` | POST | — | Registrar dispositivo |
+| `/api/auth/admin/login` | POST | — | Login admin |
+| `/api/admin/reset-password` | POST | X-Admin-Reset-Key | Reset admin password (requiere secret) |
+| `/api/submissions` | POST | X-Device-Token | Crear submission |
+| `/api/approved` | GET | X-Device-Token | Pull attendances aprobados |
 
 ## Endpoints de salud
 

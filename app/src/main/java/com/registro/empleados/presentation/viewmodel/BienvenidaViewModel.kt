@@ -3,6 +3,7 @@ package com.registro.empleados.presentation.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.registro.empleados.data.device.DeviceIdentityManager
 import com.registro.empleados.data.local.preferences.AppPreferences
 import com.registro.empleados.domain.model.EncargadoSector
 import com.registro.empleados.domain.usecase.empleado.CargarEmpleadosPorSectorUseCase
@@ -17,7 +18,8 @@ import javax.inject.Inject
 @HiltViewModel
 class BienvenidaViewModel @Inject constructor(
     private val appPreferences: AppPreferences,
-    private val cargarEmpleadosPorSectorUseCase: CargarEmpleadosPorSectorUseCase
+    private val cargarEmpleadosPorSectorUseCase: CargarEmpleadosPorSectorUseCase,
+    private val deviceIdentityManager: DeviceIdentityManager
 ) : ViewModel() {
 
     data class BienvenidaUiState(
@@ -48,6 +50,9 @@ class BienvenidaViewModel @Inject constructor(
                 Log.d("BienvenidaVM", "Guardando configuración: ${encargado.nombreEncargado} - ${encargado.sector}")
                 
                 appPreferences.guardarConfiguracion(encargado.nombreEncargado, encargado.sector)
+                
+                // Registrar dispositivo en backend (POST /auth/device/register) y guardar token
+                deviceIdentityManager.registerWhenConfigSaved(encargado.nombreEncargado, encargado.sector)
                 
                 Log.d("BienvenidaVM", "Configuración guardada exitosamente")
                 

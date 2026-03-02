@@ -2,6 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { db } from "../db/turso.js";
 import { logger } from "../utils/logger.js";
+import { schemaSql as embeddedSchemaSql } from "./schemaContent.js";
 
 /**
  * Verifica si existe la tabla attendances (indica que el schema ya fue aplicado).
@@ -19,8 +20,23 @@ async function schemaExists(): Promise<boolean> {
 }
 
 /**
+ * Obtiene el schema SQL: desde archivo (Node) o embebido (Workers).
+ */
+function getSchemaSql(): string | null {
+  try {
+    const schemaPath = path.join(process.cwd(), "..", "db", "schema.sql");
+    if (typeof fs !== "undefined" && fs.existsSync?.(schemaPath)) {
+      return fs.readFileSync(schemaPath, "utf-8");
+    }
+  } catch {
+    /* fs no disponible (Workers) */
+  }
+  return embeddedSchemaSql;
+}
+
+/**
  * Ejecuta el schema.sql si la tabla attendances no existe.
- * Lee el archivo completo y lo ejecuta en una sola llamada (executeMultiple).
+ * En Node: lee db/schema.sql. En Workers: usa schema embebido.
  */
 export async function bootstrapSchema(): Promise<void> {
   if (await schemaExists()) {
@@ -28,13 +44,11 @@ export async function bootstrapSchema(): Promise<void> {
     return;
   }
 
-  const schemaPath = path.join(process.cwd(), "..", "db", "schema.sql");
-  if (!fs.existsSync(schemaPath)) {
-    logger.warn("Bootstrap schema: archivo no encontrado en " + schemaPath);
+  const schemaSql = getSchemaSql();
+  if (!schemaSql) {
+    logger.warn("Bootstrap schema: no se pudo cargar el schema");
     return;
   }
-
-  const schemaSql = fs.readFileSync(schemaPath, "utf-8");
 
   try {
     await db.executeMultiple(schemaSql);

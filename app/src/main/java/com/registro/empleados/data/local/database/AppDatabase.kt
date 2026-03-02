@@ -23,9 +23,11 @@ import com.registro.empleados.data.database.entities.DiaLaboral
         RegistroAsistenciaEntity::class,
         DiaLaboral::class,
         HorasEmpleadoMesEntity::class,
-        AusenciaEntity::class
+        AusenciaEntity::class,
+        OutboxSubmissionEntity::class,
+        ApprovedAttendanceEntity::class
     ],
-    version = 15, // Corregir nombres y DNIs de todos los sectores
+    version = 17, // Tabla approved_attendances para pull desde backend
     exportSchema = true
 )
 @TypeConverters(
@@ -39,6 +41,8 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun diaLaboralDao(): DiaLaboralDao
     abstract fun horasEmpleadoMesDao(): HorasEmpleadoMesDao
     abstract fun ausenciaDao(): AusenciaDao
+    abstract fun outboxSubmissionDao(): OutboxSubmissionDao
+    abstract fun approvedAttendanceDao(): ApprovedAttendanceDao
     
     companion object {
         @Volatile
@@ -433,6 +437,45 @@ abstract class AppDatabase : RoomDatabase() {
                 android.util.Log.d("Migration_14_15", "✅ === MIGRACIÓN 14→15 COMPLETADA ===")
             }
         }
+
+        val MIGRATION_15_16 = object : Migration(15, 16) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("""
+                    CREATE TABLE IF NOT EXISTS outbox_submissions (
+                        id TEXT PRIMARY KEY NOT NULL,
+                        employee_id TEXT NOT NULL,
+                        date TEXT NOT NULL,
+                        minutes_worked INTEGER,
+                        check_in TEXT,
+                        check_out TEXT,
+                        notes TEXT,
+                        created_at INTEGER NOT NULL,
+                        attempts INTEGER NOT NULL DEFAULT 0,
+                        last_error TEXT,
+                        status TEXT NOT NULL
+                    )
+                """.trimIndent())
+            }
+        }
+
+        val MIGRATION_16_17 = object : Migration(16, 17) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("""
+                    CREATE TABLE IF NOT EXISTS approved_attendances (
+                        id TEXT PRIMARY KEY NOT NULL,
+                        employee_id TEXT NOT NULL,
+                        sector_id TEXT NOT NULL,
+                        date TEXT NOT NULL,
+                        minutes_worked INTEGER,
+                        check_in TEXT,
+                        check_out TEXT,
+                        notes TEXT,
+                        updated_at INTEGER NOT NULL,
+                        is_deleted INTEGER NOT NULL DEFAULT 0
+                    )
+                """.trimIndent())
+            }
+        }
         
         
         fun getDatabase(context: Context): AppDatabase {
@@ -451,7 +494,9 @@ abstract class AppDatabase : RoomDatabase() {
                     MIGRATION_8_9,
                     MIGRATION_12_13,
                     MIGRATION_13_14,
-                    MIGRATION_14_15
+                    MIGRATION_14_15,
+                    MIGRATION_15_16,
+                    MIGRATION_16_17
                 )
                 .fallbackToDestructiveMigration()  // Para desarrollo - borra y recrea
                 .build()

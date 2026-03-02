@@ -5,21 +5,29 @@ import {
   type InValue,
 } from "@libsql/client";
 
-const url = process.env.TURSO_DATABASE_URL;
-const authToken = process.env.TURSO_AUTH_TOKEN;
+let _client: Client | null = null;
 
-if (!url || !authToken) {
-  throw new Error(
-    "TURSO_DATABASE_URL y TURSO_AUTH_TOKEN son obligatorios en .env"
-  );
+function getClient(): Client {
+  if (!_client) {
+    const url = process.env.TURSO_DATABASE_URL;
+    const authToken = process.env.TURSO_AUTH_TOKEN;
+    if (!url || !authToken) {
+      throw new Error(
+        "TURSO_DATABASE_URL y TURSO_AUTH_TOKEN son obligatorios en .env"
+      );
+    }
+    _client = createClient({ url, authToken });
+  }
+  return _client;
 }
 
-const client = createClient({
-  url,
-  authToken,
-});
+const db = {
+  execute: (opts: Parameters<Client["execute"]>[0]) => getClient().execute(opts),
+  executeMultiple: (sql: string) => getClient().executeMultiple(sql),
+  transaction: (mode: "read" | "write") => getClient().transaction(mode),
+};
 
-export { client as db };
+export { db };
 
 export type { Client, Transaction, InValue };
 
@@ -32,7 +40,7 @@ export async function query(
   sql: string,
   params: InValue[] = []
 ): Promise<{ rows: unknown[] }> {
-  const result = await client.execute({
+  const result = await getClient().execute({
     sql,
     args: params,
   });
@@ -46,7 +54,7 @@ export async function query(
 export async function transaction<T>(
   fn: (tx: Transaction) => Promise<T>
 ): Promise<T> {
-  const tx = await client.transaction("write");
+  const tx = await getClient().transaction("write");
   try {
     const result = await fn(tx);
     await tx.commit();

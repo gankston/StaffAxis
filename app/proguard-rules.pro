@@ -20,11 +20,18 @@
 -keep class * extends androidx.room.RoomDatabase
 -dontwarn androidx.room.paging.**
 
-# Retrofit
+# Retrofit - evitar ClassCastException (Class cannot be cast to ParameterizedType)
 -dontwarn retrofit2.**
 -keep class retrofit2.** { *; }
+-keep,allowobfuscation,allowshrinking interface retrofit2.Call
+-keep,allowobfuscation,allowshrinking class retrofit2.Response
+-keep,allowobfuscation,allowshrinking class kotlin.coroutines.Continuation
+# Mantener interfaces API con sus firmas genéricas
+-keep interface com.registro.empleados.data.remote.api.** { *; }
+-keep class com.registro.empleados.data.remote.dto.** { *; }
 -keepattributes Signature
 -keepattributes Exceptions
+-keepattributes RuntimeVisibleAnnotations
 
 # Apache POI
 -dontwarn org.apache.poi.**
