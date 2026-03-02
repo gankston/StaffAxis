@@ -52,10 +52,11 @@ export async function createSubmission(
 
   const id = crypto.randomUUID();
   try {
-    await db.execute({
+    const insertResult = await db.execute({
       sql: `INSERT INTO attendance_submissions
             (id, device_id, sector_id, encargado_name, employee_id, date, minutes_worked, check_in, check_out, notes, status, created_at, updated_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?, ?)`,
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?, ?)
+            ON CONFLICT(device_id, employee_id, date) DO NOTHING`,
       args: [
         id,
         device_id,
@@ -71,18 +72,46 @@ export async function createSubmission(
         now,
       ],
     });
+
+    const rowsAffected = insertResult.rowsAffected ?? -1;
+    if (rowsAffected === 0) {
+      logger.info("[StaffAxis] submissions dedup");
+      return { data: { ok: true, dedup: true }, status: 200 as const };
+    }
+
+    if (rowsAffected >= 1) {
+      const row = await db.execute({
+        sql: "SELECT * FROM attendance_submissions WHERE id = ?",
+        args: [id],
+      });
+      return { data: { ok: true, ...row.rows[0] }, status: 201 as const };
+    }
+
+    const existing = await db.execute({
+      sql: "SELECT * FROM attendance_submissions WHERE device_id = ? AND employee_id = ? AND date = ?",
+      args: [device_id, employee_id, date],
+    });
+    if (existing.rows.length > 0) {
+      const row = existing.rows[0] as unknown as { id: string };
+      if (row?.id === id) {
+        return { data: { ok: true, ...existing.rows[0] }, status: 201 as const };
+      }
+      logger.info("[StaffAxis] submissions dedup");
+      return { data: { ok: true, dedup: true }, status: 200 as const };
+    }
+
     const row = await db.execute({
       sql: "SELECT * FROM attendance_submissions WHERE id = ?",
       args: [id],
     });
-    return { data: row.rows[0], status: 201 as const };
+    return { data: { ok: true, ...row.rows[0] }, status: 201 as const };
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     const isDedupConstraint =
       (msg.includes("SQLITE_CONSTRAINT") && msg.includes("ux_attendance_submissions_dedup")) ||
       msg.includes("UNIQUE constraint failed: attendance_submissions.device_id, attendance_submissions.employee_id, attendance_submissions.date");
     if (isDedupConstraint) {
-      logger.info("[StaffAxis] dedup via unique constraint");
+      logger.info("[StaffAxis] submissions dedup");
       return { data: { ok: true, dedup: true }, status: 200 as const };
     }
     throw err;
