@@ -1,5 +1,6 @@
 package com.registro.empleados.data.remote.api
 
+import com.google.gson.annotations.SerializedName
 import com.registro.empleados.data.remote.dto.SectorDto
 import retrofit2.Response
 import retrofit2.http.GET
@@ -15,5 +16,5 @@ interface SectorsApiService {
 }
 
 data class SectorsResponseDto(
-    val sectors: List<SectorDto>
+    @SerializedName("sectors") val sectors: List<SectorDto>
 )

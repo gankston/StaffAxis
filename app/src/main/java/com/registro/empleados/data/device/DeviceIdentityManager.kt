@@ -103,29 +103,29 @@ class DeviceIdentityManager @Inject constructor(
 
     private suspend fun resolveSectorId(wanted: String): String? {
         return try {
-            Log.i("StaffAxis", "USING_API_IMPL=${sectorsApiService::class.java.name} getSectorsReturnType=Response<SectorsResponseDto>")
             val response = sectorsApiService.getSectors()
-            if (!response.isSuccessful) {
-                Log.e("StaffAxis", "getSectors fail code=${response.code()}")
-                return null
-            }
-            val sectors = response.body()?.sectors ?: emptyList()
-            val ids = sectors.map { it.id }
-            Log.i("StaffAxis", "getSectors OK count=${sectors.size} ids=$ids")
-            Log.i("StaffAxis", "resolveSector wanted=$wanted")
-            val resolved = when {
-                sectors.isEmpty() -> null
-                wanted.isNotBlank() -> {
-                    sectors.find { it.id == wanted }?.id
-                        ?: sectors.find { it.name.equals(wanted, ignoreCase = true) }?.id
+            val body = response.body()
+            if (response.isSuccessful && body != null) {
+                val sectors = body.sectors
+                Log.i("StaffAxis", "getSectors OK count=${sectors.size} ids=${sectors.map { it.id }}")
+                Log.i("StaffAxis", "resolveSector wanted=$wanted")
+                val resolved = when {
+                    sectors.isEmpty() -> null
+                    wanted.isNotBlank() -> {
+                        sectors.find { it.id == wanted }?.id
+                            ?: sectors.find { it.name.equals(wanted, ignoreCase = true) }?.id
+                    }
+                    sectors.size == 1 -> sectors.first().id
+                    else -> null
                 }
-                sectors.size == 1 -> sectors.first().id
-                else -> null
+                if (resolved != null) {
+                    Log.i("StaffAxis", "resolveSector OK sector_id=$resolved")
+                }
+                resolved
+            } else {
+                Log.e("StaffAxis", "getSectors FAIL status=${response.code()} err=${response.errorBody()?.string()?.take(200)}")
+                null
             }
-            if (resolved != null) {
-                Log.i("StaffAxis", "resolveSector OK sector_id=$resolved")
-            }
-            resolved
         } catch (e: Exception) {
             Log.e("StaffAxis", "registerDevice -> fail code=-1 msg=get sectors ${e.javaClass.simpleName}", e)
             null
