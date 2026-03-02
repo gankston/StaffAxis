@@ -10,7 +10,6 @@ import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
-import com.registro.empleados.BuildConfig
 import com.registro.empleados.data.device.DeviceIdentityManager
 import com.registro.empleados.data.local.dao.OutboxSubmissionDao
 import com.registro.empleados.data.remote.api.SubmissionsApiService
@@ -48,7 +47,6 @@ class PushOutboxWorker @AssistedInject constructor(
             Log.i("StaffAxis", "PushOutboxWorker END result=success sent=0 failed=0")
             return@withContext Result.success()
         }
-        Log.i("StaffAxis", "BASE_URL=" + BuildConfig.BASE_URL)
         var anySuccess = false
         var anyRetriableFailure = false
         var anyPermanentFailure = false
