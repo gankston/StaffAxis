@@ -120,6 +120,7 @@ object NetworkModule {
     @Singleton
     @Named("api")
     fun provideApiRetrofit(okHttpClient: OkHttpClient): Retrofit {
+        Log.i("StaffAxis", "API_BASE_URL=" + BuildConfig.BASE_URL)
         return Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
             .client(okHttpClient)
