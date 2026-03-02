@@ -66,10 +66,16 @@ object NetworkModule {
             } else {
                 request
             }
-            if (path.contains("/api/submissions")) {
-                Log.i("StaffAxis", "HTTP -> " + newRequest.url + " headers=" + newRequest.headers)
-            }
             chain.proceed(newRequest)
+        }
+
+        val submissionsLoggingInterceptor = Interceptor { chain ->
+            val request = chain.request()
+            val response = chain.proceed(request)
+            if (request.url.encodedPath.contains("/api/submissions")) {
+                Log.i("StaffAxis", "submissions: ${request.method} ${request.url} -> ${response.code}")
+            }
+            response
         }
 
         val urlLoggingInterceptor = Interceptor { chain ->
@@ -85,6 +91,7 @@ object NetworkModule {
         return OkHttpClient.Builder()
             .addInterceptor(userAgentInterceptor)
             .addInterceptor(authInterceptor)
+            .addInterceptor(submissionsLoggingInterceptor)
             .addInterceptor(urlLoggingInterceptor)
             .addInterceptor(loggingInterceptor)
             .connectTimeout(30, TimeUnit.SECONDS)
