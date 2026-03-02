@@ -50,6 +50,14 @@ export async function createSubmission(
   });
   logger.info("[StaffAxis] ensured employee exists", { employee_id });
 
+  const existing = await db.execute({
+    sql: `SELECT id FROM attendance_submissions WHERE device_id = ? AND employee_id = ? AND date = ? LIMIT 1`,
+    args: [device_id, employee_id, date],
+  });
+  if (existing.rows.length > 0) {
+    return { data: { ok: true, dedup: true }, status: 200 as const };
+  }
+
   const id = crypto.randomUUID();
   try {
     await db.execute({
