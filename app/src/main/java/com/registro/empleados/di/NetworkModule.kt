@@ -69,6 +69,18 @@ object NetworkModule {
             chain.proceed(newRequest)
         }
 
+        val staffaxisLoggingInterceptor = Interceptor { chain ->
+            val request = chain.request()
+            if (request.url.host == "staffaxis-api-prod.pgastonor.workers.dev") {
+                Log.i("StaffAxis", "HTTP -> " + request.method + " " + request.url)
+                val response = chain.proceed(request)
+                Log.i("StaffAxis", "HTTP <- " + response.code + " " + request.url)
+                response
+            } else {
+                chain.proceed(request)
+            }
+        }
+
         val submissionsLoggingInterceptor = Interceptor { chain ->
             val request = chain.request()
             val response = chain.proceed(request)
@@ -91,6 +103,7 @@ object NetworkModule {
         return OkHttpClient.Builder()
             .addInterceptor(userAgentInterceptor)
             .addInterceptor(authInterceptor)
+            .addInterceptor(staffaxisLoggingInterceptor)
             .addInterceptor(submissionsLoggingInterceptor)
             .addInterceptor(urlLoggingInterceptor)
             .addInterceptor(loggingInterceptor)
