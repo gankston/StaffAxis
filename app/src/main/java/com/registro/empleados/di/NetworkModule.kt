@@ -116,7 +116,7 @@ object NetworkModule {
             level = HttpLoggingInterceptor.Level.NONE
         }
 
-        return OkHttpClient.Builder()
+        val client = OkHttpClient.Builder()
             .addInterceptor(RawPeekInterceptor())
             .addInterceptor(userAgentInterceptor)
             .addInterceptor(authInterceptor)
@@ -129,6 +129,8 @@ object NetworkModule {
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
             .build()
+        Log.i("StaffAxis", "OKHTTP_API_CLIENT interceptors=" + client.interceptors.map { it.javaClass.name })
+        return client
     }
 
     /**
@@ -138,12 +140,13 @@ object NetworkModule {
     @Singleton
     @Named("api")
     fun provideApiRetrofit(okHttpClient: OkHttpClient): Retrofit {
-        Log.i("StaffAxis", "API_BASE_URL=" + BuildConfig.BASE_URL)
-        return Retrofit.Builder()
+        val retrofit = Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
+        Log.i("StaffAxis", "RETROFIT_API baseUrl=" + retrofit.baseUrl().toString())
+        return retrofit
     }
 
     /**
