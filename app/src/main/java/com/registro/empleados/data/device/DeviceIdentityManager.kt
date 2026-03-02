@@ -89,7 +89,7 @@ class DeviceIdentityManager @Inject constructor(
                     val token = response.body()?.token
                     if (!token.isNullOrBlank()) {
                         devicePrefs.setDeviceCredentials(token, deviceId)
-                        Log.i("StaffAxis", "registerDevice success (200) token saved")
+                        Log.i("StaffAxis", "registerDevice success status=$code tokenSaved=true")
                     } else {
                         Log.e("StaffAxis", "registerDevice -> fail code=$code msg=empty token")
                     }
