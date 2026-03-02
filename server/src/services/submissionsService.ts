@@ -1,4 +1,4 @@
-import { db, query } from "../db/turso.js";
+import { db } from "../db/turso.js";
 import type { DeviceAuth } from "./authService.js";
 import { logger } from "../utils/logger.js";
 
@@ -50,14 +50,6 @@ export async function createSubmission(
   });
   logger.info("[StaffAxis] ensured employee exists", { employee_id });
 
-  const existing = await db.execute({
-    sql: `SELECT id FROM attendance_submissions WHERE device_id = ? AND employee_id = ? AND date = ? LIMIT 1`,
-    args: [device_id, employee_id, date],
-  });
-  if (existing.rows.length > 0) {
-    return { data: { ok: true, dedup: true }, status: 200 as const };
-  }
-
   const id = crypto.randomUUID();
   try {
     await db.execute({
@@ -86,16 +78,14 @@ export async function createSubmission(
     return { data: row.rows[0], status: 201 as const };
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
-    if (msg.includes("UNIQUE") || msg.includes("unique")) {
-      const existing = await query(
-        `SELECT * FROM attendance_submissions
-         WHERE device_id = ? AND employee_id = ? AND date = ?
-         ORDER BY updated_at DESC LIMIT 1`,
-        [device_id, employee_id, date]
-      );
-      if (existing.rows.length > 0) {
-        return { data: existing.rows[0], status: 200 as const };
-      }
+    const isUniqueConstraint =
+      msg.includes("SQLITE_CONSTRAINT") ||
+      msg.includes("UNIQUE") ||
+      msg.includes("unique") ||
+      msg.includes("ux_attendance_submissions_dedup");
+    if (isUniqueConstraint) {
+      logger.info("[StaffAxis] submissions dedup (unique constraint)", { device_id, employee_id, date });
+      return { data: { ok: true, dedup: true }, status: 200 as const };
     }
     throw err;
   }
