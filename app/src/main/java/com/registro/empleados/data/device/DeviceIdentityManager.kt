@@ -56,16 +56,22 @@ class DeviceIdentityManager @Inject constructor(
     /**
      * Registra el dispositivo en el backend con encargado y sector.
      * Se llama internamente cuando el usuario guarda configuración (encargado + sector).
-     * - Resuelve sector_id a partir del nombre (consulta API de sectores)
-     * - Si no hay match, usa el primer sector disponible
-     * - Guarda el token devuelto en DataStore
+     * - Usa sector_id persistido si existe; si no, resuelve vía GET /api/sectors
+     * - Resolución: match por sector.id (exacto); si wanted vacío y solo 1 sector, usa ese
+     * - Guarda el token y sector_id en prefs
      */
-    suspend fun registerWhenConfigSaved(nombreEncargado: String, sectorName: String) =
+    suspend fun registerWhenConfigSaved(nombreEncargado: String, sectorWanted: String) =
         withContext(Dispatchers.IO) {
             Log.i("StaffAxis", "registerDevice -> start")
             try {
                 val deviceId = devicePrefs.ensureDeviceId()
-                val sectorId = resolveSectorId(sectorName)
+                var sectorId = appPreferences.getSectorId()
+                if (sectorId.isNullOrBlank()) {
+                    sectorId = resolveSectorId(sectorWanted)
+                    if (sectorId != null) {
+                        appPreferences.setSectorId(sectorId)
+                    }
+                }
                 if (sectorId == null) {
                     Log.e("StaffAxis", "registerDevice -> fail code=-1 msg=sector_id not resolved")
                     return@withContext
@@ -83,7 +89,7 @@ class DeviceIdentityManager @Inject constructor(
                     val token = response.body()?.token
                     if (!token.isNullOrBlank()) {
                         devicePrefs.setDeviceCredentials(token, deviceId)
-                        Log.i("StaffAxis", "registerDevice -> success")
+                        Log.i("StaffAxis", "registerDevice success (200) token saved")
                     } else {
                         Log.e("StaffAxis", "registerDevice -> fail code=$code msg=empty token")
                     }
@@ -95,17 +101,32 @@ class DeviceIdentityManager @Inject constructor(
             }
         }
 
-    private suspend fun resolveSectorId(sectorName: String): String? {
+    private suspend fun resolveSectorId(wanted: String): String? {
         return try {
             val response = sectorsApiService.getSectors()
-            if (!response.isSuccessful) return null
-            val sectors = response.body()?.sectors ?: return null
-            sectors
-                .find { it.name.equals(sectorName, ignoreCase = true) }
-                ?.id
-                ?: sectors.firstOrNull()?.id
+            if (!response.isSuccessful) {
+                Log.e("StaffAxis", "getSectors fail code=${response.code()}")
+                return null
+            }
+            val sectors = response.body()?.sectors ?: emptyList()
+            val ids = sectors.map { it.id }
+            Log.i("StaffAxis", "getSectors OK count=${sectors.size} ids=$ids")
+            Log.i("StaffAxis", "resolveSector wanted=$wanted")
+            val resolved = when {
+                sectors.isEmpty() -> null
+                wanted.isNotBlank() -> {
+                    sectors.find { it.id == wanted }?.id
+                        ?: sectors.find { it.name.equals(wanted, ignoreCase = true) }?.id
+                }
+                sectors.size == 1 -> sectors.first().id
+                else -> null
+            }
+            if (resolved != null) {
+                Log.i("StaffAxis", "resolveSector OK sector_id=$resolved")
+            }
+            resolved
         } catch (e: Exception) {
-            Log.e("StaffAxis", "registerDevice -> fail code=-1 msg=get sectors ${e.javaClass.simpleName}")
+            Log.e("StaffAxis", "registerDevice -> fail code=-1 msg=get sectors ${e.javaClass.simpleName}", e)
             null
         }
     }

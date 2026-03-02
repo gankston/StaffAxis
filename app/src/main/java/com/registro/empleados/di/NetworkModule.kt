@@ -52,7 +52,7 @@ object NetworkModule {
             val request = chain.request()
             val path = request.url.encodedPath
             val isStaffAxisApi = request.url.host.contains("staffaxis")
-            val needsToken = isStaffAxisApi && path.startsWith("/api/") && !path.startsWith("/api/auth/")
+            val needsToken = isStaffAxisApi && path.startsWith("/api/") && !path.startsWith("/api/auth/") && !path.contains("/sectors")
             val token = if (needsToken) devicePrefs.getDeviceTokenSync() else null
             val hasToken = !token.isNullOrBlank()
             if (needsToken) {

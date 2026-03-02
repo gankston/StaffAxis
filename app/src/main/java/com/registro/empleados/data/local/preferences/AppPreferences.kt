@@ -18,13 +18,15 @@ class AppPreferences @Inject constructor(
     companion object {
         private const val KEY_NOMBRE_ENCARGADO = "nombre_encargado"
         private const val KEY_SECTOR = "sector_seleccionado"
+        private const val KEY_SECTOR_ID = "sector_id"
         private const val KEY_ES_PRIMERA_VEZ = "es_primera_vez"
     }
     
-    fun guardarConfiguracion(nombreEncargado: String, sector: String) {
+    fun guardarConfiguracion(nombreEncargado: String, sector: String, sectorId: String? = null) {
         prefs.edit().apply {
             putString(KEY_NOMBRE_ENCARGADO, nombreEncargado)
             putString(KEY_SECTOR, sector)
+            if (sectorId != null) putString(KEY_SECTOR_ID, sectorId)
             putBoolean(KEY_ES_PRIMERA_VEZ, false)
             apply()
         }
@@ -40,6 +42,14 @@ class AppPreferences @Inject constructor(
     
     fun getSectorSeleccionado(): String {
         return prefs.getString(KEY_SECTOR, "") ?: ""
+    }
+
+    fun getSectorId(): String? {
+        return prefs.getString(KEY_SECTOR_ID, null)?.takeIf { it.isNotBlank() }
+    }
+
+    fun setSectorId(sectorId: String) {
+        prefs.edit().putString(KEY_SECTOR_ID, sectorId).apply()
     }
     
     fun tieneConfiguracion(): Boolean {
