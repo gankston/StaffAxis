@@ -60,13 +60,7 @@ class AsistenciaApplication : Application(), Configuration.Provider {
                 val response = withContext(Dispatchers.IO) {
                     sectorsApiService.getSectors()
                 }
-                Log.i("StaffAxis", "GET sectors url=" + response.raw().request.url)
-                Log.i("StaffAxis", "GET sectors status=" + response.code())
-                val raw = response.body()?.string()
-                Log.i("StaffAxis", "GET sectors raw=" + (raw?.take(300) ?: "null"))
-                response.errorBody()?.string()?.let { err ->
-                    Log.i("StaffAxis", "GET sectors errorBody=" + err.take(300))
-                }
+                Log.i("StaffAxis", "PING sectors status=${response.code()}")
             } catch (e: Exception) {
                 Log.i("StaffAxis", "PING sectors error=${e.message ?: e.javaClass.simpleName}")
             }

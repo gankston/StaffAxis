@@ -4,9 +4,7 @@ import android.util.Log
 import com.registro.empleados.data.local.preferences.AppPreferences
 import com.registro.empleados.data.local.preferences.DevicePrefs
 import com.registro.empleados.data.remote.api.AuthApiService
-import com.google.gson.Gson
 import com.registro.empleados.data.remote.api.SectorsApiService
-import com.registro.empleados.data.remote.api.SectorsResponseDto
 import com.registro.empleados.data.remote.dto.RegisterDeviceRequestDto
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -106,19 +104,11 @@ class DeviceIdentityManager @Inject constructor(
     private suspend fun resolveSectorId(wanted: String): String? {
         return try {
             val response = sectorsApiService.getSectors()
-            Log.i("StaffAxis", "GET sectors url=" + response.raw().request.url)
-            Log.i("StaffAxis", "GET sectors status=" + response.code())
-            val raw = response.body()?.string()
-            Log.i("StaffAxis", "GET sectors raw=" + (raw?.take(300) ?: "null"))
-            response.errorBody()?.string()?.let { err ->
-                Log.i("StaffAxis", "GET sectors errorBody=" + err.take(300))
-            }
             if (!response.isSuccessful) {
                 Log.e("StaffAxis", "getSectors fail code=${response.code()}")
                 return null
             }
-            val dto = raw?.let { Gson().fromJson(it, SectorsResponseDto::class.java) }
-            val sectors = dto?.sectors ?: emptyList()
+            val sectors = response.body()?.sectors ?: emptyList()
             val ids = sectors.map { it.id }
             Log.i("StaffAxis", "getSectors OK count=${sectors.size} ids=$ids")
             Log.i("StaffAxis", "resolveSector wanted=$wanted")
