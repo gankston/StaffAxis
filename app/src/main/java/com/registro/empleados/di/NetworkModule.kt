@@ -66,6 +66,9 @@ object NetworkModule {
             } else {
                 request
             }
+            if (path.contains("/api/submissions")) {
+                Log.i("StaffAxis", "HTTP -> " + newRequest.url + " headers=" + newRequest.headers)
+            }
             chain.proceed(newRequest)
         }
 
