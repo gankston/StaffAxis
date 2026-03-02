@@ -103,6 +103,7 @@ class DeviceIdentityManager @Inject constructor(
 
     private suspend fun resolveSectorId(wanted: String): String? {
         return try {
+            Log.i("StaffAxis", "USING_API_IMPL=${sectorsApiService::class.java.name} getSectorsReturnType=Response<SectorsResponseDto>")
             val response = sectorsApiService.getSectors()
             if (!response.isSuccessful) {
                 Log.e("StaffAxis", "getSectors fail code=${response.code()}")
