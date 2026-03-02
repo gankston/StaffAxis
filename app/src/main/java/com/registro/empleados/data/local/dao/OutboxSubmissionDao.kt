@@ -6,12 +6,18 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.registro.empleados.data.local.entity.OutboxSubmissionEntity
 
+/**
+ * DAO para outbox de submissions. Status: pending | sent | failed_permanent.
+ * failed_permanent NUNCA se reenvía: getNextPending y countPendingWithSameKey
+ * excluyen status != 'pending'. Solo resetToPendingForRetry (acción explícita) lo reactiva.
+ */
 @Dao
 interface OutboxSubmissionDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(outbox: OutboxSubmissionEntity)
 
+    /** Pendientes a enviar. Excluye failed_permanent. */
     @Query("""
         SELECT * FROM outbox_submissions 
         WHERE status = 'pending' 
@@ -42,7 +48,18 @@ interface OutboxSubmissionDao {
     suspend fun markFailedPermanent(id: String, error: String)
 
     /**
+     * Reactiva un item failed_permanent para reintento manual. Solo llamar desde UI explícita.
+     */
+    @Query("""
+        UPDATE outbox_submissions 
+        SET status = 'pending', last_error = NULL 
+        WHERE id = :id AND status = 'failed_permanent'
+    """)
+    suspend fun resetToPendingForRetry(id: String)
+
+    /**
      * Cuenta pendientes con la misma clave (evitar duplicados).
+     * Excluye failed_permanent.
      * Usa '' para checkIn/checkOut null y -1 para minutesWorked null.
      */
     @Query("""

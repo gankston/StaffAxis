@@ -42,5 +42,5 @@ data class OutboxSubmissionEntity(
     val lastError: String? = null,
 
     @ColumnInfo(name = "status")
-    val status: String // 'pending' | 'sent'
+    val status: String // 'pending' | 'sent' | 'failed_permanent'
 )
