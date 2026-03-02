@@ -78,13 +78,11 @@ export async function createSubmission(
     return { data: row.rows[0], status: 201 as const };
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
-    const isUniqueConstraint =
-      msg.includes("SQLITE_CONSTRAINT") ||
-      msg.includes("UNIQUE") ||
-      msg.includes("unique") ||
-      msg.includes("ux_attendance_submissions_dedup");
-    if (isUniqueConstraint) {
-      logger.info("[StaffAxis] submissions dedup (unique constraint)", { device_id, employee_id, date });
+    const isDedupConstraint =
+      (msg.includes("SQLITE_CONSTRAINT") && msg.includes("ux_attendance_submissions_dedup")) ||
+      msg.includes("UNIQUE constraint failed: attendance_submissions.device_id, attendance_submissions.employee_id, attendance_submissions.date");
+    if (isDedupConstraint) {
+      logger.info("[StaffAxis] dedup via unique constraint");
       return { data: { ok: true, dedup: true }, status: 200 as const };
     }
     throw err;
