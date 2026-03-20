@@ -14,8 +14,11 @@ import com.registro.empleados.data.local.entity.OutboxSubmissionEntity
 @Dao
 interface OutboxSubmissionDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(outbox: OutboxSubmissionEntity)
+
+    @Query("SELECT COUNT(*) FROM outbox_submissions WHERE dedup_key = :dedupKey AND status = 'pending'")
+    suspend fun countPendingByDedupKey(dedupKey: String): Int
 
     /** Pendientes a enviar. Excluye failed_permanent. */
     @Query("""
@@ -25,6 +28,9 @@ interface OutboxSubmissionDao {
         LIMIT :limit
     """)
     suspend fun getNextPending(limit: Int = 10): List<OutboxSubmissionEntity>
+
+    @Query("SELECT COUNT(*) FROM outbox_submissions WHERE status = 'pending'")
+    suspend fun countPending(): Int
 
     @Query("""
         UPDATE outbox_submissions 

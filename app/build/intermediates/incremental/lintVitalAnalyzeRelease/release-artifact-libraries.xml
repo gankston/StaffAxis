@@ -493,6 +493,32 @@
       externalAnnotations="annotations.zip"
       proguardRules="proguard.txt"/>
   <library
+      name="androidx.datastore:datastore-preferences:1.0.0@aar"
+      jars="C:\Users\pgast\.gradle\caches\8.13\transforms\42d61d8b9a760cd96ee57f7e078650a1\transformed\datastore-preferences-1.0.0\jars\classes.jar"
+      resolved="androidx.datastore:datastore-preferences:1.0.0"
+      folder="C:\Users\pgast\.gradle\caches\8.13\transforms\42d61d8b9a760cd96ee57f7e078650a1\transformed\datastore-preferences-1.0.0"
+      manifest="AndroidManifest.xml"
+      resFolder="res"
+      assetsFolder="assets"
+      lintJar="lint.jar"
+      publicResources="public.txt"
+      symbolFile="R.txt"
+      externalAnnotations="annotations.zip"
+      proguardRules="proguard.txt"/>
+  <library
+      name="com.google.accompanist:accompanist-swiperefresh:0.34.0@aar"
+      jars="C:\Users\pgast\.gradle\caches\8.13\transforms\f88eaa163a12dffb7f1b30e2e616ed8c\transformed\accompanist-swiperefresh-0.34.0\jars\classes.jar"
+      resolved="com.google.accompanist:accompanist-swiperefresh:0.34.0"
+      folder="C:\Users\pgast\.gradle\caches\8.13\transforms\f88eaa163a12dffb7f1b30e2e616ed8c\transformed\accompanist-swiperefresh-0.34.0"
+      manifest="AndroidManifest.xml"
+      resFolder="res"
+      assetsFolder="assets"
+      lintJar="lint.jar"
+      publicResources="public.txt"
+      symbolFile="R.txt"
+      externalAnnotations="annotations.zip"
+      proguardRules="proguard.txt"/>
+  <library
       name="org.jetbrains.kotlin:kotlin-parcelize-runtime:2.0.0@jar"
       jars="C:\Users\pgast\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-parcelize-runtime\2.0.0\64302a285bd7779196c44a9ceae188ebd62ea67\kotlin-parcelize-runtime-2.0.0.jar"
       resolved="org.jetbrains.kotlin:kotlin-parcelize-runtime:2.0.0"/>
@@ -538,6 +564,19 @@
       name="com.squareup.okhttp3:okhttp:4.12.0@jar"
       jars="C:\Users\pgast\.gradle\caches\modules-2\files-2.1\com.squareup.okhttp3\okhttp\4.12.0\2f4525d4a200e97e1b87449c2cd9bd2e25b7e8cd\okhttp-4.12.0.jar"
       resolved="com.squareup.okhttp3:okhttp:4.12.0"/>
+  <library
+      name="androidx.datastore:datastore:1.0.0@aar"
+      jars="C:\Users\pgast\.gradle\caches\8.13\transforms\2ce36096adfa14ab3eec073a683e8271\transformed\datastore-1.0.0\jars\classes.jar"
+      resolved="androidx.datastore:datastore:1.0.0"
+      folder="C:\Users\pgast\.gradle\caches\8.13\transforms\2ce36096adfa14ab3eec073a683e8271\transformed\datastore-1.0.0"
+      manifest="AndroidManifest.xml"
+      resFolder="res"
+      assetsFolder="assets"
+      lintJar="lint.jar"
+      publicResources="public.txt"
+      symbolFile="R.txt"
+      externalAnnotations="annotations.zip"
+      proguardRules="proguard.txt"/>
   <library
       name="androidx.compose.material3:material3-window-size-class-android:1.2.0@aar"
       jars="C:\Users\pgast\.gradle\caches\8.13\transforms\874b37c89febc21e84f10982747e945b\transformed\material3-window-size-class-release\jars\classes.jar"
@@ -773,6 +812,14 @@
       externalAnnotations="annotations.zip"
       proguardRules="proguard.txt"/>
   <library
+      name="androidx.datastore:datastore-preferences-core:1.0.0@jar"
+      jars="C:\Users\pgast\.gradle\caches\modules-2\files-2.1\androidx.datastore\datastore-preferences-core\1.0.0\403f64499b9a8994f5f7010329ddd1ee5c919ed5\datastore-preferences-core-1.0.0.jar"
+      resolved="androidx.datastore:datastore-preferences-core:1.0.0"/>
+  <library
+      name="androidx.datastore:datastore-core:1.0.0@jar"
+      jars="C:\Users\pgast\.gradle\caches\modules-2\files-2.1\androidx.datastore\datastore-core\1.0.0\91b04fb657294e2906d95dce6a9e5a851f6125c1\datastore-core-1.0.0.jar"
+      resolved="androidx.datastore:datastore-core:1.0.0"/>
+  <library
       name="org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.7.3@jar"
       jars="C:\Users\pgast\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlinx\kotlinx-coroutines-core-jvm\1.7.3\2b09627576f0989a436a00a4a54b55fa5026fb86\kotlinx-coroutines-core-jvm-1.7.3.jar"
       resolved="org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.7.3"/>
@@ -969,6 +1016,19 @@
       name="androidx.hilt:hilt-common:1.1.0@jar"
       jars="C:\Users\pgast\.gradle\caches\modules-2\files-2.1\androidx.hilt\hilt-common\1.1.0\9ca9c006cfce81d1435a0735fdab4b9e1166faa1\hilt-common-1.1.0.jar"
       resolved="androidx.hilt:hilt-common:1.1.0"/>
+  <library
+      name="androidx.compose.material:material-android:1.6.1@aar"
+      jars="C:\Users\pgast\.gradle\caches\8.13\transforms\90a92f35bb4c716d30f6350f63477351\transformed\material-release\jars\classes.jar"
+      resolved="androidx.compose.material:material-android:1.6.1"
+      folder="C:\Users\pgast\.gradle\caches\8.13\transforms\90a92f35bb4c716d30f6350f63477351\transformed\material-release"
+      manifest="AndroidManifest.xml"
+      resFolder="res"
+      assetsFolder="assets"
+      lintJar="lint.jar"
+      publicResources="public.txt"
+      symbolFile="R.txt"
+      externalAnnotations="annotations.zip"
+      proguardRules="proguard.txt"/>
   <library
       name="androidx.emoji2:emoji2-views-helper:1.3.0@aar"
       jars="C:\Users\pgast\.gradle\caches\8.13\transforms\3c57d3a1807ed58021a0751becf5b251\transformed\emoji2-views-helper-1.3.0\jars\classes.jar"

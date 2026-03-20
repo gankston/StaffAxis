@@ -1,8 +1,8 @@
 1<?xml version="1.0" encoding="utf-8"?>
 2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
 3    package="com.registro.empleados"
-4    android:versionCode="12"
-5    android:versionName="1.7.5" >
+4    android:versionCode="28"
+5    android:versionName="2.0.5" >
 6
 7    <uses-sdk
 8        android:minSdkVersion="26"
@@ -52,7 +52,7 @@
 29-->[androidx.core:core:1.12.0] C:\Users\pgast\.gradle\caches\8.13\transforms\b2c250bd108ac93e533ebc3081865fb0\transformed\core-1.12.0\AndroidManifest.xml:26:22-94
 30
 31    <application
-31-->C:\Registro empleados\app\src\main\AndroidManifest.xml:13:5-44:19
+31-->C:\Registro empleados\app\src\main\AndroidManifest.xml:13:5-55:19
 32        android:name="com.registro.empleados.AsistenciaApplication"
 32-->C:\Registro empleados\app\src\main\AndroidManifest.xml:14:9-46
 33        android:allowBackup="true"
@@ -74,76 +74,72 @@
 41-->C:\Registro empleados\app\src\main\AndroidManifest.xml:21:9-35
 42        android:theme="@style/Theme.Asistencia" >
 42-->C:\Registro empleados\app\src\main\AndroidManifest.xml:22:9-48
-43        <activity
-43-->C:\Registro empleados\app\src\main\AndroidManifest.xml:24:9-33:20
-44            android:name="com.registro.empleados.presentation.MainActivity"
-44-->C:\Registro empleados\app\src\main\AndroidManifest.xml:25:13-54
-45            android:exported="true"
-45-->C:\Registro empleados\app\src\main\AndroidManifest.xml:26:13-36
-46            android:label="@string/app_name"
-46-->C:\Registro empleados\app\src\main\AndroidManifest.xml:27:13-45
-47            android:theme="@style/Theme.Asistencia" >
-47-->C:\Registro empleados\app\src\main\AndroidManifest.xml:28:13-52
-48            <intent-filter>
-48-->C:\Registro empleados\app\src\main\AndroidManifest.xml:29:13-32:29
-49                <action android:name="android.intent.action.MAIN" />
-49-->C:\Registro empleados\app\src\main\AndroidManifest.xml:30:17-69
-49-->C:\Registro empleados\app\src\main\AndroidManifest.xml:30:25-66
-50
-51                <category android:name="android.intent.category.LAUNCHER" />
-51-->C:\Registro empleados\app\src\main\AndroidManifest.xml:31:17-77
-51-->C:\Registro empleados\app\src\main\AndroidManifest.xml:31:27-74
-52            </intent-filter>
-53        </activity>
-54
-55        <provider
-56            android:name="androidx.core.content.FileProvider"
-56-->C:\Registro empleados\app\src\main\AndroidManifest.xml:36:13-62
-57            android:authorities="com.registro.empleados.fileprovider"
-57-->C:\Registro empleados\app\src\main\AndroidManifest.xml:37:13-64
-58            android:exported="false"
-58-->C:\Registro empleados\app\src\main\AndroidManifest.xml:38:13-37
-59            android:grantUriPermissions="true" >
-59-->C:\Registro empleados\app\src\main\AndroidManifest.xml:39:13-47
-60            <meta-data
-60-->C:\Registro empleados\app\src\main\AndroidManifest.xml:40:13-42:54
-61                android:name="android.support.FILE_PROVIDER_PATHS"
-61-->C:\Registro empleados\app\src\main\AndroidManifest.xml:41:17-67
-62                android:resource="@xml/file_paths" />
-62-->C:\Registro empleados\app\src\main\AndroidManifest.xml:42:17-51
-63        </provider>
-64        <provider
-64-->[androidx.work:work-runtime:2.9.0] C:\Users\pgast\.gradle\caches\8.13\transforms\3a17f3cbb08538d8d2fd69a86bd8e4d7\transformed\work-runtime-2.9.0\AndroidManifest.xml:29:9-37:20
-65            android:name="androidx.startup.InitializationProvider"
-65-->[androidx.work:work-runtime:2.9.0] C:\Users\pgast\.gradle\caches\8.13\transforms\3a17f3cbb08538d8d2fd69a86bd8e4d7\transformed\work-runtime-2.9.0\AndroidManifest.xml:30:13-67
-66            android:authorities="com.registro.empleados.androidx-startup"
-66-->[androidx.work:work-runtime:2.9.0] C:\Users\pgast\.gradle\caches\8.13\transforms\3a17f3cbb08538d8d2fd69a86bd8e4d7\transformed\work-runtime-2.9.0\AndroidManifest.xml:31:13-68
-67            android:exported="false" >
-67-->[androidx.work:work-runtime:2.9.0] C:\Users\pgast\.gradle\caches\8.13\transforms\3a17f3cbb08538d8d2fd69a86bd8e4d7\transformed\work-runtime-2.9.0\AndroidManifest.xml:32:13-37
-68            <meta-data
-68-->[androidx.work:work-runtime:2.9.0] C:\Users\pgast\.gradle\caches\8.13\transforms\3a17f3cbb08538d8d2fd69a86bd8e4d7\transformed\work-runtime-2.9.0\AndroidManifest.xml:34:13-36:52
-69                android:name="androidx.work.WorkManagerInitializer"
-69-->[androidx.work:work-runtime:2.9.0] C:\Users\pgast\.gradle\caches\8.13\transforms\3a17f3cbb08538d8d2fd69a86bd8e4d7\transformed\work-runtime-2.9.0\AndroidManifest.xml:35:17-68
-70                android:value="androidx.startup" />
-70-->[androidx.work:work-runtime:2.9.0] C:\Users\pgast\.gradle\caches\8.13\transforms\3a17f3cbb08538d8d2fd69a86bd8e4d7\transformed\work-runtime-2.9.0\AndroidManifest.xml:36:17-49
-71            <meta-data
-71-->[androidx.emoji2:emoji2:1.3.0] C:\Users\pgast\.gradle\caches\8.13\transforms\bc6f777b4f8109e05170311b79b360b8\transformed\emoji2-1.3.0\AndroidManifest.xml:29:13-31:52
-72                android:name="androidx.emoji2.text.EmojiCompatInitializer"
-72-->[androidx.emoji2:emoji2:1.3.0] C:\Users\pgast\.gradle\caches\8.13\transforms\bc6f777b4f8109e05170311b79b360b8\transformed\emoji2-1.3.0\AndroidManifest.xml:30:17-75
-73                android:value="androidx.startup" />
-73-->[androidx.emoji2:emoji2:1.3.0] C:\Users\pgast\.gradle\caches\8.13\transforms\bc6f777b4f8109e05170311b79b360b8\transformed\emoji2-1.3.0\AndroidManifest.xml:31:17-49
-74            <meta-data
-74-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\pgast\.gradle\caches\8.13\transforms\72f90a09461338eb1252aab70dbca641\transformed\lifecycle-process-2.7.0\AndroidManifest.xml:29:13-31:52
-75                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
-75-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\pgast\.gradle\caches\8.13\transforms\72f90a09461338eb1252aab70dbca641\transformed\lifecycle-process-2.7.0\AndroidManifest.xml:30:17-78
-76                android:value="androidx.startup" />
-76-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\pgast\.gradle\caches\8.13\transforms\72f90a09461338eb1252aab70dbca641\transformed\lifecycle-process-2.7.0\AndroidManifest.xml:31:17-49
+43
+44        <!-- Quitar inicializador por defecto: usamos Configuration.Provider en AsistenciaApplication -->
+45        <provider
+46            android:name="androidx.startup.InitializationProvider"
+46-->C:\Registro empleados\app\src\main\AndroidManifest.xml:26:13-67
+47            android:authorities="com.registro.empleados.androidx-startup"
+47-->C:\Registro empleados\app\src\main\AndroidManifest.xml:27:13-68
+48            android:exported="false" >
+48-->C:\Registro empleados\app\src\main\AndroidManifest.xml:28:13-37
+49            <meta-data
+49-->[androidx.emoji2:emoji2:1.3.0] C:\Users\pgast\.gradle\caches\8.13\transforms\bc6f777b4f8109e05170311b79b360b8\transformed\emoji2-1.3.0\AndroidManifest.xml:29:13-31:52
+50                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+50-->[androidx.emoji2:emoji2:1.3.0] C:\Users\pgast\.gradle\caches\8.13\transforms\bc6f777b4f8109e05170311b79b360b8\transformed\emoji2-1.3.0\AndroidManifest.xml:30:17-75
+51                android:value="androidx.startup" />
+51-->[androidx.emoji2:emoji2:1.3.0] C:\Users\pgast\.gradle\caches\8.13\transforms\bc6f777b4f8109e05170311b79b360b8\transformed\emoji2-1.3.0\AndroidManifest.xml:31:17-49
+52            <meta-data
+52-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\pgast\.gradle\caches\8.13\transforms\72f90a09461338eb1252aab70dbca641\transformed\lifecycle-process-2.7.0\AndroidManifest.xml:29:13-31:52
+53                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+53-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\pgast\.gradle\caches\8.13\transforms\72f90a09461338eb1252aab70dbca641\transformed\lifecycle-process-2.7.0\AndroidManifest.xml:30:17-78
+54                android:value="androidx.startup" />
+54-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\pgast\.gradle\caches\8.13\transforms\72f90a09461338eb1252aab70dbca641\transformed\lifecycle-process-2.7.0\AndroidManifest.xml:31:17-49
+55            <meta-data
+55-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\pgast\.gradle\caches\8.13\transforms\055fd05d8c502eb040a0c3110314c5c7\transformed\profileinstaller-1.3.0\AndroidManifest.xml:29:13-31:52
+56                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+56-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\pgast\.gradle\caches\8.13\transforms\055fd05d8c502eb040a0c3110314c5c7\transformed\profileinstaller-1.3.0\AndroidManifest.xml:30:17-85
+57                android:value="androidx.startup" />
+57-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\pgast\.gradle\caches\8.13\transforms\055fd05d8c502eb040a0c3110314c5c7\transformed\profileinstaller-1.3.0\AndroidManifest.xml:31:17-49
+58        </provider>
+59
+60        <activity
+60-->C:\Registro empleados\app\src\main\AndroidManifest.xml:35:9-44:20
+61            android:name="com.registro.empleados.presentation.MainActivity"
+61-->C:\Registro empleados\app\src\main\AndroidManifest.xml:36:13-54
+62            android:exported="true"
+62-->C:\Registro empleados\app\src\main\AndroidManifest.xml:37:13-36
+63            android:label="@string/app_name"
+63-->C:\Registro empleados\app\src\main\AndroidManifest.xml:38:13-45
+64            android:theme="@style/Theme.Asistencia" >
+64-->C:\Registro empleados\app\src\main\AndroidManifest.xml:39:13-52
+65            <intent-filter>
+65-->C:\Registro empleados\app\src\main\AndroidManifest.xml:40:13-43:29
+66                <action android:name="android.intent.action.MAIN" />
+66-->C:\Registro empleados\app\src\main\AndroidManifest.xml:41:17-69
+66-->C:\Registro empleados\app\src\main\AndroidManifest.xml:41:25-66
+67
+68                <category android:name="android.intent.category.LAUNCHER" />
+68-->C:\Registro empleados\app\src\main\AndroidManifest.xml:42:17-77
+68-->C:\Registro empleados\app\src\main\AndroidManifest.xml:42:27-74
+69            </intent-filter>
+70        </activity>
+71
+72        <provider
+73            android:name="androidx.core.content.FileProvider"
+73-->C:\Registro empleados\app\src\main\AndroidManifest.xml:47:13-62
+74            android:authorities="com.registro.empleados.fileprovider"
+74-->C:\Registro empleados\app\src\main\AndroidManifest.xml:48:13-64
+75            android:exported="false"
+75-->C:\Registro empleados\app\src\main\AndroidManifest.xml:49:13-37
+76            android:grantUriPermissions="true" >
+76-->C:\Registro empleados\app\src\main\AndroidManifest.xml:50:13-47
 77            <meta-data
-77-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\pgast\.gradle\caches\8.13\transforms\055fd05d8c502eb040a0c3110314c5c7\transformed\profileinstaller-1.3.0\AndroidManifest.xml:29:13-31:52
-78                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
-78-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\pgast\.gradle\caches\8.13\transforms\055fd05d8c502eb040a0c3110314c5c7\transformed\profileinstaller-1.3.0\AndroidManifest.xml:30:17-85
-79                android:value="androidx.startup" />
-79-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\pgast\.gradle\caches\8.13\transforms\055fd05d8c502eb040a0c3110314c5c7\transformed\profileinstaller-1.3.0\AndroidManifest.xml:31:17-49
+77-->C:\Registro empleados\app\src\main\AndroidManifest.xml:51:13-53:54
+78                android:name="android.support.FILE_PROVIDER_PATHS"
+78-->C:\Registro empleados\app\src\main\AndroidManifest.xml:52:17-67
+79                android:resource="@xml/file_paths" />
+79-->C:\Registro empleados\app\src\main\AndroidManifest.xml:53:17-51
 80        </provider>
 81
 82        <service

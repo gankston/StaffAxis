@@ -10,8 +10,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -31,9 +34,30 @@ fun AgregarEmpleadoScreen(
     viewModel: EmpleadosViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    
-    // Sistema de mensajes eliminado
-    
+    val context = LocalContext.current
+    val snackbarHostState = remember { SnackbarHostState() }
+    var validationDialogMessage by remember { mutableStateOf<String?>(null) }
+    var autoTestFired by remember { mutableStateOf(false) }
+
+    LaunchedEffect(uiState.error) {
+        uiState.error?.let { msg ->
+            snackbarHostState.showSnackbar(
+                message = msg,
+                duration = SnackbarDuration.Long
+            )
+        }
+    }
+
+    // BYPASS / TEST DE VIDA: dispara un POST hardcodeado al abrir la pantalla (una sola vez)
+    LaunchedEffect(Unit) {
+        if (!autoTestFired) {
+            autoTestFired = true
+            println("!!! DEBUG_GASTON: BYPASS AUTO POST al abrir pantalla (testRedCrearEmpleado) !!!")
+            Toast.makeText(context, "Auto-Test de red: enviando POST...", Toast.LENGTH_LONG).show()
+            viewModel.testRedCrearEmpleado()
+        }
+    }
+
     val padding = when (windowSizeClass.widthSizeClass) {
         androidx.compose.material3.windowsizeclass.WindowWidthSizeClass.Compact -> PaddingValues(16.dp)
         androidx.compose.material3.windowsizeclass.WindowWidthSizeClass.Medium -> PaddingValues(24.dp)
@@ -53,6 +77,7 @@ fun AgregarEmpleadoScreen(
                     }
                 )
             },
+            snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
         ) { paddingValues ->
             Column(
                 modifier = Modifier
@@ -69,11 +94,43 @@ fun AgregarEmpleadoScreen(
                     fontWeight = FontWeight.Bold
                 )
 
-                // Campo DNI (obligatorio)
+                // Nombre
+                OutlinedTextField(
+                    value = uiState.nombre,
+                    onValueChange = viewModel::onNombreChanged,
+                    label = { Text("Nombre *") },
+                    placeholder = { Text("Ej: Julio") },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true,
+                    isError = uiState.nombre.isBlank() && uiState.intentoGuardar,
+                    supportingText = {
+                        if (uiState.nombre.isBlank() && uiState.intentoGuardar) {
+                            Text("El nombre es obligatorio", color = MaterialTheme.colorScheme.error)
+                        }
+                    }
+                )
+
+                // Apellido
+                OutlinedTextField(
+                    value = uiState.apellido,
+                    onValueChange = viewModel::onApellidoChanged,
+                    label = { Text("Apellido *") },
+                    placeholder = { Text("Ej: Juárez") },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true,
+                    isError = uiState.apellido.isBlank() && uiState.intentoGuardar,
+                    supportingText = {
+                        if (uiState.apellido.isBlank() && uiState.intentoGuardar) {
+                            Text("El apellido es obligatorio", color = MaterialTheme.colorScheme.error)
+                        }
+                    }
+                )
+
+                // DNI / Documento
                 OutlinedTextField(
                     value = uiState.legajo ?: "",
                     onValueChange = { viewModel.onLegajoChanged(it.ifBlank { null }) },
-                    label = { Text("DNI *") },
+                    label = { Text("DNI / Documento *") },
                     placeholder = { Text("Ingrese el DNI") },
                     modifier = Modifier.fillMaxWidth(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
@@ -86,49 +143,41 @@ fun AgregarEmpleadoScreen(
                     }
                 )
 
-                // Campo Nombre Completo
-                OutlinedTextField(
-                    value = uiState.nombreCompleto,
-                    onValueChange = viewModel::onNombreCompletoChanged,
-                    label = { Text("Nombre Completo *") },  // Asterisco para obligatorio
-                    placeholder = { Text("Ej: JUAREZ JULIO") },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true,
-                    isError = uiState.nombreCompleto.isBlank() && uiState.intentoGuardar,
-                    supportingText = {
-                        if (uiState.nombreCompleto.isBlank() && uiState.intentoGuardar) {
-                            Text("El nombre es obligatorio", color = MaterialTheme.colorScheme.error)
-                        }
-                    }
-                )
-
-                // Campo Sector (estático)
-                OutlinedTextField(
-                    value = uiState.sector,
-                    onValueChange = { }, // No se puede cambiar
-                    label = { Text("Sector") },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true,
-                    enabled = false, // Campo deshabilitado
-                    colors = OutlinedTextFieldDefaults.colors(
-                        disabledTextColor = MaterialTheme.colorScheme.onSurface,
-                        disabledBorderColor = MaterialTheme.colorScheme.outline,
-                        disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant
-                    )
-                )
-
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // BOTÓN GUARDAR
                 Button(
-                    onClick = { 
-                        android.util.Log.d("AgregarEmpleado", "Click en Guardar")
-                        viewModel.crearEmpleado() 
+                    onClick = {
+                        println("!!! GASTON_DEBUG: BOTON PRESIONADO !!!")
+                        Log.d("GASTON_DEBUG", "Clic en Guardar detectado")
+                        Log.e("GASTON_DEBUG", "¡BOTON PRESIONADO!")
+                        Toast.makeText(context, "Enviando...", Toast.LENGTH_LONG).show()
+                        println("!!! GASTON_DEBUG: Datos -> Nombre: ${uiState.nombre}, Apellido: ${uiState.apellido}, DNI: ${uiState.legajo}")
+                        if (uiState.nombre.isBlank()) {
+                            Log.e("GASTON_DEBUG", "Fallo validación: nombre vacío")
+                            Toast.makeText(context, "Falta completar el nombre", Toast.LENGTH_LONG).show()
+                            validationDialogMessage = "Falta completar el nombre"
+                            println("!!! GASTON_DEBUG: Fallo validación: nombre vacío")
+                            return@Button
+                        }
+                        if (uiState.apellido.isBlank()) {
+                            Log.e("GASTON_DEBUG", "Fallo validación: apellido vacío")
+                            Toast.makeText(context, "Falta completar el apellido", Toast.LENGTH_LONG).show()
+                            validationDialogMessage = "Falta completar el apellido"
+                            println("!!! GASTON_DEBUG: Fallo validación: apellido vacío")
+                            return@Button
+                        }
+                        if (uiState.legajo.isNullOrBlank()) {
+                            Log.e("GASTON_DEBUG", "Fallo validación: DNI vacío")
+                            Toast.makeText(context, "Falta completar el DNI", Toast.LENGTH_LONG).show()
+                            validationDialogMessage = "Falta completar el DNI"
+                            println("!!! GASTON_DEBUG: Fallo validación: DNI vacío")
+                            return@Button
+                        }
+                        viewModel.crearEmpleado()
                     },
                     modifier = Modifier.fillMaxWidth(),
-                    enabled = !uiState.isLoading && 
-                             uiState.nombreCompleto.isNotBlank() &&
-                             !uiState.legajo.isNullOrBlank()
+                    enabled = !uiState.isLoading
                 ) {
                     if (uiState.isLoading) {
                         CircularProgressIndicator(
@@ -142,6 +191,27 @@ fun AgregarEmpleadoScreen(
                         Spacer(modifier = Modifier.width(8.dp))
                         Text("Guardar Empleado")
                     }
+                }
+
+                if (!uiState.error.isNullOrBlank()) {
+                    Text(
+                        text = uiState.error!!,
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+
+                TextButton(
+                    onClick = {
+                        Log.d("GASTON_DEBUG", "Test de Red presionado")
+                        Toast.makeText(context, "Test de red: enviando POST hardcodeado...", Toast.LENGTH_LONG).show()
+                        viewModel.testRedCrearEmpleado()
+                    },
+                    enabled = !uiState.isLoading,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Test de Red (temporal)")
                 }
 
                 // Información adicional
@@ -165,7 +235,7 @@ fun AgregarEmpleadoScreen(
                             style = MaterialTheme.typography.bodySmall
                         )
                         Text(
-                            text = "• El DNI es obligatorio",
+                            text = "• El empleado se asigna al sector en el que trabaja el encargado",
                             style = MaterialTheme.typography.bodySmall
                         )
                         Text(
@@ -195,6 +265,17 @@ fun AgregarEmpleadoScreen(
                 },
                 dismissButton = {
                     TextButton(onClick = { viewModel.cancelarTraspasoEmpleado() }) { Text("Cancelar") }
+                }
+            )
+        }
+
+        if (validationDialogMessage != null) {
+            AlertDialog(
+                onDismissRequest = { validationDialogMessage = null },
+                title = { Text("Faltan datos") },
+                text = { Text(validationDialogMessage ?: "") },
+                confirmButton = {
+                    Button(onClick = { validationDialogMessage = null }) { Text("OK") }
                 }
             )
         }

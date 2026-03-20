@@ -1,7 +1,6 @@
 package com.registro.empleados.data.export
 
 import android.content.Context
-import com.registro.empleados.domain.model.Ausencia
 import com.registro.empleados.domain.model.Empleado
 import com.registro.empleados.domain.model.RegistroAsistencia
 import jxl.Workbook
@@ -34,7 +33,6 @@ class ExcelExportService @Inject constructor(
      * @param periodoInicio Fecha de inicio del período (día 21)
      * @param periodoFin Fecha de fin del período (día 20)
      * @param nombreEncargado Nombre del encargado del sector
-     * @param ausencias Lista de ausencias para marcar con 0 horas
      * @return Ruta del archivo generado
      */
     suspend fun exportarRegistrosAsistencia(
@@ -43,7 +41,6 @@ class ExcelExportService @Inject constructor(
         periodoInicio: java.time.LocalDate,
         periodoFin: java.time.LocalDate,
         nombreEncargado: String = "",
-        ausencias: List<Ausencia> = emptyList(),
         nombreSector: String = ""
     ): String {
         // Generar nombre del archivo: asistencia[NombreDelSector][FechaDelDiaDeExportacion].xls
@@ -133,26 +130,16 @@ class ExcelExportService @Inject constructor(
                 rowNum++
                 android.util.Log.d("ExcelExport", "Encabezados creados: ${headers.size} columnas")
                 
-        // Crear mapa de empleados por clave consistente usada en la app (legajoKey)
-        val empleadosMap = empleados.associateBy { emp ->
-            emp.legajo ?: "SIN_LEGAJO_${emp.nombreCompleto.hashCode()}"
-        }
+        // Mapa de empleados por ID real del backend (usado en registros.legajoEmpleado)
+        val empleadosMap = empleados.mapNotNull { emp -> emp.employeeIdBackend?.let { id -> id to emp } }.toMap()
                 android.util.Log.d("ExcelExport", "Mapa de empleados creado: ${empleadosMap.size} empleados")
                 
                 // Agrupar registros por empleado (usar legajo del empleado)
                 val registrosPorEmpleado = registros.groupBy { it.legajoEmpleado }
                 android.util.Log.d("ExcelExport", "Registros agrupados por ${registrosPorEmpleado.size} empleados")
                 
-                // Obtener empleados que solo tienen ausencias (sin registros de asistencia)
-                val empleadosConAusencias = ausencias.map { it.legajoEmpleado }.distinct()
-                val empleadosSoloConAusencias = empleadosConAusencias.filter { legajo ->
-                    legajo !in registrosPorEmpleado.keys
-                }
-                android.util.Log.d("ExcelExport", "Empleados solo con ausencias: ${empleadosSoloConAusencias.size}")
-                
                 // Crear lista combinada de todos los empleados a exportar
                 val todosLosEmpleados = registrosPorEmpleado.keys.toMutableSet()
-                todosLosEmpleados.addAll(empleadosSoloConAusencias)
                 
                 // ELIMINAR DUPLICADOS comparando DNI únicamente (si existe)
                 val empleadosUnicos = mutableSetOf<String>()
@@ -181,12 +168,8 @@ class ExcelExportService @Inject constructor(
                         // N (número de fila)
                         sheet.addCell(Number(0, filaIndex, filaIndex.toDouble()))
                         
-                        // DNI (mostrar "Sin datos" si corresponde)
-                        val dniParaMostrar = when {
-                            empleado?.legajo != null -> empleado.legajo
-                            legajoEmpleado.startsWith("SIN_LEGAJO_") -> "Sin datos"
-                            else -> legajoEmpleado
-                        }
+                        // DNI (mostrar "Sin datos" si no tiene legajo)
+                        val dniParaMostrar = empleado.legajo ?: "Sin datos"
                         sheet.addCell(Label(1, filaIndex, dniParaMostrar))
                         
                         // RUTA 5 (nombre del empleado)
@@ -199,36 +182,16 @@ class ExcelExportService @Inject constructor(
                             fecha.dayOfMonth
                         }
                         
-                        // Crear mapa de fechas con ausencias para este empleado
-                        val ausenciasEmpleado = ausencias.filter { 
-                            it.legajoEmpleado == legajoEmpleado 
-                        }
-                        val fechasConAusencia = mutableSetOf<Int>()
-                        ausenciasEmpleado.forEach { ausencia ->
-                            val fechasAfectadas = ausencia.getFechasAfectadas()
-                            fechasAfectadas.forEach { fecha ->
-                                if (fecha.dayOfMonth in diasDelPeriodo) {
-                                    fechasConAusencia.add(fecha.dayOfMonth)
-                                }
-                            }
-                        }
-                        
                         var totalHoras = 0
                         
                         // Llenar columnas de días
                         diasDelPeriodo.forEachIndexed { colIndex, dia ->
-                            // Si hay ausencia en este día, escribir 0
-                            if (dia in fechasConAusencia) {
-                                sheet.addCell(Number(3 + colIndex, filaIndex, 0.0))
-                                // No sumar al total si es ausencia
-                            } else {
-                                val horasDelDia = horasPorFecha[dia]?.horasTrabajadas ?: 0
-                                if (horasDelDia > 0) {
-                                    sheet.addCell(Number(3 + colIndex, filaIndex, horasDelDia.toDouble()))
-                                    totalHoras += horasDelDia
-                                }
-                                // Si horasDelDia es 0, la celda queda vacía
+                            val horasDelDia = horasPorFecha[dia]?.horasTrabajadas ?: 0
+                            if (horasDelDia > 0) {
+                                sheet.addCell(Number(3 + colIndex, filaIndex, horasDelDia.toDouble()))
+                                totalHoras += horasDelDia
                             }
+                            // Si horasDelDia es 0, la celda queda vacía
                         }
                         
                         // Columna HORAS (total)

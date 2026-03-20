@@ -664,6 +664,8 @@ fun DialogoAgregarAusencia(
     var empleadoSeleccionado by remember { mutableStateOf<com.registro.empleados.domain.model.Empleado?>(null) }
     var fechaInicio by remember { mutableStateOf(LocalDate.now()) }
     var fechaFin by remember { mutableStateOf(LocalDate.now()) }
+    var observaciones by remember { mutableStateOf("") }
+    var esJustificada by remember { mutableStateOf(false) }
     val motivoFijo = "Accidente laboral"
     var expandido by remember { mutableStateOf(false) }
     var mostrarDatePickerInicio by remember { mutableStateOf(false) }
@@ -743,7 +745,7 @@ fun DialogoAgregarAusencia(
                         onExpandedChange = { expandido = it }
                     ) {
                         OutlinedTextField(
-                            value = empleadoSeleccionado?.nombreCompleto ?: "",
+                            value = empleadoSeleccionado?.let { "${it.nombreCompleto} - ${it.dni ?: it.legajo ?: ""}" } ?: "",
                             onValueChange = {},
                             readOnly = true,
                             placeholder = { Text("Seleccione un empleado (${empleadosDelSector.size} disponibles)") },
@@ -765,10 +767,10 @@ fun DialogoAgregarAusencia(
                         ) {
                             empleadosDelSector.forEach { empleado ->
                                 DropdownMenuItem(
-                                    text = { Text("${empleado.nombreCompleto} (${empleado.legajo ?: "Sin DNI"})") },
+                                    text = { Text("${empleado.nombreCompleto} - ${empleado.dni ?: empleado.legajo ?: ""}") },
                                     onClick = {
                                         empleadoSeleccionado = empleado
-                                        legajoSeleccionado = empleado.legajo ?: "SIN_LEGAJO_${empleado.nombreCompleto.hashCode()}"
+                                        legajoSeleccionado = empleado.employeeIdBackend ?: empleado.dni ?: empleado.legajo ?: "SIN_ID_${empleado.nombreCompleto.hashCode()}"
                                         expandido = false
                                     }
                                 )
@@ -829,6 +831,44 @@ fun DialogoAgregarAusencia(
                         disabledContainerColor = Color(0xFF2A2A3E)
                     )
                 )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Observaciones
+                OutlinedTextField(
+                    value = observaciones,
+                    onValueChange = { observaciones = it },
+                    label = { Text("Observaciones (opcional)") },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedTextColor = Color.White,
+                        unfocusedTextColor = Color.White,
+                        focusedBorderColor = Color(0xFFFF5252),
+                        unfocusedBorderColor = Color(0xFFB0B0B0)
+                    )
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // Justificada
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Checkbox(
+                        checked = esJustificada,
+                        onCheckedChange = { esJustificada = it },
+                        colors = CheckboxDefaults.colors(
+                            checkedColor = Color(0xFFFF5252),
+                            uncheckedColor = Color.White
+                        )
+                    )
+                    Text(
+                        "¿Es justificada?",
+                        color = Color.White,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
             }
         },
         confirmButton = {
@@ -840,7 +880,9 @@ fun DialogoAgregarAusencia(
                             nombreEmpleado = empleadoSeleccionado!!.nombreCompleto,
                             fechaInicio = fechaInicio,
                             fechaFin = fechaFin,
-                            motivo = motivoFijo
+                            motivo = motivoFijo,
+                            observaciones = observaciones.takeIf { it.isNotBlank() },
+                            esJustificada = esJustificada
                         )
                         onAusenciaCreada()
                     }

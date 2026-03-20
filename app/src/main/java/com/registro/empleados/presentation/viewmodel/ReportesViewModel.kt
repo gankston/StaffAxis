@@ -2,13 +2,19 @@ package com.registro.empleados.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.registro.empleados.data.local.dao.OutboxSubmissionDao
 import com.registro.empleados.data.local.preferences.AppPreferences
+import com.registro.empleados.data.remote.api.SubmissionsApiService
+import com.registro.empleados.data.remote.dto.CreateSubmissionRequestDto
 import com.registro.empleados.domain.model.Empleado
 import com.registro.empleados.domain.model.RegistroAsistencia
 import com.registro.empleados.domain.usecase.asistencia.GetRegistrosByRangoUseCase
 import com.registro.empleados.domain.usecase.empleado.GetAllEmpleadosActivosUseCase
 import com.registro.empleados.domain.usecase.export.ExportarRegistrosAsistenciaUseCase
 import com.registro.empleados.domain.usecase.database.LimpiarBaseDatosUseCase
+import com.registro.empleados.data.local.dao.AusenciaDao
+import com.registro.empleados.data.remote.api.AusenciasApiService
+import com.registro.empleados.data.remote.dto.CreateAbsenceRequestDto
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -29,7 +35,11 @@ class ReportesViewModel @Inject constructor(
     private val getAllEmpleadosActivosUseCase: GetAllEmpleadosActivosUseCase,
     private val exportarRegistrosAsistenciaUseCase: ExportarRegistrosAsistenciaUseCase,
     private val limpiarBaseDatosUseCase: LimpiarBaseDatosUseCase,
-    private val appPreferences: AppPreferences
+    private val appPreferences: AppPreferences,
+    private val outboxSubmissionDao: OutboxSubmissionDao,
+    private val submissionsApiService: SubmissionsApiService,
+    private val ausenciaDao: AusenciaDao,
+    private val ausenciasApiService: AusenciasApiService
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ReportesUiState())
@@ -169,14 +179,12 @@ class ReportesViewModel @Inject constructor(
                     legajo = state.legajoFiltro.takeIf { it.isNotBlank() }
                 )
                 
-                // Filtrar registros por sector: solo los de empleados del sector seleccionado
-                val legajosDelSector = state.empleadosDelSector.mapNotNull { empleado ->
-                    empleado.legajo ?: "SIN_LEGAJO_${empleado.nombreCompleto.hashCode()}"
-                }.toSet()
+                // Filtrar registros por sector: solo los de empleados del sector (por ID real del backend)
+                val idsDelSector = state.empleadosDelSector.mapNotNull { it.employeeIdBackend }.toSet()
                 
                 val registrosFiltrados = if (state.sectorActual.isNotBlank()) {
                     todosLosRegistros.filter { registro ->
-                        legajosDelSector.contains(registro.legajoEmpleado)
+                        idsDelSector.contains(registro.legajoEmpleado)
                     }
                 } else {
                     todosLosRegistros
@@ -392,10 +400,244 @@ class ReportesViewModel @Inject constructor(
      * Limpia los mensajes de error y éxito.
      */
     fun clearMessages() {
-        _uiState.value = _uiState.value.copy(
+        _uiState.update { it.copy(
             error = null,
-            mensaje = null
-        )
+            mensaje = null,
+            tarjaSnackbar = null,
+            showSubmissionResult = false
+        ) }
+    }
+
+    /**
+     * Envía al backend todas las asistencias pendientes (outbox) y las marca como sent.
+     * Mantiene el flujo "guardar local y enviar después".
+     */
+    fun submitTarjaToServer() {
+        if (_uiState.value.submittingTarja) return
+
+        _uiState.update { it.copy(
+            submittingTarja = true, 
+            error = null, 
+            mensaje = null, 
+            tarjaSnackbar = null,
+            showSubmissionResult = false
+        ) }
+
+        viewModelScope.launch {
+            try {
+                // REGLA DE ORO: Sincronizar ausencias primero, pero si falla NO bloquea el resto
+                try {
+                    syncAusencias()
+                } catch (e: Exception) {
+                    android.util.Log.e("SYNC_AUSENCIAS", "Error sincronizando ausencias (no crítico)", e)
+                }
+
+                // 1) Recuperar pendientes del outbox (no enviados)
+                val pending = try {
+                    outboxSubmissionDao.getNextPending(limit = 500)
+                } catch (e: Exception) {
+                    android.util.Log.e("SYNC_CRASH", "Error leyendo outbox (Room/DB)", e)
+                    _uiState.update {
+                        it.copy(
+                            submittingTarja = false,
+                            error = "Error al leer asistencias pendientes: ${e.message ?: "Error de base de datos"}",
+                            tarjaSnackbar = "Error al preparar el envío."
+                        )
+                    }
+                    return@launch
+                }
+                
+                // Contar cuántas ausencias hay para HOY (syncAusencias() ya las envió arriba)
+                val hoy = LocalDate.now()
+                val ausenciasHoy = try {
+                    ausenciaDao.getAusenciasByFecha(hoy)
+                } catch (e: Exception) {
+                    android.util.Log.w("SYNC_AUSENCIAS", "No se pudo leer ausencias de hoy", e)
+                    emptyList()
+                }
+                val cantAusenciasHoy = ausenciasHoy.size
+
+                if (pending.isEmpty()) {
+                    // Si hay ausencias del día, ya se sincronizaron. Mostrar éxito.
+                    if (cantAusenciasHoy > 0) {
+                        android.util.Log.d("SYNC_AUSENCIAS", "Sin asistencias pendientes pero $cantAusenciasHoy ausencias del día ya sincronizadas.")
+                        _uiState.update {
+                            it.copy(
+                                submittingTarja = false,
+                                tarjaSnackbar = "Cierre completado. $cantAusenciasHoy ausencia(s) del día sincronizadas.",
+                                showSubmissionResult = true,
+                                submissionResultSuccess = true,
+                                mensaje = "Se sincronizaron $cantAusenciasHoy ausencia(s) correctamente."
+                            )
+                        }
+                    } else {
+                        _uiState.update { it.copy(submittingTarja = false, tarjaSnackbar = "No hay asistencias ni ausencias pendientes.") }
+                    }
+                    return@launch
+                }
+
+
+                var sentAsistencias = 0
+                var failedPermanentAsistencias = 0
+                var skippedAusentes = 0
+
+                val ausentesCacheByDate = mutableMapOf<String, Set<String>>()
+
+                // 2) Mapear al modelo API y enviar asistencia 1 por 1
+                for (item in pending) {
+                    try {
+                        val ausentesEnFecha: Set<String> = ausentesCacheByDate.getOrPut(item.date) {
+                            val fecha = runCatching { LocalDate.parse(item.date) }.getOrNull()
+                            if (fecha == null) return@getOrPut emptySet()
+                            runCatching {
+                                ausenciaDao.getAusenciasByFecha(fecha)
+                                    .asSequence()
+                                    .map { it.legajoEmpleado }
+                                    .filter { it.isNotBlank() }
+                                    .toSet()
+                            }.getOrElse { emptySet() }
+                        }
+
+                        if (ausentesEnFecha.contains(item.employeeId)) {
+                            outboxSubmissionDao.markFailedPermanent(
+                                item.id,
+                                "Ignorado: empleado con ausencia registrada en la fecha ${item.date}"
+                            )
+                            skippedAusentes++
+                            continue
+                        }
+
+                        val request = CreateSubmissionRequestDto(
+                            employeeId = item.employeeId,
+                            date = item.date,
+                            minutesWorked = item.minutesWorked,
+                            checkIn = item.checkIn,
+                            checkOut = item.checkOut,
+                            notes = item.notes
+                        )
+
+                        val response = submissionsApiService.createSubmissionRaw(request)
+                        val code = response.code()
+                        val errorBody = response.errorBody()?.string().orEmpty()
+
+                        when {
+                            code in listOf(200, 201, 202) -> {
+                                outboxSubmissionDao.markSent(item.id)
+                                sentAsistencias++
+                            }
+                            code == 503 || errorBody.contains("1102") -> {
+                                outboxSubmissionDao.incrementAttempt(item.id, if (errorBody.contains("1102")) "error code: 1102" else "HTTP $code")
+                                _uiState.update {
+                                    it.copy(
+                                        submittingTarja = false,
+                                        tarjaSnackbar = "Servidor ocupado (503/1102). Reintente en unos minutos."
+                                    )
+                                }
+                                return@launch
+                            }
+                            code in 400..499 -> {
+                                outboxSubmissionDao.markFailedPermanent(item.id, "HTTP $code")
+                                failedPermanentAsistencias++
+                            }
+                            else -> {
+                                outboxSubmissionDao.incrementAttempt(item.id, "HTTP $code")
+                            }
+                        }
+                    } catch (e: Exception) {
+                        android.util.Log.e("SYNC_CRASH", "Error armando/enviando payload", e)
+                        _uiState.update {
+                            it.copy(
+                                submittingTarja = false,
+                                error = "Error al enviar: ${e.message ?: e.javaClass.simpleName}",
+                                tarjaSnackbar = "Error al enviar asistencias."
+                            )
+                        }
+                        return@launch
+                    }
+                }
+
+                // 3) Feedback final
+                val ausenciasEnFinal = ausenciasHoy.size
+                _uiState.update {
+                    it.copy(
+                        submittingTarja = false,
+                        tarjaSnackbar = buildString {
+                            append("Cierre enviado. ")
+                            append("Asistencias: $sentAsistencias enviadas")
+                            if (failedPermanentAsistencias > 0) append(" ($failedPermanentAsistencias fallos)")
+                            if (skippedAusentes > 0) append(", $skippedAusentes asistencia(s) de ausentes ignoradas")
+                            if (ausenciasEnFinal > 0) append(", $ausenciasEnFinal ausencia(s) sincronizadas")
+                            append(".")
+                        },
+                        showSubmissionResult = true,
+                        submissionResultSuccess = (failedPermanentAsistencias == 0) && (sentAsistencias > 0 || ausenciasEnFinal > 0),
+                        mensaje = buildString {
+                            if (sentAsistencias > 0) append("$sentAsistencias asistencia(s) enviadas. ")
+                            if (ausenciasEnFinal > 0) append("$ausenciasEnFinal ausencia(s) registradas.")
+                        }.trim()
+                    )
+                }
+            } catch (e: Exception) {
+                android.util.Log.e("SYNC_CRASH", "Error armando/enviando payload", e)
+                _uiState.update {
+                    it.copy(
+                        submittingTarja = false,
+                        error = "Error al enviar asistencias: ${e.message ?: "Error desconocido"}",
+                        tarjaSnackbar = "Error al enviar asistencias.",
+                        showSubmissionResult = true,
+                        submissionResultSuccess = false
+                    )
+                }
+            }
+        }
+    }
+
+    /**
+     * Sincroniza las ausencias pendientes con el backend.
+     * Se llama dentro del Cierre de Tarja. Si falla NO bloquea el envío de asistencias.
+     */
+    private suspend fun syncAusencias() {
+        android.util.Log.d("SYNC_AUSENCIAS", "╔═══ SYNC AUSENCIAS (Cierre de Tarja) ═══╗")
+        val pending = ausenciaDao.getPendingAusencias(limit = 100)
+        android.util.Log.d("SYNC_AUSENCIAS", "  Ausencias pendientes en Room: ${pending.size}")
+        
+        if (pending.isEmpty()) {
+            android.util.Log.d("SYNC_AUSENCIAS", "  No hay ausencias pendientes. Saltando sync.")
+            android.util.Log.d("SYNC_AUSENCIAS", "╚═══════════════════════════════════════╝")
+            return
+        }
+
+        var sent = 0
+        for (item in pending) {
+            try {
+                android.util.Log.d("SYNC_AUSENCIAS", "  → Enviando ausencia id=${item.id} employee_id=${item.legajoEmpleado} fecha=${item.fechaInicio}..${item.fechaFin}")
+                val request = CreateAbsenceRequestDto(
+                    employeeId = item.legajoEmpleado,
+                    startDate = item.fechaInicio.toString(),
+                    endDate = item.fechaFin.toString(),
+                    reason = item.motivo ?: "Ausencia",
+                    observations = item.observaciones,
+                    isJustified = item.esJustificada
+                )
+
+                val response = ausenciasApiService.createAbsence(request)
+                android.util.Log.d("SYNC_AUSENCIAS", "    HTTP ${response.code()}")
+                if (response.isSuccessful) {
+                    ausenciaDao.markAsSent(item.id)
+                    sent++
+                    android.util.Log.d("SYNC_AUSENCIAS", "    ✅ Enviada y marcada como 'sent'")
+                } else {
+                    val errorMsg = response.errorBody()?.string() ?: "Error HTTP ${response.code()}"
+                    ausenciaDao.markAsFailed(item.id, errorMsg)
+                    android.util.Log.e("SYNC_AUSENCIAS", "    ❌ Falló: $errorMsg")
+                }
+            } catch (e: Exception) {
+                android.util.Log.e("SYNC_AUSENCIAS", "    ❌ Exception id=${item.id}: ${e.javaClass.simpleName} - ${e.message}", e)
+                ausenciaDao.markAsFailed(item.id, e.message ?: e.javaClass.simpleName)
+            }
+        }
+        android.util.Log.d("SYNC_AUSENCIAS", "  Resultado: $sent/${pending.size} ausencias enviadas")
+        android.util.Log.d("SYNC_AUSENCIAS", "╚═══════════════════════════════════════╝")
     }
 
     /**
@@ -484,7 +726,11 @@ data class ReportesUiState(
     val exportandoCSV: Boolean = false,
     val archivoParaCompartir: String? = null,
     val error: String? = null,
-    val mensaje: String? = null
+    val mensaje: String? = null,
+    val submittingTarja: Boolean = false,
+    val tarjaSnackbar: String? = null,
+    val showSubmissionResult: Boolean = false,
+    val submissionResultSuccess: Boolean = false
 ) {
     /**
      * Verifica si se puede generar un reporte.

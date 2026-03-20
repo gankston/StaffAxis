@@ -11,23 +11,22 @@ import com.registro.empleados.data.local.dao.*
 import com.registro.empleados.data.local.entity.*
 import com.registro.empleados.data.local.converter.LocalDateConverter
 import com.registro.empleados.data.local.converter.LocalDateTimeConverter
-import com.registro.empleados.data.database.daos.DiaLaboralDao
-import com.registro.empleados.data.database.entities.DiaLaboral
 
 /**
  * Base de datos principal de la aplicación.
  */
 @Database(
     entities = [
+        SectorEntity::class,
         EmpleadoEntity::class,
         RegistroAsistenciaEntity::class,
-        DiaLaboral::class,
+        DiaLaboralEntity::class,
         HorasEmpleadoMesEntity::class,
-        AusenciaEntity::class,
         OutboxSubmissionEntity::class,
-        ApprovedAttendanceEntity::class
+        ApprovedAttendanceEntity::class,
+        AusenciaEntity::class
     ],
-    version = 17, // Tabla approved_attendances para pull desde backend
+    version = 26,
     exportSchema = true
 )
 @TypeConverters(
@@ -36,13 +35,14 @@ import com.registro.empleados.data.database.entities.DiaLaboral
 )
 abstract class AppDatabase : RoomDatabase() {
     
+    abstract fun sectorDao(): SectorDao
     abstract fun empleadoDao(): EmpleadoDao
     abstract fun registroAsistenciaDao(): RegistroAsistenciaDao
     abstract fun diaLaboralDao(): DiaLaboralDao
     abstract fun horasEmpleadoMesDao(): HorasEmpleadoMesDao
-    abstract fun ausenciaDao(): AusenciaDao
     abstract fun outboxSubmissionDao(): OutboxSubmissionDao
     abstract fun approvedAttendanceDao(): ApprovedAttendanceDao
+    abstract fun ausenciaDao(): AusenciaDao
     
     companion object {
         @Volatile
@@ -476,8 +476,76 @@ abstract class AppDatabase : RoomDatabase() {
                 """.trimIndent())
             }
         }
+
+        val MIGRATION_17_18 = object : Migration(17, 18) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE outbox_submissions ADD COLUMN dedup_key TEXT")
+                database.execSQL("UPDATE outbox_submissions SET dedup_key = id WHERE dedup_key IS NULL")
+                database.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_outbox_submissions_dedup_key ON outbox_submissions(dedup_key) WHERE dedup_key IS NOT NULL")
+            }
+        }
+
+        val MIGRATION_18_19 = object : Migration(18, 19) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL(
+                    """
+                    CREATE TABLE IF NOT EXISTS sectors (
+                        id TEXT NOT NULL,
+                        name TEXT NOT NULL,
+                        PRIMARY KEY(id)
+                    )
+                    """.trimIndent()
+                )
+                database.execSQL("CREATE INDEX IF NOT EXISTS index_sectors_name ON sectors(name)")
+            }
+        }
+
+        val MIGRATION_19_20 = object : Migration(19, 20) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE sectors ADD COLUMN encargado TEXT")
+            }
+        }
+
+        val MIGRATION_20_21 = object : Migration(20, 21) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE empleados ADD COLUMN dni TEXT")
+            }
+        }
         
-        
+        val MIGRATION_21_22 = object : Migration(21, 22) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE empleados ADD COLUMN employee_id_backend TEXT")
+            }
+        }
+
+        val MIGRATION_22_23 = object : Migration(22, 23) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("""
+                    CREATE TABLE IF NOT EXISTS outbox_ausencias (
+                        id TEXT PRIMARY KEY NOT NULL,
+                        employee_id TEXT NOT NULL,
+                        start_date TEXT NOT NULL,
+                        end_date TEXT NOT NULL,
+                        reason TEXT,
+                        created_at INTEGER NOT NULL,
+                        attempts INTEGER NOT NULL DEFAULT 0,
+                        last_error TEXT,
+                        status TEXT NOT NULL
+                    )
+                """.trimIndent())
+            }
+        }
+
+        val MIGRATION_25_26 = object : Migration(25, 26) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE ausencia_table ADD COLUMN observaciones TEXT")
+                database.execSQL("ALTER TABLE ausencia_table ADD COLUMN esJustificada INTEGER NOT NULL DEFAULT 0")
+                database.execSQL("ALTER TABLE ausencia_table ADD COLUMN syncStatus TEXT NOT NULL DEFAULT 'pending'")
+                database.execSQL("ALTER TABLE ausencia_table ADD COLUMN attempts INTEGER NOT NULL DEFAULT 0")
+                database.execSQL("ALTER TABLE ausencia_table ADD COLUMN lastError TEXT")
+            }
+        }
+
         fun getDatabase(context: Context): AppDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
@@ -496,9 +564,16 @@ abstract class AppDatabase : RoomDatabase() {
                     MIGRATION_13_14,
                     MIGRATION_14_15,
                     MIGRATION_15_16,
-                    MIGRATION_16_17
+                    MIGRATION_16_17,
+                    MIGRATION_17_18,
+                    MIGRATION_18_19,
+                    MIGRATION_19_20,
+                    MIGRATION_20_21,
+                    MIGRATION_21_22,
+                    MIGRATION_22_23,
+                    MIGRATION_25_26
                 )
-                .fallbackToDestructiveMigration()  // Para desarrollo - borra y recrea
+                .fallbackToDestructiveMigration()  // Evita crasheos en dispositivos con versión vieja de la BD
                 .build()
                 INSTANCE = instance
                 instance

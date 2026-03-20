@@ -4,12 +4,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.registro.empleados.data.local.preferences.AppPreferences
 import com.registro.empleados.domain.model.Empleado
+import com.registro.empleados.domain.repository.EmpleadoRepository
 import com.registro.empleados.domain.usecase.empleado.GetAllEmpleadosActivosUseCase
 import com.registro.empleados.domain.usecase.empleado.GetEmpleadoByLegajoUseCase
 import com.registro.empleados.domain.usecase.empleado.InsertEmpleadoUseCase
 import com.registro.empleados.domain.usecase.empleado.TieneHorasCargadasHoyUseCase
 import com.registro.empleados.domain.usecase.empleado.UpdateEmpleadoUseCase
-import com.registro.empleados.domain.usecase.ausencia.EmpleadoTieneAusenciaEnFechaUseCase
+import com.registro.empleados.domain.usecase.ausencia.GetAusenciasByFechaUseCase
+import com.registro.empleados.domain.usecase.sync.SyncEmpleadosFromApiUseCase
+import com.registro.empleados.domain.exception.TransferConflictException
+import android.content.Context
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -18,6 +23,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import android.util.Log
+import android.widget.Toast
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
@@ -29,8 +35,11 @@ class EmpleadosViewModel @Inject constructor(
     private val insertEmpleadoUseCase: InsertEmpleadoUseCase,
     private val updateEmpleadoUseCase: UpdateEmpleadoUseCase,
     private val tieneHorasCargadasHoyUseCase: TieneHorasCargadasHoyUseCase,
-    private val empleadoTieneAusenciaEnFechaUseCase: EmpleadoTieneAusenciaEnFechaUseCase,
-    private val appPreferences: AppPreferences
+    private val getAusenciasByFechaUseCase: GetAusenciasByFechaUseCase,
+    private val appPreferences: AppPreferences,
+    private val empleadoRepository: EmpleadoRepository,
+    private val syncEmpleadosFromApiUseCase: SyncEmpleadosFromApiUseCase,
+    @ApplicationContext private val appContext: Context
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(EmpleadosUiState())
@@ -84,33 +93,20 @@ class EmpleadosViewModel @Inject constructor(
                     
                     val empleadosConHorasHoy = mutableSetOf<String>()
                     for (empleado in empleadosDelSector) {
-                        val legajoKey = empleado.legajo ?: "SIN_LEGAJO_${empleado.nombreCompleto.hashCode()}"
-                        if (tieneHorasCargadasHoyUseCase(legajoKey)) {
-                            empleadosConHorasHoy.add(legajoKey)
-                        }
+                        val idReal = empleado.employeeIdBackend ?: continue
+                        if (tieneHorasCargadasHoyUseCase(idReal)) empleadosConHorasHoy.add(idReal)
                     }
-                    
-                    val empleadosAusentesHoy = mutableSetOf<String>()
-                    for (empleado in empleadosDelSector) {
-                        val legajoKey = empleado.legajo ?: "SIN_LEGAJO_${empleado.nombreCompleto.hashCode()}"
-                        
-                        Log.d("EmpleadosVM", "🔍 Verificando ausencia para: ${empleado.nombreCompleto} ($legajoKey)")
-                        
-                        val tieneAusencia = empleadoTieneAusenciaEnFechaUseCase(legajoKey, hoy)
-                        Log.d("EmpleadosVM", "🔍 Resultado del UseCase: $tieneAusencia")
-                        
-                        if (tieneAusencia) {
-                            empleadosAusentesHoy.add(legajoKey)
-                            Log.d("EmpleadosVM", "  ❌ AUSENTE HOY - AGREGADO AL SET")
-                        } else {
-                            Log.d("EmpleadosVM", "  ✅ Presente")
-                        }
+
+                    val ausentesHoy = try {
+                        getAusenciasByFechaUseCase(hoy)
+                            .asSequence()
+                            .map { it.legajoEmpleado }
+                            .filter { it.isNotBlank() }
+                            .toSet()
+                    } catch (e: Exception) {
+                        Log.w("EmpleadosVM", "No se pudo obtener ausencias de hoy: ${e.message}")
+                        emptySet()
                     }
-                    
-                    Log.d("EmpleadosVM", "═══════════════════════")
-                    Log.d("EmpleadosVM", "Total ausentes hoy: ${empleadosAusentesHoy.size}")
-                    Log.d("EmpleadosVM", "Ausentes: $empleadosAusentesHoy")
-                    Log.d("EmpleadosVM", "═══════════════════════")
                     
                     val empleadosOrdenados = empleadosDelSector.sortedBy { it.nombreCompleto }
                     
@@ -118,7 +114,7 @@ class EmpleadosViewModel @Inject constructor(
                         it.copy(
                             empleados = empleadosOrdenados,
                             empleadosConHorasHoy = empleadosConHorasHoy,
-                            empleadosAusentesHoy = empleadosAusentesHoy,
+                            empleadosAusentesHoy = ausentesHoy,
                             isLoading = false
                         )
                     }
@@ -188,36 +184,78 @@ class EmpleadosViewModel @Inject constructor(
         )
     }
 
-    fun guardarNuevoEmpleado() {
+    fun guardarNuevoEmpleado(forceTransfer: Boolean = false) {
+        android.util.Log.i("EmpleadosViewModel", ">>> BOTÓN GUARDAR PULSADO (forceTransfer=$forceTransfer) <<<")
+        // Toast para debug (se quitará después)
+        Toast.makeText(appContext, "Guardando empleado...", Toast.LENGTH_SHORT).show()
         val form = _uiState.value.formularioNuevoEmpleado
         
-        if (!esFormularioValido(form)) {
+        if (!forceTransfer && !esFormularioValido(form)) {
             return
         }
 
         viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(isLoading = true, error = null)
+            _uiState.update { it.copy(isLoading = true, error = null) }
             
             try {
-                insertEmpleadoUseCase(
-                    legajo = form.legajo ?: "",
-                    nombreCompleto = form.nombreCompleto,
-                    sector = form.sector,
-                    fechaIngreso = form.fechaIngreso
-                )
+                val sectorId = appPreferences.getSectorId() ?: ""
+                val sectorName = appPreferences.getSectorSeleccionado() ?: ""
                 
-                // LIMPIAR FORMULARIO COMPLETAMENTE
-                _uiState.value = _uiState.value.copy(
-                    mostrarFormularioNuevo = false,
-                    formularioNuevoEmpleado = FormularioNuevoEmpleado(),
-                    mensaje = "Empleado creado exitosamente",
-                    isLoading = false
+                if (sectorId.isBlank()) {
+                    _uiState.update { it.copy(isLoading = false, error = "Configure el sector antes de continuar") }
+                    return@launch
+                }
+
+                // Usamos la API para crear/traspasar
+                val result = empleadoRepository.createEmployeeViaApi(
+                    firstName = form.nombreCompleto.split(" ").lastOrNull() ?: form.nombreCompleto,
+                    lastName = form.nombreCompleto.split(" ").firstOrNull() ?: "",
+                    documentNumber = form.legajo,
+                    sectorId = sectorId,
+                    sectorName = sectorName,
+                    forceTransfer = forceTransfer
+                )
+
+                result.fold(
+                    onSuccess = {
+                        _uiState.update { it.copy(
+                            mostrarFormularioNuevo = false,
+                            formularioNuevoEmpleado = FormularioNuevoEmpleado(),
+                            mensaje = if (forceTransfer) "Empleado traspasado correctamente" else "Empleado agregado correctamente",
+                            empleadoCreadoExitosamente = true,
+                            empleadoExistenteParaTraspaso = null,
+                            isLoading = false
+                        )}
+                        viewModelScope.launch {
+                            syncEmpleadosFromApiUseCase()
+                            loadEmpleados()
+                        }
+                    },
+                    onFailure = { e ->
+                        android.util.Log.e("EmpleadosViewModel", "Error al guardar empleado: ${e.message}", e)
+                        if (e is TransferConflictException) {
+                            android.util.Log.w("EmpleadosViewModel", "CONFLICTO DETECTADO: Mostrando pop-up")
+                            Toast.makeText(appContext, "Empleado Duplicado Detectado", Toast.LENGTH_LONG).show()
+                            _uiState.update { it.copy(
+                                isLoading = false,
+                                empleadoExistenteParaTraspaso = e.existingEmployee,
+                                error = null
+                            )}
+                        } else {
+                            android.util.Log.e("EmpleadosViewModel", "Otro error: ${e.message}")
+                            Toast.makeText(appContext, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                            _uiState.update { it.copy(
+                                isLoading = false,
+                                error = e.message ?: "Error al procesar empleado"
+                            )}
+                        }
+                    }
                 )
             } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(
-                    error = e.message ?: "Error al crear empleado",
+                _uiState.update { it.copy(
+                    error = e.message ?: "Error inesperado",
                     isLoading = false
-                )
+                )}
             }
         }
     }
@@ -260,6 +298,14 @@ class EmpleadosViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(legajo = legajo?.trim()?.ifBlank { null })
     }
 
+    fun onNombreChanged(nombre: String) {
+        _uiState.value = _uiState.value.copy(nombre = nombre.trim())
+    }
+
+    fun onApellidoChanged(apellido: String) {
+        _uiState.value = _uiState.value.copy(apellido = apellido.trim())
+    }
+
     fun onNombreCompletoChanged(nombreCompleto: String) {
         _uiState.value = _uiState.value.copy(nombreCompleto = nombreCompleto)
     }
@@ -268,65 +314,172 @@ class EmpleadosViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(sector = sector)
     }
 
+    fun testRedCrearEmpleado() {
+        Log.e("GASTON_DEBUG", "TEST RED: iniciado")
+        Toast.makeText(appContext, "TEST RED: iniciando POST...", Toast.LENGTH_LONG).show()
+        viewModelScope.launch {
+            try {
+                val sectorId = appPreferences.getSectorId()
+                if (sectorId.isNullOrBlank()) {
+                    Toast.makeText(appContext, "TEST RED: falta sector_id", Toast.LENGTH_LONG).show()
+                    return@launch
+                }
+                val sectorName = appPreferences.getSectorSeleccionado()
+                val result = empleadoRepository.createEmployeeViaApi(
+                    firstName = "Pepe",
+                    lastName = "Test",
+                    documentNumber = "000",
+                    sectorId = sectorId,
+                    sectorName = sectorName
+                )
+                result.fold(
+                    onSuccess = {
+                        android.util.Log.i("EmpleadosViewModel", "TEST RED ÉXITO")
+                        Toast.makeText(appContext, "TEST RED OK: creado", Toast.LENGTH_LONG).show()
+                        loadEmpleados()
+                    },
+                    onFailure = { e ->
+                        android.util.Log.e("EmpleadosViewModel", "TEST RED FALLO: ${e.message}", e)
+                        if (e is TransferConflictException) {
+                            android.util.Log.w("EmpleadosViewModel", "CONFLICTO DETECTADO en TEST RED")
+                            Toast.makeText(appContext, "Test de red: ¡Empleado Duplicado!", Toast.LENGTH_LONG).show()
+                            _uiState.update { it.copy(
+                                isLoading = false,
+                                empleadoExistenteParaTraspaso = e.existingEmployee,
+                                error = null
+                            )}
+                        } else {
+                            Toast.makeText(appContext, "TEST RED FAIL: ${e.message}", Toast.LENGTH_LONG).show()
+                        }
+                    }
+                )
+            } catch (e: Exception) {
+                Toast.makeText(appContext, "TEST RED EXC: ${e.message}", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
     fun crearEmpleado() {
+        val nombre = _uiState.value.nombre
+        Log.e("DEBUG_GASTON", "Botón presionado")
+        Toast.makeText(appContext, "Intentando enviar a: $nombre", Toast.LENGTH_SHORT).show()
+        println("!!! GASTON_DEBUG: entrar crearEmpleado() nombre=${_uiState.value.nombre} apellido=${_uiState.value.apellido} dni=${_uiState.value.legajo}")
+
         viewModelScope.launch {
             try {
                 _uiState.value = _uiState.value.copy(
-                    isLoading = true, 
+                    isLoading = true,
                     error = null,
                     intentoGuardar = true
                 )
-                
+
+                val sectorId = appPreferences.getSectorId()
+                if (sectorId.isNullOrBlank()) {
+                    Toast.makeText(appContext, "No enviado: Configure el sector antes de agregar empleados", Toast.LENGTH_LONG).show()
+                    println("!!! GASTON_DEBUG: abortar: sectorId vacío")
+                    _uiState.value = _uiState.value.copy(
+                        isLoading = false,
+                        error = "Configure el sector antes de agregar empleados"
+                    )
+                    return@launch
+                }
+                val sectorName = appPreferences.getSectorSeleccionado()
+
                 if (_uiState.value.legajo.isNullOrBlank()) {
+                    Toast.makeText(appContext, "No enviado: El DNI es obligatorio", Toast.LENGTH_LONG).show()
+                    println("!!! GASTON_DEBUG: abortar: DNI vacío")
                     _uiState.value = _uiState.value.copy(isLoading = false, error = "El DNI es obligatorio")
                     return@launch
                 }
-                if (_uiState.value.nombreCompleto.isBlank()) {
-                    _uiState.value = _uiState.value.copy(isLoading = false, error = "El nombre completo es obligatorio")
+                if (_uiState.value.nombre.isBlank()) {
+                    Toast.makeText(appContext, "No enviado: El nombre es obligatorio", Toast.LENGTH_LONG).show()
+                    println("!!! GASTON_DEBUG: abortar: nombre vacío")
+                    _uiState.value = _uiState.value.copy(isLoading = false, error = "El nombre es obligatorio")
                     return@launch
                 }
-                
-                val legajoTrimmed = _uiState.value.legajo!!.trim().uppercase()
-                val sectorActual = _uiState.value.sector.ifBlank { "Sin especificar" }
-                
-                val empleadoExistente = getEmpleadoByLegajoUseCase(legajoTrimmed)
+                if (_uiState.value.apellido.isBlank()) {
+                    Toast.makeText(appContext, "No enviado: El apellido es obligatorio", Toast.LENGTH_LONG).show()
+                    println("!!! GASTON_DEBUG: abortar: apellido vacío")
+                    _uiState.value = _uiState.value.copy(isLoading = false, error = "El apellido es obligatorio")
+                    return@launch
+                }
+
+                val legajoTrimmed = _uiState.value.legajo!!.trim()
+                android.util.Log.d("EmpleadosVM", "DNI capturado del formulario para POST: \"$legajoTrimmed\"")
+                println("!!! GASTON_DEBUG: payload listo -> first_name=${_uiState.value.nombre.trim()} last_name=${_uiState.value.apellido.trim()} dni=$legajoTrimmed sector_id=$sectorId")
+                val sectorActual = sectorName.ifBlank { "Sin especificar" }
+
+                val empleadoExistente = getEmpleadoByLegajoUseCase(legajoTrimmed.uppercase())
                 if (empleadoExistente != null) {
                     if (empleadoExistente.sector.equals(sectorActual, ignoreCase = true)) {
+                        Toast.makeText(appContext, "No enviado: El empleado ya existe en su sector", Toast.LENGTH_LONG).show()
                         _uiState.value = _uiState.value.copy(
                             isLoading = false,
                             error = "El empleado ya existe en su sector"
                         )
                         return@launch
                     }
+                    Toast.makeText(appContext, "No enviado: Empleado existe en otro sector (traspaso)", Toast.LENGTH_LONG).show()
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
                         empleadoExistenteParaTraspaso = empleadoExistente
                     )
                     return@launch
                 }
-                
-                insertEmpleadoUseCase(
-                    legajo = legajoTrimmed,
-                    nombreCompleto = _uiState.value.nombreCompleto.trim(),
-                    sector = sectorActual,
-                    fechaIngreso = LocalDate.now()
+
+                val result = empleadoRepository.createEmployeeViaApi(
+                    firstName = _uiState.value.nombre.trim(),
+                    lastName = _uiState.value.apellido.trim(),
+                    documentNumber = legajoTrimmed,
+                    sectorId = sectorId,
+                    sectorName = sectorName
                 )
-                
-                _uiState.value = _uiState.value.copy(
-                    isLoading = false,
-                    empleadoCreadoExitosamente = true,
-                    mensaje = "✅ Empleado creado exitosamente",
-                    legajo = null,
-                    nombreCompleto = "",
-                    sector = "",
-                    intentoGuardar = false,
-                    formularioNuevoEmpleado = FormularioNuevoEmpleado()
+
+                result.fold(
+                    onSuccess = {
+                        println("!!! GASTON_DEBUG: API OK (createEmployeeViaApi) -> éxito")
+                        _uiState.update { it.copy(
+                            isLoading = false,
+                            empleadoCreadoExitosamente = true,
+                            mensaje = "Empleado agregado correctamente",
+                            legajo = null,
+                            nombre = "",
+                            apellido = "",
+                            nombreCompleto = "",
+                            intentoGuardar = false,
+                            formularioNuevoEmpleado = FormularioNuevoEmpleado(),
+                            error = null
+                        )}
+                        viewModelScope.launch {
+                            syncEmpleadosFromApiUseCase()
+                            loadEmpleados()
+                        }
+                    },
+                    onFailure = { e ->
+                        android.util.Log.e("EmpleadosViewModel", "Error en crearEmpleado: ${e.message}", e)
+                        if (e is TransferConflictException) {
+                            android.util.Log.w("EmpleadosViewModel", "CONFLICTO DETECTADO (409): Mostrando pop-up")
+                            Toast.makeText(appContext, "Empleado Duplicado Detectado", Toast.LENGTH_LONG).show()
+                            _uiState.update { it.copy(
+                                isLoading = false,
+                                empleadoExistenteParaTraspaso = e.existingEmployee,
+                                error = null
+                            )}
+                        } else {
+                            val errorMsg = e.message ?: "Error al crear empleado"
+                            android.util.Log.e("EmpleadosViewModel", "Otro error (API): $errorMsg")
+                            Toast.makeText(appContext, "Error (API): $errorMsg", Toast.LENGTH_LONG).show()
+                            _uiState.update { it.copy(isLoading = false, error = errorMsg) }
+                        }
+                    }
                 )
-                
             } catch (e: Exception) {
+                val errorMsg = e.message ?: "Error al crear empleado"
+                Toast.makeText(appContext, "No enviado (excepción): $errorMsg", Toast.LENGTH_LONG).show()
+                println("!!! GASTON_DEBUG: Error en ViewModel (excepción): ${e.message}")
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
-                    error = "No se pudo crear el empleado: ${e.message}"
+                    error = errorMsg
                 )
             }
         }
@@ -334,23 +487,60 @@ class EmpleadosViewModel @Inject constructor(
 
     fun confirmarTraspasoEmpleado() {
         val empleado = _uiState.value.empleadoExistenteParaTraspaso ?: return
-        val sectorActual = _uiState.value.sector.ifBlank { "Sin especificar" }
+        val sectorId = appPreferences.getSectorId()
+        val sectorName = appPreferences.getSectorSeleccionado()
+        if (sectorId.isNullOrBlank()) {
+            _uiState.value = _uiState.value.copy(
+                empleadoExistenteParaTraspaso = null,
+                error = "Configure el sector"
+            )
+            return
+        }
         viewModelScope.launch {
             try {
+                android.util.Log.i("EmpleadosViewModel", ">>> CONFIRMAR TRASPASO PULSADO para ${empleado.nombreCompleto} (DNI: ${empleado.dni ?: empleado.legajo}) <<<")
+                Toast.makeText(appContext, "Iniciando traspaso...", Toast.LENGTH_SHORT).show()
                 _uiState.value = _uiState.value.copy(isLoading = true)
-                updateEmpleadoUseCase(empleado.copy(sector = sectorActual))
-                _uiState.value = _uiState.value.copy(
-                    isLoading = false,
-                    empleadoExistenteParaTraspaso = null,
-                    empleadoCreadoExitosamente = true,
-                    mensaje = "✅ Empleado traspasado a $sectorActual",
-                    legajo = null,
-                    nombreCompleto = "",
-                    sector = "",
-                    intentoGuardar = false,
-                    formularioNuevoEmpleado = FormularioNuevoEmpleado()
+                val result = empleadoRepository.createEmployeeViaApi(
+                    firstName = empleado.nombre,
+                    lastName = empleado.apellido,
+                    documentNumber = empleado.dni ?: empleado.legajo,
+                    sectorId = sectorId,
+                    sectorName = sectorName,
+                    forceTransfer = true // AQUÍ FORZAMOS EL TRASPASO YA CONFIRMADO
                 )
-                loadEmpleados()
+                result.fold(
+                    onSuccess = {
+                        android.util.Log.i("EmpleadosViewModel", "TRASPASO ÉXITO")
+                        Toast.makeText(appContext, "¡Empleado traspasado correctamente!", Toast.LENGTH_LONG).show()
+                        _uiState.update { it.copy(
+                            isLoading = false,
+                            empleadoExistenteParaTraspaso = null,
+                            empleadoCreadoExitosamente = true,
+                            mensaje = "Empleado traspasado a $sectorName correctamente",
+                            legajo = null,
+                            nombre = "",
+                            apellido = "",
+                            nombreCompleto = "",
+                            intentoGuardar = false,
+                            formularioNuevoEmpleado = FormularioNuevoEmpleado(),
+                            error = null
+                        )}
+                        viewModelScope.launch {
+                            syncEmpleadosFromApiUseCase()
+                            loadEmpleados()
+                        }
+                    },
+                    onFailure = { e ->
+                        android.util.Log.e("EmpleadosViewModel", "FALLO EN TRASPASO: ${e.message}", e)
+                        Toast.makeText(appContext, "Fallo en traspaso: ${e.message}", Toast.LENGTH_LONG).show()
+                        _uiState.update { it.copy(
+                            isLoading = false,
+                            empleadoExistenteParaTraspaso = null,
+                            error = "Error al confirmar traspaso: ${e.message}"
+                        )}
+                    }
+                )
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
@@ -396,19 +586,97 @@ class EmpleadosViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(
             formularioNuevoEmpleado = FormularioNuevoEmpleado(),
             legajo = null,
+            nombre = "",
+            apellido = "",
             nombreCompleto = "",
             sector = ""
         )
     }
-    
-    // FUNCIÓN AGRESIVA PARA FORZAR RECARGA DE COLORES
-    fun forzarRecargaColores() {
-        viewModelScope.launch {
-            Log.d("EmpleadosVM", "🔥 FORZANDO RECARGA DE COLORES")
-            isLoading = false
-            loadEmpleados()
+
+    // --- EDICIÓN DE EMPLEADO ---
+
+    fun abrirDialogoEditar(empleado: Empleado) {
+        _uiState.update {
+            it.copy(
+                mostrarDialogoEditar = true,
+                empleadoAEditar = empleado,
+                editarNombreCompleto = empleado.nombreCompleto,
+                editarLegajo = empleado.legajo
+            )
         }
     }
+
+    fun cerrarDialogoEditar() {
+        _uiState.update {
+            it.copy(
+                mostrarDialogoEditar = false,
+                empleadoAEditar = null,
+                editarNombreCompleto = "",
+                editarLegajo = null
+            )
+        }
+    }
+
+    fun onEditarNombreChanged(nuevoNombre: String) {
+        _uiState.update { it.copy(editarNombreCompleto = nuevoNombre) }
+    }
+
+    fun onEditarLegajoChanged(nuevoLegajo: String) {
+        _uiState.update { it.copy(editarLegajo = nuevoLegajo.ifBlank { null }) }
+    }
+
+    fun guardarEmpleadoEditado() {
+        val empleadoActual = _uiState.value.empleadoAEditar ?: return
+        val nuevoNombre = _uiState.value.editarNombreCompleto.trim()
+        val nuevoLegajo = _uiState.value.editarLegajo?.trim()
+
+        if (nuevoNombre.isBlank()) {
+            _uiState.update { it.copy(error = "El nombre es obligatorio") }
+            return
+        }
+
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true, error = null) }
+            try {
+                val empleadoActualizado = empleadoActual.copy(
+                    nombreCompleto = nuevoNombre,
+                    legajo = nuevoLegajo
+                )
+
+                updateEmpleadoUseCase(empleadoActualizado)
+
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        mostrarDialogoEditar = false,
+                        empleadoAEditar = null,
+                        mensajeEditado = "✅ Empleado actualizado: $nuevoNombre",
+                        mostrarMensajeEditado = true
+                    )
+                }
+                
+                // Recargar lista
+                loadEmpleados()
+                
+                kotlinx.coroutines.delay(2000)
+                _uiState.update { it.copy(mostrarMensajeEditado = false) }
+
+            } catch (e: Exception) {
+                Log.e("EmpleadosVM", "Error al actualizar empleado", e)
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        error = "Error al actualizar: ${e.message}"
+                    )
+                }
+            }
+        }
+    }
+
+    fun cerrarMensajeEditado() {
+        _uiState.update { it.copy(mostrarMensajeEditado = false) }
+    }
+    
 }
 
 data class EmpleadosUiState(
@@ -424,9 +692,19 @@ data class EmpleadosUiState(
     val empleadoCreadoExitosamente: Boolean? = null,
     val empleadoExistenteParaTraspaso: Empleado? = null,
     val legajo: String? = null,
+    val nombre: String = "",
+    val apellido: String = "",
     val nombreCompleto: String = "",
     val sector: String = "",
-    val intentoGuardar: Boolean = false
+    val intentoGuardar: Boolean = false,
+    
+    // Edición de empleado
+    val mostrarDialogoEditar: Boolean = false,
+    val empleadoAEditar: Empleado? = null,
+    val editarNombreCompleto: String = "",
+    val editarLegajo: String? = null,
+    val mostrarMensajeEditado: Boolean = false,
+    val mensajeEditado: String = ""
 )
 
 data class FormularioNuevoEmpleado(

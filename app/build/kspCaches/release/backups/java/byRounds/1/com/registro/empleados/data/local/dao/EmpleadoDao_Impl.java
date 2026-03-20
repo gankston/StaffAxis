@@ -61,44 +61,56 @@ public final class EmpleadoDao_Impl implements EmpleadoDao {
 
   private final SharedSQLiteStatement __preparedStmtOfCorregirEmpleadoPorNombre;
 
+  private final SharedSQLiteStatement __preparedStmtOfBorrarDuplicadosPorBackendId;
+
   public EmpleadoDao_Impl(@NonNull final RoomDatabase __db) {
     this.__db = __db;
     this.__insertionAdapterOfEmpleadoEntity = new EntityInsertionAdapter<EmpleadoEntity>(__db) {
       @Override
       @NonNull
       protected String createQuery() {
-        return "INSERT OR REPLACE INTO `empleados` (`id`,`legajo`,`nombreCompleto`,`sector`,`fechaIngreso`,`activo`,`fechaCreacion`,`observacion`) VALUES (nullif(?, 0),?,?,?,?,?,?,?)";
+        return "INSERT OR REPLACE INTO `empleados` (`id`,`employee_id_backend`,`legajo`,`nombreCompleto`,`sector`,`fechaIngreso`,`activo`,`fechaCreacion`,`observacion`,`dni`) VALUES (nullif(?, 0),?,?,?,?,?,?,?,?,?)";
       }
 
       @Override
       protected void bind(@NonNull final SupportSQLiteStatement statement,
           @NonNull final EmpleadoEntity entity) {
         statement.bindLong(1, entity.getId());
-        if (entity.getLegajo() == null) {
+        if (entity.getEmployeeIdBackend() == null) {
           statement.bindNull(2);
         } else {
-          statement.bindString(2, entity.getLegajo());
+          statement.bindString(2, entity.getEmployeeIdBackend());
         }
-        statement.bindString(3, entity.getNombreCompleto());
-        statement.bindString(4, entity.getSector());
+        if (entity.getLegajo() == null) {
+          statement.bindNull(3);
+        } else {
+          statement.bindString(3, entity.getLegajo());
+        }
+        statement.bindString(4, entity.getNombreCompleto());
+        statement.bindString(5, entity.getSector());
         final String _tmp = __localDateConverter.fromLocalDate(entity.getFechaIngreso());
         if (_tmp == null) {
-          statement.bindNull(5);
+          statement.bindNull(6);
         } else {
-          statement.bindString(5, _tmp);
+          statement.bindString(6, _tmp);
         }
         final int _tmp_1 = entity.getActivo() ? 1 : 0;
-        statement.bindLong(6, _tmp_1);
+        statement.bindLong(7, _tmp_1);
         final String _tmp_2 = __localDateConverter.fromLocalDate(entity.getFechaCreacion());
         if (_tmp_2 == null) {
-          statement.bindNull(7);
-        } else {
-          statement.bindString(7, _tmp_2);
-        }
-        if (entity.getObservacion() == null) {
           statement.bindNull(8);
         } else {
-          statement.bindString(8, entity.getObservacion());
+          statement.bindString(8, _tmp_2);
+        }
+        if (entity.getObservacion() == null) {
+          statement.bindNull(9);
+        } else {
+          statement.bindString(9, entity.getObservacion());
+        }
+        if (entity.getDni() == null) {
+          statement.bindNull(10);
+        } else {
+          statement.bindString(10, entity.getDni());
         }
       }
     };
@@ -119,40 +131,50 @@ public final class EmpleadoDao_Impl implements EmpleadoDao {
       @Override
       @NonNull
       protected String createQuery() {
-        return "UPDATE OR ABORT `empleados` SET `id` = ?,`legajo` = ?,`nombreCompleto` = ?,`sector` = ?,`fechaIngreso` = ?,`activo` = ?,`fechaCreacion` = ?,`observacion` = ? WHERE `id` = ?";
+        return "UPDATE OR ABORT `empleados` SET `id` = ?,`employee_id_backend` = ?,`legajo` = ?,`nombreCompleto` = ?,`sector` = ?,`fechaIngreso` = ?,`activo` = ?,`fechaCreacion` = ?,`observacion` = ?,`dni` = ? WHERE `id` = ?";
       }
 
       @Override
       protected void bind(@NonNull final SupportSQLiteStatement statement,
           @NonNull final EmpleadoEntity entity) {
         statement.bindLong(1, entity.getId());
-        if (entity.getLegajo() == null) {
+        if (entity.getEmployeeIdBackend() == null) {
           statement.bindNull(2);
         } else {
-          statement.bindString(2, entity.getLegajo());
+          statement.bindString(2, entity.getEmployeeIdBackend());
         }
-        statement.bindString(3, entity.getNombreCompleto());
-        statement.bindString(4, entity.getSector());
+        if (entity.getLegajo() == null) {
+          statement.bindNull(3);
+        } else {
+          statement.bindString(3, entity.getLegajo());
+        }
+        statement.bindString(4, entity.getNombreCompleto());
+        statement.bindString(5, entity.getSector());
         final String _tmp = __localDateConverter.fromLocalDate(entity.getFechaIngreso());
         if (_tmp == null) {
-          statement.bindNull(5);
+          statement.bindNull(6);
         } else {
-          statement.bindString(5, _tmp);
+          statement.bindString(6, _tmp);
         }
         final int _tmp_1 = entity.getActivo() ? 1 : 0;
-        statement.bindLong(6, _tmp_1);
+        statement.bindLong(7, _tmp_1);
         final String _tmp_2 = __localDateConverter.fromLocalDate(entity.getFechaCreacion());
         if (_tmp_2 == null) {
-          statement.bindNull(7);
-        } else {
-          statement.bindString(7, _tmp_2);
-        }
-        if (entity.getObservacion() == null) {
           statement.bindNull(8);
         } else {
-          statement.bindString(8, entity.getObservacion());
+          statement.bindString(8, _tmp_2);
         }
-        statement.bindLong(9, entity.getId());
+        if (entity.getObservacion() == null) {
+          statement.bindNull(9);
+        } else {
+          statement.bindString(9, entity.getObservacion());
+        }
+        if (entity.getDni() == null) {
+          statement.bindNull(10);
+        } else {
+          statement.bindString(10, entity.getDni());
+        }
+        statement.bindLong(11, entity.getId());
       }
     };
     this.__preparedStmtOfUpdateEstadoEmpleado = new SharedSQLiteStatement(__db) {
@@ -216,6 +238,21 @@ public final class EmpleadoDao_Impl implements EmpleadoDao {
       @NonNull
       public String createQuery() {
         final String _query = "UPDATE empleados SET nombreCompleto = ?, legajo = ? WHERE sector = ? AND nombreCompleto LIKE '%' || ? || '%' AND nombreCompleto LIKE '%' || ? || '%'";
+        return _query;
+      }
+    };
+    this.__preparedStmtOfBorrarDuplicadosPorBackendId = new SharedSQLiteStatement(__db) {
+      @Override
+      @NonNull
+      public String createQuery() {
+        final String _query = "\n"
+                + "        DELETE FROM empleados \n"
+                + "        WHERE id NOT IN (\n"
+                + "            SELECT MIN(id) \n"
+                + "            FROM empleados \n"
+                + "            GROUP BY COALESCE(employee_id_backend, id)\n"
+                + "        )\n"
+                + "    ";
         return _query;
       }
     };
@@ -494,6 +531,29 @@ public final class EmpleadoDao_Impl implements EmpleadoDao {
   }
 
   @Override
+  public Object borrarDuplicadosPorBackendId(final Continuation<? super Unit> $completion) {
+    return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
+      @Override
+      @NonNull
+      public Unit call() throws Exception {
+        final SupportSQLiteStatement _stmt = __preparedStmtOfBorrarDuplicadosPorBackendId.acquire();
+        try {
+          __db.beginTransaction();
+          try {
+            _stmt.executeUpdateDelete();
+            __db.setTransactionSuccessful();
+            return Unit.INSTANCE;
+          } finally {
+            __db.endTransaction();
+          }
+        } finally {
+          __preparedStmtOfBorrarDuplicadosPorBackendId.release(_stmt);
+        }
+      }
+    }, $completion);
+  }
+
+  @Override
   public Flow<List<EmpleadoEntity>> getAllEmpleadosActivos() {
     final String _sql = "SELECT * FROM empleados WHERE activo = 1 ORDER BY nombreCompleto";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);
@@ -504,6 +564,7 @@ public final class EmpleadoDao_Impl implements EmpleadoDao {
         final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
         try {
           final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
+          final int _cursorIndexOfEmployeeIdBackend = CursorUtil.getColumnIndexOrThrow(_cursor, "employee_id_backend");
           final int _cursorIndexOfLegajo = CursorUtil.getColumnIndexOrThrow(_cursor, "legajo");
           final int _cursorIndexOfNombreCompleto = CursorUtil.getColumnIndexOrThrow(_cursor, "nombreCompleto");
           final int _cursorIndexOfSector = CursorUtil.getColumnIndexOrThrow(_cursor, "sector");
@@ -511,11 +572,18 @@ public final class EmpleadoDao_Impl implements EmpleadoDao {
           final int _cursorIndexOfActivo = CursorUtil.getColumnIndexOrThrow(_cursor, "activo");
           final int _cursorIndexOfFechaCreacion = CursorUtil.getColumnIndexOrThrow(_cursor, "fechaCreacion");
           final int _cursorIndexOfObservacion = CursorUtil.getColumnIndexOrThrow(_cursor, "observacion");
+          final int _cursorIndexOfDni = CursorUtil.getColumnIndexOrThrow(_cursor, "dni");
           final List<EmpleadoEntity> _result = new ArrayList<EmpleadoEntity>(_cursor.getCount());
           while (_cursor.moveToNext()) {
             final EmpleadoEntity _item;
             final long _tmpId;
             _tmpId = _cursor.getLong(_cursorIndexOfId);
+            final String _tmpEmployeeIdBackend;
+            if (_cursor.isNull(_cursorIndexOfEmployeeIdBackend)) {
+              _tmpEmployeeIdBackend = null;
+            } else {
+              _tmpEmployeeIdBackend = _cursor.getString(_cursorIndexOfEmployeeIdBackend);
+            }
             final String _tmpLegajo;
             if (_cursor.isNull(_cursorIndexOfLegajo)) {
               _tmpLegajo = null;
@@ -562,7 +630,13 @@ public final class EmpleadoDao_Impl implements EmpleadoDao {
             } else {
               _tmpObservacion = _cursor.getString(_cursorIndexOfObservacion);
             }
-            _item = new EmpleadoEntity(_tmpId,_tmpLegajo,_tmpNombreCompleto,_tmpSector,_tmpFechaIngreso,_tmpActivo,_tmpFechaCreacion,_tmpObservacion);
+            final String _tmpDni;
+            if (_cursor.isNull(_cursorIndexOfDni)) {
+              _tmpDni = null;
+            } else {
+              _tmpDni = _cursor.getString(_cursorIndexOfDni);
+            }
+            _item = new EmpleadoEntity(_tmpId,_tmpEmployeeIdBackend,_tmpLegajo,_tmpNombreCompleto,_tmpSector,_tmpFechaIngreso,_tmpActivo,_tmpFechaCreacion,_tmpObservacion,_tmpDni);
             _result.add(_item);
           }
           return _result;
@@ -589,6 +663,7 @@ public final class EmpleadoDao_Impl implements EmpleadoDao {
         final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
         try {
           final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
+          final int _cursorIndexOfEmployeeIdBackend = CursorUtil.getColumnIndexOrThrow(_cursor, "employee_id_backend");
           final int _cursorIndexOfLegajo = CursorUtil.getColumnIndexOrThrow(_cursor, "legajo");
           final int _cursorIndexOfNombreCompleto = CursorUtil.getColumnIndexOrThrow(_cursor, "nombreCompleto");
           final int _cursorIndexOfSector = CursorUtil.getColumnIndexOrThrow(_cursor, "sector");
@@ -596,11 +671,18 @@ public final class EmpleadoDao_Impl implements EmpleadoDao {
           final int _cursorIndexOfActivo = CursorUtil.getColumnIndexOrThrow(_cursor, "activo");
           final int _cursorIndexOfFechaCreacion = CursorUtil.getColumnIndexOrThrow(_cursor, "fechaCreacion");
           final int _cursorIndexOfObservacion = CursorUtil.getColumnIndexOrThrow(_cursor, "observacion");
+          final int _cursorIndexOfDni = CursorUtil.getColumnIndexOrThrow(_cursor, "dni");
           final List<EmpleadoEntity> _result = new ArrayList<EmpleadoEntity>(_cursor.getCount());
           while (_cursor.moveToNext()) {
             final EmpleadoEntity _item;
             final long _tmpId;
             _tmpId = _cursor.getLong(_cursorIndexOfId);
+            final String _tmpEmployeeIdBackend;
+            if (_cursor.isNull(_cursorIndexOfEmployeeIdBackend)) {
+              _tmpEmployeeIdBackend = null;
+            } else {
+              _tmpEmployeeIdBackend = _cursor.getString(_cursorIndexOfEmployeeIdBackend);
+            }
             final String _tmpLegajo;
             if (_cursor.isNull(_cursorIndexOfLegajo)) {
               _tmpLegajo = null;
@@ -647,7 +729,13 @@ public final class EmpleadoDao_Impl implements EmpleadoDao {
             } else {
               _tmpObservacion = _cursor.getString(_cursorIndexOfObservacion);
             }
-            _item = new EmpleadoEntity(_tmpId,_tmpLegajo,_tmpNombreCompleto,_tmpSector,_tmpFechaIngreso,_tmpActivo,_tmpFechaCreacion,_tmpObservacion);
+            final String _tmpDni;
+            if (_cursor.isNull(_cursorIndexOfDni)) {
+              _tmpDni = null;
+            } else {
+              _tmpDni = _cursor.getString(_cursorIndexOfDni);
+            }
+            _item = new EmpleadoEntity(_tmpId,_tmpEmployeeIdBackend,_tmpLegajo,_tmpNombreCompleto,_tmpSector,_tmpFechaIngreso,_tmpActivo,_tmpFechaCreacion,_tmpObservacion,_tmpDni);
             _result.add(_item);
           }
           return _result;
@@ -678,6 +766,7 @@ public final class EmpleadoDao_Impl implements EmpleadoDao {
         final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
         try {
           final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
+          final int _cursorIndexOfEmployeeIdBackend = CursorUtil.getColumnIndexOrThrow(_cursor, "employee_id_backend");
           final int _cursorIndexOfLegajo = CursorUtil.getColumnIndexOrThrow(_cursor, "legajo");
           final int _cursorIndexOfNombreCompleto = CursorUtil.getColumnIndexOrThrow(_cursor, "nombreCompleto");
           final int _cursorIndexOfSector = CursorUtil.getColumnIndexOrThrow(_cursor, "sector");
@@ -685,10 +774,17 @@ public final class EmpleadoDao_Impl implements EmpleadoDao {
           final int _cursorIndexOfActivo = CursorUtil.getColumnIndexOrThrow(_cursor, "activo");
           final int _cursorIndexOfFechaCreacion = CursorUtil.getColumnIndexOrThrow(_cursor, "fechaCreacion");
           final int _cursorIndexOfObservacion = CursorUtil.getColumnIndexOrThrow(_cursor, "observacion");
+          final int _cursorIndexOfDni = CursorUtil.getColumnIndexOrThrow(_cursor, "dni");
           final EmpleadoEntity _result;
           if (_cursor.moveToFirst()) {
             final long _tmpId;
             _tmpId = _cursor.getLong(_cursorIndexOfId);
+            final String _tmpEmployeeIdBackend;
+            if (_cursor.isNull(_cursorIndexOfEmployeeIdBackend)) {
+              _tmpEmployeeIdBackend = null;
+            } else {
+              _tmpEmployeeIdBackend = _cursor.getString(_cursorIndexOfEmployeeIdBackend);
+            }
             final String _tmpLegajo;
             if (_cursor.isNull(_cursorIndexOfLegajo)) {
               _tmpLegajo = null;
@@ -735,7 +831,13 @@ public final class EmpleadoDao_Impl implements EmpleadoDao {
             } else {
               _tmpObservacion = _cursor.getString(_cursorIndexOfObservacion);
             }
-            _result = new EmpleadoEntity(_tmpId,_tmpLegajo,_tmpNombreCompleto,_tmpSector,_tmpFechaIngreso,_tmpActivo,_tmpFechaCreacion,_tmpObservacion);
+            final String _tmpDni;
+            if (_cursor.isNull(_cursorIndexOfDni)) {
+              _tmpDni = null;
+            } else {
+              _tmpDni = _cursor.getString(_cursorIndexOfDni);
+            }
+            _result = new EmpleadoEntity(_tmpId,_tmpEmployeeIdBackend,_tmpLegajo,_tmpNombreCompleto,_tmpSector,_tmpFechaIngreso,_tmpActivo,_tmpFechaCreacion,_tmpObservacion,_tmpDni);
           } else {
             _result = null;
           }
@@ -763,6 +865,7 @@ public final class EmpleadoDao_Impl implements EmpleadoDao {
         final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
         try {
           final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
+          final int _cursorIndexOfEmployeeIdBackend = CursorUtil.getColumnIndexOrThrow(_cursor, "employee_id_backend");
           final int _cursorIndexOfLegajo = CursorUtil.getColumnIndexOrThrow(_cursor, "legajo");
           final int _cursorIndexOfNombreCompleto = CursorUtil.getColumnIndexOrThrow(_cursor, "nombreCompleto");
           final int _cursorIndexOfSector = CursorUtil.getColumnIndexOrThrow(_cursor, "sector");
@@ -770,10 +873,17 @@ public final class EmpleadoDao_Impl implements EmpleadoDao {
           final int _cursorIndexOfActivo = CursorUtil.getColumnIndexOrThrow(_cursor, "activo");
           final int _cursorIndexOfFechaCreacion = CursorUtil.getColumnIndexOrThrow(_cursor, "fechaCreacion");
           final int _cursorIndexOfObservacion = CursorUtil.getColumnIndexOrThrow(_cursor, "observacion");
+          final int _cursorIndexOfDni = CursorUtil.getColumnIndexOrThrow(_cursor, "dni");
           final EmpleadoEntity _result;
           if (_cursor.moveToFirst()) {
             final long _tmpId;
             _tmpId = _cursor.getLong(_cursorIndexOfId);
+            final String _tmpEmployeeIdBackend;
+            if (_cursor.isNull(_cursorIndexOfEmployeeIdBackend)) {
+              _tmpEmployeeIdBackend = null;
+            } else {
+              _tmpEmployeeIdBackend = _cursor.getString(_cursorIndexOfEmployeeIdBackend);
+            }
             final String _tmpLegajo;
             if (_cursor.isNull(_cursorIndexOfLegajo)) {
               _tmpLegajo = null;
@@ -820,7 +930,13 @@ public final class EmpleadoDao_Impl implements EmpleadoDao {
             } else {
               _tmpObservacion = _cursor.getString(_cursorIndexOfObservacion);
             }
-            _result = new EmpleadoEntity(_tmpId,_tmpLegajo,_tmpNombreCompleto,_tmpSector,_tmpFechaIngreso,_tmpActivo,_tmpFechaCreacion,_tmpObservacion);
+            final String _tmpDni;
+            if (_cursor.isNull(_cursorIndexOfDni)) {
+              _tmpDni = null;
+            } else {
+              _tmpDni = _cursor.getString(_cursorIndexOfDni);
+            }
+            _result = new EmpleadoEntity(_tmpId,_tmpEmployeeIdBackend,_tmpLegajo,_tmpNombreCompleto,_tmpSector,_tmpFechaIngreso,_tmpActivo,_tmpFechaCreacion,_tmpObservacion,_tmpDni);
           } else {
             _result = null;
           }
@@ -846,6 +962,7 @@ public final class EmpleadoDao_Impl implements EmpleadoDao {
         final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
         try {
           final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
+          final int _cursorIndexOfEmployeeIdBackend = CursorUtil.getColumnIndexOrThrow(_cursor, "employee_id_backend");
           final int _cursorIndexOfLegajo = CursorUtil.getColumnIndexOrThrow(_cursor, "legajo");
           final int _cursorIndexOfNombreCompleto = CursorUtil.getColumnIndexOrThrow(_cursor, "nombreCompleto");
           final int _cursorIndexOfSector = CursorUtil.getColumnIndexOrThrow(_cursor, "sector");
@@ -853,11 +970,18 @@ public final class EmpleadoDao_Impl implements EmpleadoDao {
           final int _cursorIndexOfActivo = CursorUtil.getColumnIndexOrThrow(_cursor, "activo");
           final int _cursorIndexOfFechaCreacion = CursorUtil.getColumnIndexOrThrow(_cursor, "fechaCreacion");
           final int _cursorIndexOfObservacion = CursorUtil.getColumnIndexOrThrow(_cursor, "observacion");
+          final int _cursorIndexOfDni = CursorUtil.getColumnIndexOrThrow(_cursor, "dni");
           final List<EmpleadoEntity> _result = new ArrayList<EmpleadoEntity>(_cursor.getCount());
           while (_cursor.moveToNext()) {
             final EmpleadoEntity _item;
             final long _tmpId;
             _tmpId = _cursor.getLong(_cursorIndexOfId);
+            final String _tmpEmployeeIdBackend;
+            if (_cursor.isNull(_cursorIndexOfEmployeeIdBackend)) {
+              _tmpEmployeeIdBackend = null;
+            } else {
+              _tmpEmployeeIdBackend = _cursor.getString(_cursorIndexOfEmployeeIdBackend);
+            }
             final String _tmpLegajo;
             if (_cursor.isNull(_cursorIndexOfLegajo)) {
               _tmpLegajo = null;
@@ -904,7 +1028,13 @@ public final class EmpleadoDao_Impl implements EmpleadoDao {
             } else {
               _tmpObservacion = _cursor.getString(_cursorIndexOfObservacion);
             }
-            _item = new EmpleadoEntity(_tmpId,_tmpLegajo,_tmpNombreCompleto,_tmpSector,_tmpFechaIngreso,_tmpActivo,_tmpFechaCreacion,_tmpObservacion);
+            final String _tmpDni;
+            if (_cursor.isNull(_cursorIndexOfDni)) {
+              _tmpDni = null;
+            } else {
+              _tmpDni = _cursor.getString(_cursorIndexOfDni);
+            }
+            _item = new EmpleadoEntity(_tmpId,_tmpEmployeeIdBackend,_tmpLegajo,_tmpNombreCompleto,_tmpSector,_tmpFechaIngreso,_tmpActivo,_tmpFechaCreacion,_tmpObservacion,_tmpDni);
             _result.add(_item);
           }
           return _result;
@@ -962,6 +1092,7 @@ public final class EmpleadoDao_Impl implements EmpleadoDao {
         final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
         try {
           final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
+          final int _cursorIndexOfEmployeeIdBackend = CursorUtil.getColumnIndexOrThrow(_cursor, "employee_id_backend");
           final int _cursorIndexOfLegajo = CursorUtil.getColumnIndexOrThrow(_cursor, "legajo");
           final int _cursorIndexOfNombreCompleto = CursorUtil.getColumnIndexOrThrow(_cursor, "nombreCompleto");
           final int _cursorIndexOfSector = CursorUtil.getColumnIndexOrThrow(_cursor, "sector");
@@ -969,11 +1100,18 @@ public final class EmpleadoDao_Impl implements EmpleadoDao {
           final int _cursorIndexOfActivo = CursorUtil.getColumnIndexOrThrow(_cursor, "activo");
           final int _cursorIndexOfFechaCreacion = CursorUtil.getColumnIndexOrThrow(_cursor, "fechaCreacion");
           final int _cursorIndexOfObservacion = CursorUtil.getColumnIndexOrThrow(_cursor, "observacion");
+          final int _cursorIndexOfDni = CursorUtil.getColumnIndexOrThrow(_cursor, "dni");
           final List<EmpleadoEntity> _result = new ArrayList<EmpleadoEntity>(_cursor.getCount());
           while (_cursor.moveToNext()) {
             final EmpleadoEntity _item;
             final long _tmpId;
             _tmpId = _cursor.getLong(_cursorIndexOfId);
+            final String _tmpEmployeeIdBackend;
+            if (_cursor.isNull(_cursorIndexOfEmployeeIdBackend)) {
+              _tmpEmployeeIdBackend = null;
+            } else {
+              _tmpEmployeeIdBackend = _cursor.getString(_cursorIndexOfEmployeeIdBackend);
+            }
             final String _tmpLegajo;
             if (_cursor.isNull(_cursorIndexOfLegajo)) {
               _tmpLegajo = null;
@@ -1020,7 +1158,13 @@ public final class EmpleadoDao_Impl implements EmpleadoDao {
             } else {
               _tmpObservacion = _cursor.getString(_cursorIndexOfObservacion);
             }
-            _item = new EmpleadoEntity(_tmpId,_tmpLegajo,_tmpNombreCompleto,_tmpSector,_tmpFechaIngreso,_tmpActivo,_tmpFechaCreacion,_tmpObservacion);
+            final String _tmpDni;
+            if (_cursor.isNull(_cursorIndexOfDni)) {
+              _tmpDni = null;
+            } else {
+              _tmpDni = _cursor.getString(_cursorIndexOfDni);
+            }
+            _item = new EmpleadoEntity(_tmpId,_tmpEmployeeIdBackend,_tmpLegajo,_tmpNombreCompleto,_tmpSector,_tmpFechaIngreso,_tmpActivo,_tmpFechaCreacion,_tmpObservacion,_tmpDni);
             _result.add(_item);
           }
           return _result;
@@ -1049,6 +1193,7 @@ public final class EmpleadoDao_Impl implements EmpleadoDao {
         final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
         try {
           final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
+          final int _cursorIndexOfEmployeeIdBackend = CursorUtil.getColumnIndexOrThrow(_cursor, "employee_id_backend");
           final int _cursorIndexOfLegajo = CursorUtil.getColumnIndexOrThrow(_cursor, "legajo");
           final int _cursorIndexOfNombreCompleto = CursorUtil.getColumnIndexOrThrow(_cursor, "nombreCompleto");
           final int _cursorIndexOfSector = CursorUtil.getColumnIndexOrThrow(_cursor, "sector");
@@ -1056,11 +1201,18 @@ public final class EmpleadoDao_Impl implements EmpleadoDao {
           final int _cursorIndexOfActivo = CursorUtil.getColumnIndexOrThrow(_cursor, "activo");
           final int _cursorIndexOfFechaCreacion = CursorUtil.getColumnIndexOrThrow(_cursor, "fechaCreacion");
           final int _cursorIndexOfObservacion = CursorUtil.getColumnIndexOrThrow(_cursor, "observacion");
+          final int _cursorIndexOfDni = CursorUtil.getColumnIndexOrThrow(_cursor, "dni");
           final List<EmpleadoEntity> _result = new ArrayList<EmpleadoEntity>(_cursor.getCount());
           while (_cursor.moveToNext()) {
             final EmpleadoEntity _item;
             final long _tmpId;
             _tmpId = _cursor.getLong(_cursorIndexOfId);
+            final String _tmpEmployeeIdBackend;
+            if (_cursor.isNull(_cursorIndexOfEmployeeIdBackend)) {
+              _tmpEmployeeIdBackend = null;
+            } else {
+              _tmpEmployeeIdBackend = _cursor.getString(_cursorIndexOfEmployeeIdBackend);
+            }
             final String _tmpLegajo;
             if (_cursor.isNull(_cursorIndexOfLegajo)) {
               _tmpLegajo = null;
@@ -1107,7 +1259,13 @@ public final class EmpleadoDao_Impl implements EmpleadoDao {
             } else {
               _tmpObservacion = _cursor.getString(_cursorIndexOfObservacion);
             }
-            _item = new EmpleadoEntity(_tmpId,_tmpLegajo,_tmpNombreCompleto,_tmpSector,_tmpFechaIngreso,_tmpActivo,_tmpFechaCreacion,_tmpObservacion);
+            final String _tmpDni;
+            if (_cursor.isNull(_cursorIndexOfDni)) {
+              _tmpDni = null;
+            } else {
+              _tmpDni = _cursor.getString(_cursorIndexOfDni);
+            }
+            _item = new EmpleadoEntity(_tmpId,_tmpEmployeeIdBackend,_tmpLegajo,_tmpNombreCompleto,_tmpSector,_tmpFechaIngreso,_tmpActivo,_tmpFechaCreacion,_tmpObservacion,_tmpDni);
             _result.add(_item);
           }
           return _result;
@@ -1136,6 +1294,7 @@ public final class EmpleadoDao_Impl implements EmpleadoDao {
         final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
         try {
           final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
+          final int _cursorIndexOfEmployeeIdBackend = CursorUtil.getColumnIndexOrThrow(_cursor, "employee_id_backend");
           final int _cursorIndexOfLegajo = CursorUtil.getColumnIndexOrThrow(_cursor, "legajo");
           final int _cursorIndexOfNombreCompleto = CursorUtil.getColumnIndexOrThrow(_cursor, "nombreCompleto");
           final int _cursorIndexOfSector = CursorUtil.getColumnIndexOrThrow(_cursor, "sector");
@@ -1143,11 +1302,18 @@ public final class EmpleadoDao_Impl implements EmpleadoDao {
           final int _cursorIndexOfActivo = CursorUtil.getColumnIndexOrThrow(_cursor, "activo");
           final int _cursorIndexOfFechaCreacion = CursorUtil.getColumnIndexOrThrow(_cursor, "fechaCreacion");
           final int _cursorIndexOfObservacion = CursorUtil.getColumnIndexOrThrow(_cursor, "observacion");
+          final int _cursorIndexOfDni = CursorUtil.getColumnIndexOrThrow(_cursor, "dni");
           final List<EmpleadoEntity> _result = new ArrayList<EmpleadoEntity>(_cursor.getCount());
           while (_cursor.moveToNext()) {
             final EmpleadoEntity _item;
             final long _tmpId;
             _tmpId = _cursor.getLong(_cursorIndexOfId);
+            final String _tmpEmployeeIdBackend;
+            if (_cursor.isNull(_cursorIndexOfEmployeeIdBackend)) {
+              _tmpEmployeeIdBackend = null;
+            } else {
+              _tmpEmployeeIdBackend = _cursor.getString(_cursorIndexOfEmployeeIdBackend);
+            }
             final String _tmpLegajo;
             if (_cursor.isNull(_cursorIndexOfLegajo)) {
               _tmpLegajo = null;
@@ -1194,7 +1360,13 @@ public final class EmpleadoDao_Impl implements EmpleadoDao {
             } else {
               _tmpObservacion = _cursor.getString(_cursorIndexOfObservacion);
             }
-            _item = new EmpleadoEntity(_tmpId,_tmpLegajo,_tmpNombreCompleto,_tmpSector,_tmpFechaIngreso,_tmpActivo,_tmpFechaCreacion,_tmpObservacion);
+            final String _tmpDni;
+            if (_cursor.isNull(_cursorIndexOfDni)) {
+              _tmpDni = null;
+            } else {
+              _tmpDni = _cursor.getString(_cursorIndexOfDni);
+            }
+            _item = new EmpleadoEntity(_tmpId,_tmpEmployeeIdBackend,_tmpLegajo,_tmpNombreCompleto,_tmpSector,_tmpFechaIngreso,_tmpActivo,_tmpFechaCreacion,_tmpObservacion,_tmpDni);
             _result.add(_item);
           }
           return _result;
@@ -1233,6 +1405,7 @@ public final class EmpleadoDao_Impl implements EmpleadoDao {
         final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
         try {
           final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
+          final int _cursorIndexOfEmployeeIdBackend = CursorUtil.getColumnIndexOrThrow(_cursor, "employee_id_backend");
           final int _cursorIndexOfLegajo = CursorUtil.getColumnIndexOrThrow(_cursor, "legajo");
           final int _cursorIndexOfNombreCompleto = CursorUtil.getColumnIndexOrThrow(_cursor, "nombreCompleto");
           final int _cursorIndexOfSector = CursorUtil.getColumnIndexOrThrow(_cursor, "sector");
@@ -1240,11 +1413,18 @@ public final class EmpleadoDao_Impl implements EmpleadoDao {
           final int _cursorIndexOfActivo = CursorUtil.getColumnIndexOrThrow(_cursor, "activo");
           final int _cursorIndexOfFechaCreacion = CursorUtil.getColumnIndexOrThrow(_cursor, "fechaCreacion");
           final int _cursorIndexOfObservacion = CursorUtil.getColumnIndexOrThrow(_cursor, "observacion");
+          final int _cursorIndexOfDni = CursorUtil.getColumnIndexOrThrow(_cursor, "dni");
           final List<EmpleadoEntity> _result = new ArrayList<EmpleadoEntity>(_cursor.getCount());
           while (_cursor.moveToNext()) {
             final EmpleadoEntity _item;
             final long _tmpId;
             _tmpId = _cursor.getLong(_cursorIndexOfId);
+            final String _tmpEmployeeIdBackend;
+            if (_cursor.isNull(_cursorIndexOfEmployeeIdBackend)) {
+              _tmpEmployeeIdBackend = null;
+            } else {
+              _tmpEmployeeIdBackend = _cursor.getString(_cursorIndexOfEmployeeIdBackend);
+            }
             final String _tmpLegajo;
             if (_cursor.isNull(_cursorIndexOfLegajo)) {
               _tmpLegajo = null;
@@ -1291,7 +1471,13 @@ public final class EmpleadoDao_Impl implements EmpleadoDao {
             } else {
               _tmpObservacion = _cursor.getString(_cursorIndexOfObservacion);
             }
-            _item = new EmpleadoEntity(_tmpId,_tmpLegajo,_tmpNombreCompleto,_tmpSector,_tmpFechaIngreso,_tmpActivo,_tmpFechaCreacion,_tmpObservacion);
+            final String _tmpDni;
+            if (_cursor.isNull(_cursorIndexOfDni)) {
+              _tmpDni = null;
+            } else {
+              _tmpDni = _cursor.getString(_cursorIndexOfDni);
+            }
+            _item = new EmpleadoEntity(_tmpId,_tmpEmployeeIdBackend,_tmpLegajo,_tmpNombreCompleto,_tmpSector,_tmpFechaIngreso,_tmpActivo,_tmpFechaCreacion,_tmpObservacion,_tmpDni);
             _result.add(_item);
           }
           return _result;
@@ -1305,6 +1491,105 @@ public final class EmpleadoDao_Impl implements EmpleadoDao {
         _statement.release();
       }
     });
+  }
+
+  @Override
+  public Object getEmpleadoByBackendId(final String backendId,
+      final Continuation<? super EmpleadoEntity> $completion) {
+    final String _sql = "SELECT * FROM empleados WHERE employee_id_backend = ? LIMIT 1";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
+    int _argIndex = 1;
+    _statement.bindString(_argIndex, backendId);
+    final CancellationSignal _cancellationSignal = DBUtil.createCancellationSignal();
+    return CoroutinesRoom.execute(__db, false, _cancellationSignal, new Callable<EmpleadoEntity>() {
+      @Override
+      @Nullable
+      public EmpleadoEntity call() throws Exception {
+        final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+        try {
+          final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
+          final int _cursorIndexOfEmployeeIdBackend = CursorUtil.getColumnIndexOrThrow(_cursor, "employee_id_backend");
+          final int _cursorIndexOfLegajo = CursorUtil.getColumnIndexOrThrow(_cursor, "legajo");
+          final int _cursorIndexOfNombreCompleto = CursorUtil.getColumnIndexOrThrow(_cursor, "nombreCompleto");
+          final int _cursorIndexOfSector = CursorUtil.getColumnIndexOrThrow(_cursor, "sector");
+          final int _cursorIndexOfFechaIngreso = CursorUtil.getColumnIndexOrThrow(_cursor, "fechaIngreso");
+          final int _cursorIndexOfActivo = CursorUtil.getColumnIndexOrThrow(_cursor, "activo");
+          final int _cursorIndexOfFechaCreacion = CursorUtil.getColumnIndexOrThrow(_cursor, "fechaCreacion");
+          final int _cursorIndexOfObservacion = CursorUtil.getColumnIndexOrThrow(_cursor, "observacion");
+          final int _cursorIndexOfDni = CursorUtil.getColumnIndexOrThrow(_cursor, "dni");
+          final EmpleadoEntity _result;
+          if (_cursor.moveToFirst()) {
+            final long _tmpId;
+            _tmpId = _cursor.getLong(_cursorIndexOfId);
+            final String _tmpEmployeeIdBackend;
+            if (_cursor.isNull(_cursorIndexOfEmployeeIdBackend)) {
+              _tmpEmployeeIdBackend = null;
+            } else {
+              _tmpEmployeeIdBackend = _cursor.getString(_cursorIndexOfEmployeeIdBackend);
+            }
+            final String _tmpLegajo;
+            if (_cursor.isNull(_cursorIndexOfLegajo)) {
+              _tmpLegajo = null;
+            } else {
+              _tmpLegajo = _cursor.getString(_cursorIndexOfLegajo);
+            }
+            final String _tmpNombreCompleto;
+            _tmpNombreCompleto = _cursor.getString(_cursorIndexOfNombreCompleto);
+            final String _tmpSector;
+            _tmpSector = _cursor.getString(_cursorIndexOfSector);
+            final LocalDate _tmpFechaIngreso;
+            final String _tmp;
+            if (_cursor.isNull(_cursorIndexOfFechaIngreso)) {
+              _tmp = null;
+            } else {
+              _tmp = _cursor.getString(_cursorIndexOfFechaIngreso);
+            }
+            final LocalDate _tmp_1 = __localDateConverter.toLocalDate(_tmp);
+            if (_tmp_1 == null) {
+              throw new IllegalStateException("Expected NON-NULL 'java.time.LocalDate', but it was NULL.");
+            } else {
+              _tmpFechaIngreso = _tmp_1;
+            }
+            final boolean _tmpActivo;
+            final int _tmp_2;
+            _tmp_2 = _cursor.getInt(_cursorIndexOfActivo);
+            _tmpActivo = _tmp_2 != 0;
+            final LocalDate _tmpFechaCreacion;
+            final String _tmp_3;
+            if (_cursor.isNull(_cursorIndexOfFechaCreacion)) {
+              _tmp_3 = null;
+            } else {
+              _tmp_3 = _cursor.getString(_cursorIndexOfFechaCreacion);
+            }
+            final LocalDate _tmp_4 = __localDateConverter.toLocalDate(_tmp_3);
+            if (_tmp_4 == null) {
+              throw new IllegalStateException("Expected NON-NULL 'java.time.LocalDate', but it was NULL.");
+            } else {
+              _tmpFechaCreacion = _tmp_4;
+            }
+            final String _tmpObservacion;
+            if (_cursor.isNull(_cursorIndexOfObservacion)) {
+              _tmpObservacion = null;
+            } else {
+              _tmpObservacion = _cursor.getString(_cursorIndexOfObservacion);
+            }
+            final String _tmpDni;
+            if (_cursor.isNull(_cursorIndexOfDni)) {
+              _tmpDni = null;
+            } else {
+              _tmpDni = _cursor.getString(_cursorIndexOfDni);
+            }
+            _result = new EmpleadoEntity(_tmpId,_tmpEmployeeIdBackend,_tmpLegajo,_tmpNombreCompleto,_tmpSector,_tmpFechaIngreso,_tmpActivo,_tmpFechaCreacion,_tmpObservacion,_tmpDni);
+          } else {
+            _result = null;
+          }
+          return _result;
+        } finally {
+          _cursor.close();
+          _statement.release();
+        }
+      }
+    }, $completion);
   }
 
   @NonNull

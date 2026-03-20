@@ -9,6 +9,8 @@ import com.registro.empleados.data.remote.dto.RegisterDeviceRequestDto
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 
 /**
@@ -24,6 +26,7 @@ class DeviceIdentityManager @Inject constructor(
     private val authApiService: AuthApiService,
     private val sectorsApiService: SectorsApiService
 ) {
+    private val registerMutex = Mutex()
 
     /**
      * Asegura que device_id exista. Si no, genera UUID y lo guarda.
@@ -62,77 +65,109 @@ class DeviceIdentityManager @Inject constructor(
      */
     suspend fun registerWhenConfigSaved(nombreEncargado: String, sectorWanted: String) =
         withContext(Dispatchers.IO) {
-            Log.i("StaffAxis", "registerDevice -> start")
-            try {
-                val deviceId = devicePrefs.ensureDeviceId()
-                var sectorId = appPreferences.getSectorId()
-                if (sectorId.isNullOrBlank()) {
-                    sectorId = resolveSectorId(sectorWanted)
-                    if (sectorId != null) {
-                        appPreferences.setSectorId(sectorId)
-                    }
-                }
-                if (sectorId == null) {
-                    Log.e("StaffAxis", "registerDevice -> fail code=-1 msg=sector_id not resolved")
-                    return@withContext
-                }
-                val response = authApiService.registerDevice(
-                    RegisterDeviceRequestDto(
-                        deviceId = deviceId,
-                        sectorId = sectorId,
-                        encargadoName = nombreEncargado
-                    )
-                )
-                val code = response.code()
-                val msg = response.message().orEmpty()
-                if (response.isSuccessful) {
-                    val token = response.body()?.token
-                    if (!token.isNullOrBlank()) {
-                        devicePrefs.setDeviceCredentials(token, deviceId)
-                        Log.i("StaffAxis", "registerDevice success status=$code tokenSaved=true")
-                    } else {
-                        Log.e("StaffAxis", "registerDevice -> fail code=$code msg=empty token")
-                    }
-                } else {
-                    Log.e("StaffAxis", "registerDevice -> fail code=$code msg=$msg")
-                }
-            } catch (e: Exception) {
-                Log.e("StaffAxis", "registerDevice -> fail code=-1 msg=${e.javaClass.simpleName}", e)
+            registerMutex.withLock {
+                doRegisterWhenConfigSaved(nombreEncargado, sectorWanted)
             }
         }
 
-    private suspend fun resolveSectorId(wanted: String): String? {
-        return try {
-            val response = sectorsApiService.getSectors()
-            Log.i("StaffAxis", "GET sectors url=" + response.raw().request.url)
-            Log.i("StaffAxis", "GET sectors status=" + response.code())
-            Log.i("StaffAxis", "GET sectors contentType=" + response.headers()["content-type"])
-            val peek = response.raw().peekBody(512).string().take(200)
-            Log.i("StaffAxis", "GET sectors peek=" + peek)
-            val body = response.body()
-            if (response.isSuccessful && body != null) {
-                val sectors = body.sectors
-                Log.i("StaffAxis", "getSectors OK count=${sectors.size} ids=${sectors.map { it.id }}")
-                Log.i("StaffAxis", "resolveSector wanted=$wanted")
-                val resolved = when {
-                    sectors.isEmpty() -> null
-                    wanted.isNotBlank() -> {
-                        sectors.find { it.id == wanted }?.id
-                            ?: sectors.find { it.name.equals(wanted, ignoreCase = true) }?.id
-                    }
-                    sectors.size == 1 -> sectors.first().id
-                    else -> null
+    private companion object {
+        private const val REGISTER_RATE_LIMIT_MS = 30_000L
+    }
+
+    private suspend fun doRegisterWhenConfigSaved(nombreEncargado: String, sectorWanted: String) {
+        if (!devicePrefs.getDeviceToken().isNullOrBlank()) {
+            return
+        }
+        val now = System.currentTimeMillis()
+        val lastAttempt = devicePrefs.getLastRegisterAttemptMillis()
+        if (lastAttempt > 0 && (now - lastAttempt) < REGISTER_RATE_LIMIT_MS) {
+            Log.i("StaffAxis", "REGISTER_SKIPPED rateLimit")
+            return
+        }
+        Log.i("StaffAxis", "registerDevice -> start")
+        try {
+            val deviceId = devicePrefs.ensureDeviceId()
+            var sectorId = appPreferences.getSectorId()
+            if (sectorId.isNullOrBlank()) {
+                sectorId = resolveSectorId(sectorWanted)
+                if (sectorId != null) {
+                    appPreferences.setSectorId(sectorId)
                 }
-                if (resolved != null) {
-                    Log.i("StaffAxis", "resolveSector OK sector_id=$resolved")
+            }
+            if (sectorId == null) {
+                Log.e("StaffAxis", "registerDevice -> sector_id not resolved (sectors empty/invalid)")
+                return
+            }
+            devicePrefs.setLastRegisterAttemptMillis(System.currentTimeMillis())
+            val response = authApiService.registerDevice(
+                RegisterDeviceRequestDto(
+                    deviceId = deviceId,
+                    sectorId = sectorId,
+                    encargadoName = nombreEncargado
+                )
+            )
+            val code = response.code()
+            val msg = response.message().orEmpty()
+            if (response.isSuccessful) {
+                val body = response.body()
+                if (code == 202 || body?.pending == true) {
+                    Log.i("StaffAxis", "registerDevice -> 202 pending, retry later")
+                    return
                 }
-                resolved
+                val token = body?.token
+                if (!token.isNullOrBlank()) {
+                    devicePrefs.setDeviceCredentials(token, deviceId)
+                    Log.i("StaffAxis", "registerDevice success status=$code tokenSaved=true")
+                } else {
+                    Log.e("StaffAxis", "registerDevice -> fail code=$code msg=empty token")
+                }
             } else {
-                Log.e("StaffAxis", "getSectors FAIL status=${response.code()} err=${response.errorBody()?.string()?.take(200)}")
-                null
+                Log.e("StaffAxis", "registerDevice -> fail code=$code msg=$msg")
             }
         } catch (e: Exception) {
-            Log.e("StaffAxis", "getSectors catch: ${e.javaClass.simpleName} msg=${e.message}", e)
+                Log.e("StaffAxis", "registerDevice -> fail code=-1 msg=${e.javaClass.simpleName}", e)
+            }
+    }
+
+    private suspend fun resolveSectorId(wantedSectorId: String): String? {
+        return try {
+            Log.i("StaffAxis", "GET_SECTORS start")
+            val response = sectorsApiService.getSectors()
+            val status = response.code()
+            val ct = response.headers()["Content-Type"] ?: ""
+            Log.i("StaffAxis", "GET_SECTORS status=$status ct=$ct")
+            if (!response.isSuccessful) {
+                Log.e("StaffAxis", "GET_SECTORS fail status=$status")
+                return null
+            }
+            val dto = response.body()
+            val sectors = dto?.sectors ?: emptyList()
+            val ids = sectors.map { it.id }.filter { it.isNotBlank() }
+            Log.i("StaffAxis", "getSectors OK sectorsCount=${sectors.size} ids=$ids")
+            when {
+                sectors.size == 1 -> {
+                    val id = sectors.first().id
+                    if (id.isBlank()) {
+                        Log.e("StaffAxis", "resolveSector FAILED single sector has empty id")
+                        return null
+                    }
+                    Log.i("StaffAxis", "resolveSector fallback single sector_id=$id")
+                    id
+                }
+                else -> {
+                    // Varios sectores: buscar por nombre (wantedSectorId es el nombre del sector)
+                    val match = sectors.find { it.name.equals(wantedSectorId, ignoreCase = true) }
+                    if (match != null && match.id.isNotBlank()) {
+                        Log.i("StaffAxis", "resolveSector matched by name '${match.name}' -> sector_id=${match.id}")
+                        match.id
+                    } else {
+                        Log.e("StaffAxis", "resolveSector FAILED no match for wanted='$wantedSectorId' among ${sectors.size} sectors")
+                        null
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("StaffAxis", "GET_SECTORS fail type=${e.javaClass.simpleName} msg=${e.message}", e)
             null
         }
     }

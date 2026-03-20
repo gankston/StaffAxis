@@ -15,7 +15,10 @@ import com.registro.empleados.presentation.viewmodel.CalendarioViewModel_HiltMod
 import com.registro.empleados.presentation.viewmodel.DashboardViewModel_HiltModules;
 import com.registro.empleados.presentation.viewmodel.EmpleadosViewModel_HiltModules;
 import com.registro.empleados.presentation.viewmodel.ReportesViewModel_HiltModules;
+import com.registro.empleados.presentation.viewmodel.SetupViewModel_HiltModules;
 import com.registro.empleados.worker.FeriadosSyncWorker_HiltModule;
+import com.registro.empleados.worker.PullApprovedWorker_HiltModule;
+import com.registro.empleados.worker.PushOutboxWorker_HiltModule;
 import dagger.Binds;
 import dagger.Component;
 import dagger.Module;
@@ -149,6 +152,8 @@ public final class AsistenciaApplication_HiltComponents {
           HiltWrapper_FragmentGetContextFix_FragmentGetContextFixModule.class,
           HiltWrapper_WorkerFactoryModule.class,
           NetworkModule.class,
+          PullApprovedWorker_HiltModule.class,
+          PushOutboxWorker_HiltModule.class,
           RepositoryModule.class,
           UseCaseModule.class,
           WorkerModule.class
@@ -182,7 +187,8 @@ public final class AsistenciaApplication_HiltComponents {
           DashboardViewModel_HiltModules.KeyModule.class,
           EmpleadosViewModel_HiltModules.KeyModule.class,
           HiltWrapper_ActivityRetainedComponentManager_LifecycleModule.class,
-          ReportesViewModel_HiltModules.KeyModule.class
+          ReportesViewModel_HiltModules.KeyModule.class,
+          SetupViewModel_HiltModules.KeyModule.class
       }
   )
   @ActivityRetainedScoped
@@ -224,7 +230,8 @@ public final class AsistenciaApplication_HiltComponents {
           DashboardViewModel_HiltModules.BindsModule.class,
           EmpleadosViewModel_HiltModules.BindsModule.class,
           HiltWrapper_HiltViewModelFactory_ViewModelModule.class,
-          ReportesViewModel_HiltModules.BindsModule.class
+          ReportesViewModel_HiltModules.BindsModule.class,
+          SetupViewModel_HiltModules.BindsModule.class
       }
   )
   @ViewModelScoped

@@ -47,4 +47,13 @@ interface AusenciaDao {
     
     @Query("SELECT * FROM ausencia_table ORDER BY fechaInicio DESC")
     suspend fun getAllAusencias(): List<AusenciaEntity>
+
+    @Query("SELECT * FROM ausencia_table WHERE syncStatus = 'pending' OR syncStatus = 'failed' LIMIT :limit")
+    suspend fun getPendingAusencias(limit: Int): List<AusenciaEntity>
+
+    @Query("UPDATE ausencia_table SET syncStatus = 'sent', attempts = attempts + 1 WHERE id = :id")
+    suspend fun markAsSent(id: Long)
+
+    @Query("UPDATE ausencia_table SET syncStatus = 'failed', attempts = attempts + 1, lastError = :error WHERE id = :id")
+    suspend fun markAsFailed(id: Long, error: String)
 }

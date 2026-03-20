@@ -4,12 +4,14 @@ import com.registro.empleados.data.repository.DiaLaboralRepositoryImpl
 import com.registro.empleados.data.repository.EmpleadoRepositoryImpl
 import com.registro.empleados.data.repository.HorasEmpleadoMesRepositoryImpl
 import com.registro.empleados.data.repository.RegistroAsistenciaRepositoryImpl
-import com.registro.empleados.data.repository.AusenciaRepositoryImpl
+import com.registro.empleados.data.repository.SectorRepositoryImpl
 import com.registro.empleados.domain.repository.DiaLaboralRepository
 import com.registro.empleados.domain.repository.EmpleadoRepository
 import com.registro.empleados.domain.repository.HorasEmpleadoMesRepository
 import com.registro.empleados.domain.repository.RegistroAsistenciaRepository
+import com.registro.empleados.data.repository.AusenciaRepositoryImpl
 import com.registro.empleados.domain.repository.AusenciaRepository
+import com.registro.empleados.domain.repository.SectorRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -59,9 +61,12 @@ abstract class RepositoryModule {
         horasEmpleadoMesRepositoryImpl: HorasEmpleadoMesRepositoryImpl
     ): HorasEmpleadoMesRepository
     
-    /**
-     * Proporciona la implementación del repositorio de ausencias.
-     */
+    @Binds
+    @Singleton
+    abstract fun bindSectorRepository(
+        sectorRepositoryImpl: SectorRepositoryImpl
+    ): SectorRepository
+
     @Binds
     @Singleton
     abstract fun bindAusenciaRepository(

@@ -106,6 +106,22 @@ CREATE INDEX idx_attendances_employee_date ON attendances(employee_id, date);
 CREATE INDEX idx_attendances_updated_at ON attendances(updated_at);
 CREATE INDEX idx_attendances_deleted_at ON attendances(deleted_at);
 
+-- -----------------------------------------------------------------------------
+-- OUTBOX_SUBMISSIONS (cola para reintentos cuando /api/submissions falla 5xx/1102)
+-- -----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS outbox_submissions (
+    id              TEXT PRIMARY KEY,
+    created_at      INTEGER NOT NULL,
+    status          TEXT NOT NULL DEFAULT 'pending',
+    attempts        INTEGER NOT NULL DEFAULT 0,
+    next_retry_at   INTEGER NOT NULL,
+    last_error      TEXT,
+    dedup_key       TEXT UNIQUE,
+    payload_json    TEXT NOT NULL
+);
+
+CREATE INDEX idx_outbox_submissions_status_next_retry ON outbox_submissions(status, next_retry_at);
+
 -- =============================================================================
 -- TRIGGERS: mantener updated_at automáticamente
 -- =============================================================================

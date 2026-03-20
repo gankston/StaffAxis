@@ -1,6 +1,8 @@
 package com.registro.empleados.presentation.viewmodel;
 
+import com.registro.empleados.data.device.DeviceIdentityManager;
 import com.registro.empleados.data.local.preferences.AppPreferences;
+import com.registro.empleados.data.remote.api.AusenciasApiService;
 import com.registro.empleados.domain.usecase.ausencia.ActualizarAusenciaUseCase;
 import com.registro.empleados.domain.usecase.ausencia.CrearAusenciaUseCase;
 import com.registro.empleados.domain.usecase.ausencia.EliminarAusenciaUseCase;
@@ -51,6 +53,10 @@ public final class AusenciasViewModel_Factory implements Factory<AusenciasViewMo
 
   private final Provider<AppPreferences> appPreferencesProvider;
 
+  private final Provider<AusenciasApiService> ausenciasApiServiceProvider;
+
+  private final Provider<DeviceIdentityManager> deviceIdentityManagerProvider;
+
   public AusenciasViewModel_Factory(
       Provider<GetDiasLaboralesUseCase> getDiasLaboralesUseCaseProvider,
       Provider<GetPeriodoActualUseCase> getPeriodoActualUseCaseProvider,
@@ -61,7 +67,9 @@ public final class AusenciasViewModel_Factory implements Factory<AusenciasViewMo
       Provider<ActualizarAusenciaUseCase> actualizarAusenciaUseCaseProvider,
       Provider<EliminarAusenciaUseCase> eliminarAusenciaUseCaseProvider,
       Provider<GetAllEmpleadosActivosUseCase> getAllEmpleadosActivosUseCaseProvider,
-      Provider<AppPreferences> appPreferencesProvider) {
+      Provider<AppPreferences> appPreferencesProvider,
+      Provider<AusenciasApiService> ausenciasApiServiceProvider,
+      Provider<DeviceIdentityManager> deviceIdentityManagerProvider) {
     this.getDiasLaboralesUseCaseProvider = getDiasLaboralesUseCaseProvider;
     this.getPeriodoActualUseCaseProvider = getPeriodoActualUseCaseProvider;
     this.generarDiasLaboralesBasicosUseCaseProvider = generarDiasLaboralesBasicosUseCaseProvider;
@@ -72,11 +80,13 @@ public final class AusenciasViewModel_Factory implements Factory<AusenciasViewMo
     this.eliminarAusenciaUseCaseProvider = eliminarAusenciaUseCaseProvider;
     this.getAllEmpleadosActivosUseCaseProvider = getAllEmpleadosActivosUseCaseProvider;
     this.appPreferencesProvider = appPreferencesProvider;
+    this.ausenciasApiServiceProvider = ausenciasApiServiceProvider;
+    this.deviceIdentityManagerProvider = deviceIdentityManagerProvider;
   }
 
   @Override
   public AusenciasViewModel get() {
-    return newInstance(getDiasLaboralesUseCaseProvider.get(), getPeriodoActualUseCaseProvider.get(), generarDiasLaboralesBasicosUseCaseProvider.get(), getAusenciasByRangoUseCaseProvider.get(), getAusenciasByFechaUseCaseProvider.get(), crearAusenciaUseCaseProvider.get(), actualizarAusenciaUseCaseProvider.get(), eliminarAusenciaUseCaseProvider.get(), getAllEmpleadosActivosUseCaseProvider.get(), appPreferencesProvider.get());
+    return newInstance(getDiasLaboralesUseCaseProvider.get(), getPeriodoActualUseCaseProvider.get(), generarDiasLaboralesBasicosUseCaseProvider.get(), getAusenciasByRangoUseCaseProvider.get(), getAusenciasByFechaUseCaseProvider.get(), crearAusenciaUseCaseProvider.get(), actualizarAusenciaUseCaseProvider.get(), eliminarAusenciaUseCaseProvider.get(), getAllEmpleadosActivosUseCaseProvider.get(), appPreferencesProvider.get(), ausenciasApiServiceProvider.get(), deviceIdentityManagerProvider.get());
   }
 
   public static AusenciasViewModel_Factory create(
@@ -89,8 +99,10 @@ public final class AusenciasViewModel_Factory implements Factory<AusenciasViewMo
       Provider<ActualizarAusenciaUseCase> actualizarAusenciaUseCaseProvider,
       Provider<EliminarAusenciaUseCase> eliminarAusenciaUseCaseProvider,
       Provider<GetAllEmpleadosActivosUseCase> getAllEmpleadosActivosUseCaseProvider,
-      Provider<AppPreferences> appPreferencesProvider) {
-    return new AusenciasViewModel_Factory(getDiasLaboralesUseCaseProvider, getPeriodoActualUseCaseProvider, generarDiasLaboralesBasicosUseCaseProvider, getAusenciasByRangoUseCaseProvider, getAusenciasByFechaUseCaseProvider, crearAusenciaUseCaseProvider, actualizarAusenciaUseCaseProvider, eliminarAusenciaUseCaseProvider, getAllEmpleadosActivosUseCaseProvider, appPreferencesProvider);
+      Provider<AppPreferences> appPreferencesProvider,
+      Provider<AusenciasApiService> ausenciasApiServiceProvider,
+      Provider<DeviceIdentityManager> deviceIdentityManagerProvider) {
+    return new AusenciasViewModel_Factory(getDiasLaboralesUseCaseProvider, getPeriodoActualUseCaseProvider, generarDiasLaboralesBasicosUseCaseProvider, getAusenciasByRangoUseCaseProvider, getAusenciasByFechaUseCaseProvider, crearAusenciaUseCaseProvider, actualizarAusenciaUseCaseProvider, eliminarAusenciaUseCaseProvider, getAllEmpleadosActivosUseCaseProvider, appPreferencesProvider, ausenciasApiServiceProvider, deviceIdentityManagerProvider);
   }
 
   public static AusenciasViewModel newInstance(GetDiasLaboralesUseCase getDiasLaboralesUseCase,
@@ -101,7 +113,8 @@ public final class AusenciasViewModel_Factory implements Factory<AusenciasViewMo
       CrearAusenciaUseCase crearAusenciaUseCase,
       ActualizarAusenciaUseCase actualizarAusenciaUseCase,
       EliminarAusenciaUseCase eliminarAusenciaUseCase,
-      GetAllEmpleadosActivosUseCase getAllEmpleadosActivosUseCase, AppPreferences appPreferences) {
-    return new AusenciasViewModel(getDiasLaboralesUseCase, getPeriodoActualUseCase, generarDiasLaboralesBasicosUseCase, getAusenciasByRangoUseCase, getAusenciasByFechaUseCase, crearAusenciaUseCase, actualizarAusenciaUseCase, eliminarAusenciaUseCase, getAllEmpleadosActivosUseCase, appPreferences);
+      GetAllEmpleadosActivosUseCase getAllEmpleadosActivosUseCase, AppPreferences appPreferences,
+      AusenciasApiService ausenciasApiService, DeviceIdentityManager deviceIdentityManager) {
+    return new AusenciasViewModel(getDiasLaboralesUseCase, getPeriodoActualUseCase, generarDiasLaboralesBasicosUseCase, getAusenciasByRangoUseCase, getAusenciasByFechaUseCase, crearAusenciaUseCase, actualizarAusenciaUseCase, eliminarAusenciaUseCase, getAllEmpleadosActivosUseCase, appPreferences, ausenciasApiService, deviceIdentityManager);
   }
 }

@@ -47,7 +47,7 @@ fun EmployeeCard(
             ) {
                 Column {
                     Text(
-                        text = "Legajo: ${empleado.legajo}",
+                        text = "DNI: ${empleado.dni ?: "Sin datos"}",
                         style = MaterialTheme.typography.bodyMedium
                     )
                     Text(

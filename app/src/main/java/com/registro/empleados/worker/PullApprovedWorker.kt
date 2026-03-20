@@ -40,14 +40,21 @@ class PullApprovedWorker @AssistedInject constructor(
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
         Log.i("StaffAxis", "PullApprovedWorker -> start")
         if (!deviceIdentityManager.ensureDeviceToken()) {
-            Log.w("StaffAxis", "PullApprovedWorker -> no token, retry later")
-            return@withContext Result.retry()
+            Log.i("StaffAxis", "PULL_APPROVED skip (no token/config)")
+            return@withContext Result.success()
         }
         try {
             val since = syncStatePrefs.getLastApprovedSyncAt()
             val response = submissionsApi.getApproved(since)
             if (!response.isSuccessful) {
-                Log.e("StaffAxis", "PullApprovedWorker -> fail code=${response.code()}")
+                val code = response.code()
+                Log.e("StaffAxis", "PullApprovedWorker -> fail code=$code")
+                if (code == 503) {
+                    val body = response.errorBody()?.string().orEmpty()
+                    if (body.contains("1102")) {
+                        Log.i("StaffAxis", "PullApprovedWorker -> 1102 CPU limit, retry with backoff")
+                    }
+                }
                 return@withContext Result.retry()
             }
             val body = response.body()
@@ -108,9 +115,9 @@ class PullApprovedWorker @AssistedInject constructor(
 
     companion object {
         private const val TAG = "PullApprovedWorker"
-        const val WORK_NAME = "pull_approved_worker"
+        const val WORK_NAME = "pull_approved"
         const val WORK_TAG = "pull_approved"
-        val BACKOFF_DELAY = 10L
+        val BACKOFF_DELAY = 30L
         val BACKOFF_UNIT = TimeUnit.SECONDS
     }
 }

@@ -34,7 +34,18 @@ class SyncStatePrefs @Inject constructor(
         }
     }
 
+    suspend fun getLastTempFailAt(): Long {
+        return dataStore.data.first()[KEY_LAST_TEMP_FAIL_AT] ?: 0L
+    }
+
+    suspend fun setLastTempFailAt(value: Long) {
+        dataStore.edit { prefs ->
+            prefs[KEY_LAST_TEMP_FAIL_AT] = value
+        }
+    }
+
     companion object {
         private val KEY_LAST_APPROVED_SYNC_AT = longPreferencesKey("last_approved_sync_at")
+        private val KEY_LAST_TEMP_FAIL_AT = longPreferencesKey("last_temp_fail_at")
     }
 }

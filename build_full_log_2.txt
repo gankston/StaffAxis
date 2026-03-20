@@ -1,0 +1,559 @@
+Initialized native services in: C:\Users\pgast\.gradle\native
+Initialized jansi services in: C:\Users\pgast\.gradle\native
+The client will now receive all logging from the daemon (pid: 20600). The daemon log file: C:\Users\pgast\.gradle\daemon\8.13\daemon-20600.out.log
+Starting 24th build in daemon [uptime: 35 mins 22.818 secs, performance: 99%, GC rate: 0.00/s, heap usage: 0% of 2 GiB]
+Using 12 worker leases.
+Now considering [C:\Registro empleados] as hierarchies to watch
+Watching the file system is configured to be enabled if available
+File system watching is active
+Starting Build
+Settings evaluated using settings file 'C:\Registro empleados\settings.gradle.kts'.
+Projects loaded. Root project using build file 'C:\Registro empleados\build.gradle.kts'.
+Included projects: [root project 'Registro Empleados', project ':app']
+
+> Configure project :
+Evaluating root project 'Registro Empleados' using build file 'C:\Registro empleados\build.gradle.kts'.
+Resolved plugin [id: 'com.android.application', version: '8.13.0', apply: false]
+Resolved plugin [id: 'org.jetbrains.kotlin.android', version: '2.0.0', apply: false]
+Resolved plugin [id: 'org.jetbrains.kotlin.kapt', version: '2.0.0', apply: false]
+Resolved plugin [id: 'com.google.devtools.ksp', version: '2.0.0-1.0.21', apply: false]
+Resolved plugin [id: 'com.google.dagger.hilt.android', version: '2.48', apply: false]
+Resolved plugin [id: 'org.jetbrains.kotlin.plugin.compose', version: '2.0.0', apply: false]
+
+> Configure project :app
+Evaluating project ':app' using build file 'C:\Registro empleados\app\build.gradle.kts'.
+Resolved plugin [id: 'com.android.application']
+Resolved plugin [id: 'org.jetbrains.kotlin.android']
+Resolved plugin [id: 'com.google.devtools.ksp']
+Resolved plugin [id: 'kotlin-parcelize']
+Resolved plugin [id: 'dagger.hilt.android.plugin']
+Resolved plugin [id: 'org.jetbrains.kotlin.plugin.compose']
+Using default execution profile
+Using Kotlin Gradle Plugin gradle85 variant
+Adding -Xuse-inline-scopes-numbers Kotlin compiler flag for task :app:compileDebugKotlin
+Detected Android Gradle Plugin compose compiler configuration
+Detected Android Gradle Plugin compose compiler configuration
+Adding -Xuse-inline-scopes-numbers Kotlin compiler flag for task :app:compileDebugAndroidTestKotlin
+Detected Android Gradle Plugin compose compiler configuration
+Detected Android Gradle Plugin compose compiler configuration
+Detected Android Gradle Plugin compose compiler configuration
+All projects evaluated.
+Task name matched 'assembleRelease'
+Selected primary task 'assembleRelease' from project :
+Tasks to be executed: [task ':app:preBuild', task ':app:preReleaseBuild', task ':app:mergeReleaseJniLibFolders', task ':app:mergeReleaseNativeLibs', task ':app:stripReleaseDebugSymbols', task ':app:extractReleaseNativeSymbolTables', task ':app:mergeReleaseNativeDebugMetadata', task ':app:checkReleaseDuplicateClasses', task ':app:mergeReleaseArtProfile', task ':app:buildKotlinToolingMetadata', task ':app:checkKotlinGradlePluginConfigurationErrors', task ':app:generateReleaseBuildConfig', task ':app:checkReleaseAarMetadata', task ':app:processReleaseNavigationResources', task ':app:compileReleaseNavigationResources', task ':app:generateReleaseResValues', task ':app:mapReleaseSourceSetPaths', task ':app:generateReleaseResources', task ':app:mergeReleaseResources', task ':app:packageReleaseResources', task ':app:parseReleaseLocalResources', task ':app:createReleaseCompatibleScreenManifests', task ':app:extractDeepLinksRelease', task ':app:processReleaseMainManifest', task ':app:processReleaseManifest', task ':app:processReleaseManifestForPackage', task ':app:processReleaseResources', task ':app:kspReleaseKotlin', task ':app:compileReleaseKotlin', task ':app:javaPreCompileRelease', task ':app:compileReleaseJavaWithJavac', task ':app:hiltAggregateDepsRelease', task ':app:hiltJavaCompileRelease', task ':app:transformReleaseClassesWithAsm', task ':app:expandReleaseArtProfileWildcards', task ':app:extractProguardFiles', task ':app:mergeReleaseGeneratedProguardFiles', task ':app:processReleaseJavaRes', task ':app:mergeReleaseJavaResource', task ':app:mergeReleaseStartupProfile', task ':app:minifyReleaseWithR8', task ':app:compileReleaseArtProfile', task ':app:mergeReleaseShaders', task ':app:compileReleaseShaders', task ':app:generateReleaseAssets', task ':app:mergeReleaseAssets', task ':app:compressReleaseAssets', task ':app:extractReleaseVersionControlInfo', task ':app:generateReleaseLintVitalReportModel', task ':app:lintVitalAnalyzeRelease', task ':app:lintVitalReportRelease', task ':app:lintVitalRelease', task ':app:convertShrunkResourcesToBinaryRelease', task ':app:optimizeReleaseResources', task ':app:collectReleaseDependencies', task ':app:sdkReleaseDependencyData', task ':app:validateSigningRelease', task ':app:writeReleaseAppMetadata', task ':app:writeReleaseSigningConfigVersions', task ':app:packageRelease', task ':app:createReleaseApkListingFileRedirect', task ':app:assembleRelease']
+Tasks that were excluded: []
+Resolve mutations for :app:preBuild (Thread[#2327,Execution worker,5,main]) started.
+:app:preBuild (Thread[#2327,Execution worker,5,main]) started.
+
+> Task :app:preBuild UP-TO-DATE
+Skipping task ':app:preBuild' as it has no actions.
+Resolve mutations for :app:preReleaseBuild (Thread[#2327,Execution worker,5,main]) started.
+:app:preReleaseBuild (Thread[#2332,Execution worker Thread 6,5,main]) started.
+
+> Task :app:preReleaseBuild UP-TO-DATE
+Skipping task ':app:preReleaseBuild' as it has no actions.
+Resolve mutations for :app:mergeReleaseJniLibFolders (Thread[#2332,Execution worker Thread 6,5,main]) started.
+:app:mergeReleaseJniLibFolders (Thread[#2332,Execution worker Thread 6,5,main]) started.
+
+> Task :app:mergeReleaseJniLibFolders UP-TO-DATE
+Caching disabled for task ':app:mergeReleaseJniLibFolders' because:
+  Build cache is disabled
+  Simple merging task
+Skipping task ':app:mergeReleaseJniLibFolders' as it is up-to-date.
+Resolve mutations for :app:mergeReleaseNativeLibs (Thread[#2332,Execution worker Thread 6,5,main]) started.
+:app:mergeReleaseNativeLibs (Thread[#2332,Execution worker Thread 6,5,main]) started.
+
+> Task :app:mergeReleaseNativeLibs NO-SOURCE
+Skipping task ':app:mergeReleaseNativeLibs' as it has no source files and no previous output files.
+Resolve mutations for :app:stripReleaseDebugSymbols (Thread[#2332,Execution worker Thread 6,5,main]) started.
+:app:stripReleaseDebugSymbols (Thread[#2332,Execution worker Thread 6,5,main]) started.
+
+> Task :app:stripReleaseDebugSymbols NO-SOURCE
+Skipping task ':app:stripReleaseDebugSymbols' as it has no source files and no previous output files.
+Resolve mutations for :app:extractReleaseNativeSymbolTables (Thread[#2332,Execution worker Thread 6,5,main]) started.
+:app:extractReleaseNativeSymbolTables (Thread[#2333,Execution worker Thread 7,5,main]) started.
+
+> Task :app:extractReleaseNativeSymbolTables NO-SOURCE
+Skipping task ':app:extractReleaseNativeSymbolTables' as it has no source files and no previous output files.
+Resolve mutations for :app:mergeReleaseNativeDebugMetadata (Thread[#2333,Execution worker Thread 7,5,main]) started.
+:app:mergeReleaseNativeDebugMetadata (Thread[#2328,Execution worker Thread 2,5,main]) started.
+
+> Task :app:mergeReleaseNativeDebugMetadata NO-SOURCE
+Skipping task ':app:mergeReleaseNativeDebugMetadata' as it has no source files and no previous output files.
+Resolve mutations for :app:checkReleaseDuplicateClasses (Thread[#2328,Execution worker Thread 2,5,main]) started.
+:app:checkReleaseDuplicateClasses (Thread[#2328,Execution worker Thread 2,5,main]) started.
+
+> Task :app:checkReleaseDuplicateClasses UP-TO-DATE
+Caching disabled for task ':app:checkReleaseDuplicateClasses' because:
+  Build cache is disabled
+  Caching has been disabled for the task
+Skipping task ':app:checkReleaseDuplicateClasses' as it is up-to-date.
+Resolve mutations for :app:mergeReleaseArtProfile (Thread[#2328,Execution worker Thread 2,5,main]) started.
+:app:mergeReleaseArtProfile (Thread[#2328,Execution worker Thread 2,5,main]) started.
+
+> Task :app:mergeReleaseArtProfile UP-TO-DATE
+Caching disabled for task ':app:mergeReleaseArtProfile' because:
+  Build cache is disabled
+  Simple merging task
+Skipping task ':app:mergeReleaseArtProfile' as it is up-to-date.
+Resolve mutations for :app:buildKotlinToolingMetadata (Thread[#2328,Execution worker Thread 2,5,main]) started.
+:app:buildKotlinToolingMetadata (Thread[#2328,Execution worker Thread 2,5,main]) started.
+
+> Task :app:buildKotlinToolingMetadata UP-TO-DATE
+Caching disabled for task ':app:buildKotlinToolingMetadata' because:
+  Build cache is disabled
+  Caching has been disabled for the task
+Skipping task ':app:buildKotlinToolingMetadata' as it is up-to-date.
+Resolve mutations for :app:checkKotlinGradlePluginConfigurationErrors (Thread[#2328,Execution worker Thread 2,5,main]) started.
+:app:checkKotlinGradlePluginConfigurationErrors (Thread[#2328,Execution worker Thread 2,5,main]) started.
+
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+Skipping task ':app:checkKotlinGradlePluginConfigurationErrors' as task onlyIf 'errorDiagnostics are present' is false.
+Resolve mutations for :app:generateReleaseBuildConfig (Thread[#2328,Execution worker Thread 2,5,main]) started.
+:app:generateReleaseBuildConfig (Thread[#2328,Execution worker Thread 2,5,main]) started.
+
+> Task :app:generateReleaseBuildConfig UP-TO-DATE
+Caching disabled for task ':app:generateReleaseBuildConfig' because:
+  Build cache is disabled
+Skipping task ':app:generateReleaseBuildConfig' as it is up-to-date.
+Resolve mutations for :app:checkReleaseAarMetadata (Thread[#2328,Execution worker Thread 2,5,main]) started.
+:app:checkReleaseAarMetadata (Thread[#2328,Execution worker Thread 2,5,main]) started.
+
+> Task :app:checkReleaseAarMetadata UP-TO-DATE
+Caching disabled for task ':app:checkReleaseAarMetadata' because:
+  Build cache is disabled
+  Caching has been disabled for the task
+Skipping task ':app:checkReleaseAarMetadata' as it is up-to-date.
+Resolve mutations for :app:processReleaseNavigationResources (Thread[#2328,Execution worker Thread 2,5,main]) started.
+:app:processReleaseNavigationResources (Thread[#2328,Execution worker Thread 2,5,main]) started.
+
+> Task :app:processReleaseNavigationResources UP-TO-DATE
+Caching disabled for task ':app:processReleaseNavigationResources' because:
+  Build cache is disabled
+Skipping task ':app:processReleaseNavigationResources' as it is up-to-date.
+Resolve mutations for :app:compileReleaseNavigationResources (Thread[#2328,Execution worker Thread 2,5,main]) started.
+:app:compileReleaseNavigationResources (Thread[#2328,Execution worker Thread 2,5,main]) started.
+
+> Task :app:compileReleaseNavigationResources UP-TO-DATE
+Caching disabled for task ':app:compileReleaseNavigationResources' because:
+  Build cache is disabled
+Skipping task ':app:compileReleaseNavigationResources' as it is up-to-date.
+Resolve mutations for :app:generateReleaseResValues (Thread[#2328,Execution worker Thread 2,5,main]) started.
+:app:generateReleaseResValues (Thread[#2328,Execution worker Thread 2,5,main]) started.
+
+> Task :app:generateReleaseResValues UP-TO-DATE
+Caching disabled for task ':app:generateReleaseResValues' because:
+  Build cache is disabled
+Skipping task ':app:generateReleaseResValues' as it is up-to-date.
+Resolve mutations for :app:mapReleaseSourceSetPaths (Thread[#2328,Execution worker Thread 2,5,main]) started.
+:app:mapReleaseSourceSetPaths (Thread[#2328,Execution worker Thread 2,5,main]) started.
+
+> Task :app:mapReleaseSourceSetPaths UP-TO-DATE
+Caching disabled for task ':app:mapReleaseSourceSetPaths' because:
+  Build cache is disabled
+  Caching has been disabled for the task
+Skipping task ':app:mapReleaseSourceSetPaths' as it is up-to-date.
+Resolve mutations for :app:generateReleaseResources (Thread[#2328,Execution worker Thread 2,5,main]) started.
+:app:generateReleaseResources (Thread[#2328,Execution worker Thread 2,5,main]) started.
+
+> Task :app:generateReleaseResources UP-TO-DATE
+Caching disabled for task ':app:generateReleaseResources' because:
+  Build cache is disabled
+Skipping task ':app:generateReleaseResources' as it is up-to-date.
+Resolve mutations for :app:mergeReleaseResources (Thread[#2328,Execution worker Thread 2,5,main]) started.
+:app:mergeReleaseResources (Thread[#2328,Execution worker Thread 2,5,main]) started.
+
+> Task :app:mergeReleaseResources UP-TO-DATE
+Caching disabled for task ':app:mergeReleaseResources' because:
+  Build cache is disabled
+Skipping task ':app:mergeReleaseResources' as it is up-to-date.
+Resolve mutations for :app:packageReleaseResources (Thread[#2328,Execution worker Thread 2,5,main]) started.
+:app:packageReleaseResources (Thread[#2328,Execution worker Thread 2,5,main]) started.
+
+> Task :app:packageReleaseResources UP-TO-DATE
+Caching disabled for task ':app:packageReleaseResources' because:
+  Build cache is disabled
+Skipping task ':app:packageReleaseResources' as it is up-to-date.
+Resolve mutations for :app:parseReleaseLocalResources (Thread[#2328,Execution worker Thread 2,5,main]) started.
+:app:parseReleaseLocalResources (Thread[#2328,Execution worker Thread 2,5,main]) started.
+
+> Task :app:parseReleaseLocalResources UP-TO-DATE
+Caching disabled for task ':app:parseReleaseLocalResources' because:
+  Build cache is disabled
+Skipping task ':app:parseReleaseLocalResources' as it is up-to-date.
+Resolve mutations for :app:createReleaseCompatibleScreenManifests (Thread[#2328,Execution worker Thread 2,5,main]) started.
+:app:createReleaseCompatibleScreenManifests (Thread[#2328,Execution worker Thread 2,5,main]) started.
+
+> Task :app:createReleaseCompatibleScreenManifests UP-TO-DATE
+Caching disabled for task ':app:createReleaseCompatibleScreenManifests' because:
+  Build cache is disabled
+  Caching has been disabled for the task
+Skipping task ':app:createReleaseCompatibleScreenManifests' as it is up-to-date.
+Resolve mutations for :app:extractDeepLinksRelease (Thread[#2328,Execution worker Thread 2,5,main]) started.
+:app:extractDeepLinksRelease (Thread[#2331,Execution worker Thread 5,5,main]) started.
+
+> Task :app:extractDeepLinksRelease UP-TO-DATE
+Caching disabled for task ':app:extractDeepLinksRelease' because:
+  Build cache is disabled
+Skipping task ':app:extractDeepLinksRelease' as it is up-to-date.
+Resolve mutations for :app:processReleaseMainManifest (Thread[#2331,Execution worker Thread 5,5,main]) started.
+:app:processReleaseMainManifest (Thread[#2331,Execution worker Thread 5,5,main]) started.
+
+> Task :app:processReleaseMainManifest UP-TO-DATE
+Caching disabled for task ':app:processReleaseMainManifest' because:
+  Build cache is disabled
+Skipping task ':app:processReleaseMainManifest' as it is up-to-date.
+Resolve mutations for :app:processReleaseManifest (Thread[#2331,Execution worker Thread 5,5,main]) started.
+:app:processReleaseManifest (Thread[#2331,Execution worker Thread 5,5,main]) started.
+
+> Task :app:processReleaseManifest UP-TO-DATE
+Caching disabled for task ':app:processReleaseManifest' because:
+  Build cache is disabled
+Skipping task ':app:processReleaseManifest' as it is up-to-date.
+Resolve mutations for :app:processReleaseManifestForPackage (Thread[#2331,Execution worker Thread 5,5,main]) started.
+:app:processReleaseManifestForPackage (Thread[#2331,Execution worker Thread 5,5,main]) started.
+
+> Task :app:processReleaseManifestForPackage UP-TO-DATE
+Custom actions are attached to task ':app:processReleaseManifestForPackage'.
+Caching disabled for task ':app:processReleaseManifestForPackage' because:
+  Build cache is disabled
+Skipping task ':app:processReleaseManifestForPackage' as it is up-to-date.
+Resolve mutations for :app:processReleaseResources (Thread[#2331,Execution worker Thread 5,5,main]) started.
+:app:processReleaseResources (Thread[#2331,Execution worker Thread 5,5,main]) started.
+
+> Task :app:processReleaseResources UP-TO-DATE
+Caching disabled for task ':app:processReleaseResources' because:
+  Build cache is disabled
+Skipping task ':app:processReleaseResources' as it is up-to-date.
+Resolve mutations for :app:kspReleaseKotlin (Thread[#2331,Execution worker Thread 5,5,main]) started.
+:app:kspReleaseKotlin (Thread[#2331,Execution worker Thread 5,5,main]) started.
+
+> Task :app:kspReleaseKotlin UP-TO-DATE
+file or directory 'C:\Registro empleados\app\src\release\kotlin', not found
+file or directory 'C:\Registro empleados\app\src\release\java', not found
+file or directory 'C:\Registro empleados\app\src\main\kotlin', not found
+file or directory 'C:\Registro empleados\app\src\release\java', not found
+file or directory 'C:\Registro empleados\app\src\release\kotlin', not found
+file or directory 'C:\Registro empleados\app\src\release\java', not found
+file or directory 'C:\Registro empleados\app\src\main\kotlin', not found
+file or directory 'C:\Registro empleados\app\src\release\java', not found
+Caching disabled for task ':app:kspReleaseKotlin' because:
+  Build cache is disabled
+Skipping task ':app:kspReleaseKotlin' as it is up-to-date.
+Resolve mutations for :app:compileReleaseKotlin (Thread[#2331,Execution worker Thread 5,5,main]) started.
+:app:compileReleaseKotlin (Thread[#2331,Execution worker Thread 5,5,main]) started.
+
+> Task :app:compileReleaseKotlin UP-TO-DATE
+Caching disabled for task ':app:compileReleaseKotlin' because:
+  Build cache is disabled
+Skipping task ':app:compileReleaseKotlin' as it is up-to-date.
+Resolve mutations for :app:javaPreCompileRelease (Thread[#2331,Execution worker Thread 5,5,main]) started.
+:app:javaPreCompileRelease (Thread[#2331,Execution worker Thread 5,5,main]) started.
+
+> Task :app:javaPreCompileRelease UP-TO-DATE
+Caching disabled for task ':app:javaPreCompileRelease' because:
+  Build cache is disabled
+Skipping task ':app:javaPreCompileRelease' as it is up-to-date.
+Resolve mutations for :app:compileReleaseJavaWithJavac (Thread[#2331,Execution worker Thread 5,5,main]) started.
+:app:compileReleaseJavaWithJavac (Thread[#2331,Execution worker Thread 5,5,main]) started.
+
+> Task :app:compileReleaseJavaWithJavac UP-TO-DATE
+file or directory 'C:\Registro empleados\app\build\generated\ksp\release\classes', not found
+file or directory 'C:\Registro empleados\app\build\generated\ksp\release\classes', not found
+Custom actions are attached to task ':app:compileReleaseJavaWithJavac'.
+Caching disabled for task ':app:compileReleaseJavaWithJavac' because:
+  Build cache is disabled
+Skipping task ':app:compileReleaseJavaWithJavac' as it is up-to-date.
+No compile result for :app:compileReleaseJavaWithJavac
+Resolve mutations for :app:hiltAggregateDepsRelease (Thread[#2331,Execution worker Thread 5,5,main]) started.
+:app:hiltAggregateDepsRelease (Thread[#2331,Execution worker Thread 5,5,main]) started.
+
+> Task :app:hiltAggregateDepsRelease UP-TO-DATE
+file or directory 'C:\Registro empleados\app\build\generated\ksp\release\classes', not found
+Caching disabled for task ':app:hiltAggregateDepsRelease' because:
+  Build cache is disabled
+Skipping task ':app:hiltAggregateDepsRelease' as it is up-to-date.
+Resolve mutations for :app:hiltJavaCompileRelease (Thread[#2331,Execution worker Thread 5,5,main]) started.
+:app:hiltJavaCompileRelease (Thread[#2331,Execution worker Thread 5,5,main]) started.
+
+> Task :app:hiltJavaCompileRelease
+file or directory 'C:\Registro empleados\app\build\generated\ksp\release\classes', not found
+file or directory 'C:\Registro empleados\app\build\generated\ksp\release\classes', not found
+Caching disabled for task ':app:hiltJavaCompileRelease' because:
+  Build cache is disabled
+Task ':app:hiltJavaCompileRelease' is not up-to-date because:
+  Input property 'classpath' file C:\Registro empleados\app\build\tmp\kotlin-classes\release\com\registro\empleados\data\local\dao\OutboxSubmissionDao$DefaultImpls.class has been removed.
+  Input property 'classpath' file C:\Registro empleados\app\build\tmp\kotlin-classes\release\com\registro\empleados\data\local\dao\OutboxAusenciaDao.class has been added.
+  Input property 'classpath' file C:\Registro empleados\app\build\tmp\kotlin-classes\release\com\registro\empleados\data\local\dao\OutboxSubmissionDao.class has been removed.
+  and more...
+Compilation mode: in-process compilation
+file or directory 'C:\Registro empleados\app\build\generated\ksp\release\classes', not found
+Created classpath snapshot for incremental compilation in 0.038 secs.
+Compiling with toolchain 'C:\Program Files\Android\Android Studio\jbr'.
+Compiling with JDK Java compiler API.
+C:\Registro empleados\app\build\generated\hilt\component_sources\release\com\registro\empleados\AsistenciaApplication_HiltComponents.java:165: error: [Dagger/MissingBinding] com.registro.empleados.data.local.dao.OutboxAusenciaDao cannot be provided without an @Provides-annotated method.
+  public abstract static class SingletonC implements AsistenciaApplication_GeneratedInjector,
+                         ^
+  
+  Missing binding usage:
+      com.registro.empleados.data.local.dao.OutboxAusenciaDao is injected at
+          com.registro.empleados.worker.SyncAusenciasWorker(…, outboxAusenciaDao, …)
+      com.registro.empleados.worker.SyncAusenciasWorker_AssistedFactory is injected at
+          com.registro.empleados.worker.SyncAusenciasWorker_HiltModule.bind(factory)
+      java.util.Map<java.lang.String,javax.inject.Provider<androidx.hilt.work.WorkerAssistedFactory<? extends androidx.work.ListenableWorker>>> is injected at
+          androidx.hilt.work.WorkerFactoryModule.provideFactory(workerFactories)
+      androidx.hilt.work.HiltWorkerFactory is injected at
+          com.registro.empleados.AsistenciaApplication.workerFactory
+      com.registro.empleados.AsistenciaApplication is injected at
+          com.registro.empleados.AsistenciaApplication_GeneratedInjector.injectAsistenciaApplication(com.registro.empleados.AsistenciaApplication)
+  It is also requested at:
+      com.registro.empleados.data.repository.AusenciaRepositoryImpl(…, outboxAusenciaDao, …)
+  The following other entry points also depend on it:
+      dagger.hilt.android.internal.lifecycle.HiltViewModelFactory.ViewModelFactoriesEntryPoint.getHiltViewModelMap() [com.registro.empleados.AsistenciaApplication_HiltComponents.SingletonC → com.registro.empleados.AsistenciaApplication_HiltComponents.ActivityRetainedC → com.registro.empleados.AsistenciaApplication_HiltComponents.ViewModelC]
+1 error
+Incremental compilation of 49 classes completed in 2.51 secs.
+
+> Task :app:hiltJavaCompileRelease FAILED
+
+[Incubating] Problems report is available at: file:///C:/Registro%20empleados/build/reports/problems/problems-report.html
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:hiltJavaCompileRelease'.
+> Compilation failed; see the compiler output below.
+  C:\Registro empleados\app\build\generated\hilt\component_sources\release\com\registro\empleados\AsistenciaApplication_HiltComponents.java:165: error: [Dagger/MissingBinding] com.registro.empleados.data.local.dao.OutboxAusenciaDao cannot be provided without an @Provides-annotated method.
+    public abstract static class SingletonC implements AsistenciaApplication_GeneratedInjector,
+                           ^
+    
+    Missing binding usage:
+        com.registro.empleados.data.local.dao.OutboxAusenciaDao is injected at
+            com.registro.empleados.worker.SyncAusenciasWorker(…, outboxAusenciaDao, …)
+        com.registro.empleados.worker.SyncAusenciasWorker_AssistedFactory is injected at
+            com.registro.empleados.worker.SyncAusenciasWorker_HiltModule.bind(factory)
+        java.util.Map<java.lang.String,javax.inject.Provider<androidx.hilt.work.WorkerAssistedFactory<? extends androidx.work.ListenableWorker>>> is injected at
+            androidx.hilt.work.WorkerFactoryModule.provideFactory(workerFactories)
+        androidx.hilt.work.HiltWorkerFactory is injected at
+            com.registro.empleados.AsistenciaApplication.workerFactory
+        com.registro.empleados.AsistenciaApplication is injected at
+            com.registro.empleados.AsistenciaApplication_GeneratedInjector.injectAsistenciaApplication(com.registro.empleados.AsistenciaApplication)
+    It is also requested at:
+        com.registro.empleados.data.repository.AusenciaRepositoryImpl(…, outboxAusenciaDao, …)
+    The following other entry points also depend on it:
+        dagger.hilt.android.internal.lifecycle.HiltViewModelFactory.ViewModelFactoriesEntryPoint.getHiltViewModelMap() [com.registro.empleados.AsistenciaApplication_HiltComponents.SingletonC → com.registro.empleados.AsistenciaApplication_HiltComponents.ActivityRetainedC → com.registro.empleados.AsistenciaApplication_HiltComponents.ViewModelC]
+  1 error
+
+* Try:
+> Check your code and dependencies to fix the compilation error(s)
+> Run with --scan to get full insights.
+
+* Exception is:
+org.gradle.api.tasks.TaskExecutionException: Execution failed for task ':app:hiltJavaCompileRelease'.
+	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.lambda$executeIfValid$1(ExecuteActionsTaskExecuter.java:130)
+	at org.gradle.internal.Try$Failure.ifSuccessfulOrElse(Try.java:293)
+	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.executeIfValid(ExecuteActionsTaskExecuter.java:128)
+	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.execute(ExecuteActionsTaskExecuter.java:116)
+	at org.gradle.api.internal.tasks.execution.ProblemsTaskPathTrackingTaskExecuter.execute(ProblemsTaskPathTrackingTaskExecuter.java:40)
+	at org.gradle.api.internal.tasks.execution.FinalizePropertiesTaskExecuter.execute(FinalizePropertiesTaskExecuter.java:46)
+	at org.gradle.api.internal.tasks.execution.ResolveTaskExecutionModeExecuter.execute(ResolveTaskExecutionModeExecuter.java:51)
+	at org.gradle.api.internal.tasks.execution.SkipTaskWithNoActionsExecuter.execute(SkipTaskWithNoActionsExecuter.java:57)
+	at org.gradle.api.internal.tasks.execution.SkipOnlyIfTaskExecuter.execute(SkipOnlyIfTaskExecuter.java:74)
+	at org.gradle.api.internal.tasks.execution.CatchExceptionTaskExecuter.execute(CatchExceptionTaskExecuter.java:36)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.executeTask(EventFiringTaskExecuter.java:77)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.call(EventFiringTaskExecuter.java:55)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.call(EventFiringTaskExecuter.java:52)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:210)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:205)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:67)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:60)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:167)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:60)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:54)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter.execute(EventFiringTaskExecuter.java:52)
+	at org.gradle.execution.plan.LocalTaskNodeExecutor.execute(LocalTaskNodeExecutor.java:42)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(DefaultTaskExecutionGraph.java:331)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(DefaultTaskExecutionGraph.java:318)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.lambda$execute$0(DefaultTaskExecutionGraph.java:314)
+	at org.gradle.internal.operations.CurrentBuildOperationRef.with(CurrentBuildOperationRef.java:85)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:314)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:303)
+	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.execute(DefaultPlanExecutor.java:459)
+	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.run(DefaultPlanExecutor.java:376)
+	at org.gradle.internal.concurrent.ExecutorPolicy$CatchAndRecordFailures.onExecute(ExecutorPolicy.java:64)
+	at org.gradle.internal.concurrent.AbstractManagedExecutor$1.run(AbstractManagedExecutor.java:48)
+Caused by: org.gradle.api.internal.tasks.compile.CompilationFailedException: Compilation failed; see the compiler output below.
+C:\Registro empleados\app\build\generated\hilt\component_sources\release\com\registro\empleados\AsistenciaApplication_HiltComponents.java:165: error: [Dagger/MissingBinding] com.registro.empleados.data.local.dao.OutboxAusenciaDao cannot be provided without an @Provides-annotated method.
+  public abstract static class SingletonC implements AsistenciaApplication_GeneratedInjector,
+                         ^
+  
+  Missing binding usage:
+      com.registro.empleados.data.local.dao.OutboxAusenciaDao is injected at
+          com.registro.empleados.worker.SyncAusenciasWorker(…, outboxAusenciaDao, …)
+      com.registro.empleados.worker.SyncAusenciasWorker_AssistedFactory is injected at
+          com.registro.empleados.worker.SyncAusenciasWorker_HiltModule.bind(factory)
+      java.util.Map<java.lang.String,javax.inject.Provider<androidx.hilt.work.WorkerAssistedFactory<? extends androidx.work.ListenableWorker>>> is injected at
+          androidx.hilt.work.WorkerFactoryModule.provideFactory(workerFactories)
+      androidx.hilt.work.HiltWorkerFactory is injected at
+          com.registro.empleados.AsistenciaApplication.workerFactory
+      com.registro.empleados.AsistenciaApplication is injected at
+          com.registro.empleados.AsistenciaApplication_GeneratedInjector.injectAsistenciaApplication(com.registro.empleados.AsistenciaApplication)
+  It is also requested at:
+      com.registro.empleados.data.repository.AusenciaRepositoryImpl(…, outboxAusenciaDao, …)
+  The following other entry points also depend on it:
+      dagger.hilt.android.internal.lifecycle.HiltViewModelFactory.ViewModelFactoriesEntryPoint.getHiltViewModelMap() [com.registro.empleados.AsistenciaApplication_HiltComponents.SingletonC → com.registro.empleados.AsistenciaApplication_HiltComponents.ActivityRetainedC → com.registro.empleados.AsistenciaApplication_HiltComponents.ViewModelC]
+1 error
+	at org.gradle.api.internal.tasks.compile.JdkJavaCompiler.execute(JdkJavaCompiler.java:89)
+	at org.gradle.api.internal.tasks.compile.JdkJavaCompiler.execute(JdkJavaCompiler.java:50)
+	at org.gradle.api.internal.tasks.compile.NormalizingJavaCompiler.delegateAndHandleErrors(NormalizingJavaCompiler.java:98)
+	at org.gradle.api.internal.tasks.compile.NormalizingJavaCompiler.execute(NormalizingJavaCompiler.java:52)
+	at org.gradle.api.internal.tasks.compile.NormalizingJavaCompiler.execute(NormalizingJavaCompiler.java:38)
+	at org.gradle.api.internal.tasks.compile.AnnotationProcessorDiscoveringCompiler.execute(AnnotationProcessorDiscoveringCompiler.java:52)
+	at org.gradle.api.internal.tasks.compile.AnnotationProcessorDiscoveringCompiler.execute(AnnotationProcessorDiscoveringCompiler.java:38)
+	at org.gradle.api.internal.tasks.compile.ModuleApplicationNameWritingCompiler.execute(ModuleApplicationNameWritingCompiler.java:46)
+	at org.gradle.api.internal.tasks.compile.ModuleApplicationNameWritingCompiler.execute(ModuleApplicationNameWritingCompiler.java:36)
+	at org.gradle.jvm.toolchain.internal.DefaultToolchainJavaCompiler.execute(DefaultToolchainJavaCompiler.java:57)
+	at org.gradle.api.tasks.compile.JavaCompile.lambda$createToolchainCompiler$3(JavaCompile.java:206)
+	at org.gradle.api.internal.tasks.compile.incremental.SelectiveCompiler.lambda$execute$0(SelectiveCompiler.java:101)
+	at org.gradle.api.internal.tasks.compile.incremental.transaction.CompileTransaction.execute(CompileTransaction.java:108)
+	at org.gradle.api.internal.tasks.compile.incremental.SelectiveCompiler.execute(SelectiveCompiler.java:95)
+	at org.gradle.api.internal.tasks.compile.incremental.SelectiveCompiler.execute(SelectiveCompiler.java:44)
+	at org.gradle.api.internal.tasks.compile.incremental.IncrementalResultStoringCompiler.execute(IncrementalResultStoringCompiler.java:66)
+	at org.gradle.api.internal.tasks.compile.incremental.IncrementalResultStoringCompiler.execute(IncrementalResultStoringCompiler.java:52)
+	at org.gradle.api.internal.tasks.compile.CompileJavaBuildOperationReportingCompiler$1.call(CompileJavaBuildOperationReportingCompiler.java:64)
+	at org.gradle.api.internal.tasks.compile.CompileJavaBuildOperationReportingCompiler$1.call(CompileJavaBuildOperationReportingCompiler.java:48)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:210)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:205)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:67)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:60)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:167)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:60)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:54)
+	at org.gradle.api.internal.tasks.compile.CompileJavaBuildOperationReportingCompiler.execute(CompileJavaBuildOperationReportingCompiler.java:48)
+	at org.gradle.api.tasks.compile.JavaCompile.performCompilation(JavaCompile.java:224)
+	at org.gradle.api.tasks.compile.JavaCompile.performIncrementalCompilation(JavaCompile.java:165)
+	at org.gradle.api.tasks.compile.JavaCompile.compile(JavaCompile.java:150)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(Unknown Source)
+	at org.gradle.internal.reflect.JavaMethod.invoke(JavaMethod.java:125)
+	at org.gradle.api.internal.project.taskfactory.IncrementalTaskAction.doExecute(IncrementalTaskAction.java:45)
+	at org.gradle.api.internal.project.taskfactory.StandardTaskAction.execute(StandardTaskAction.java:51)
+	at org.gradle.api.internal.project.taskfactory.IncrementalTaskAction.execute(IncrementalTaskAction.java:26)
+	at org.gradle.api.internal.project.taskfactory.StandardTaskAction.execute(StandardTaskAction.java:29)
+	at org.gradle.api.internal.tasks.execution.TaskExecution$3.run(TaskExecution.java:244)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:30)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:27)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:67)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:60)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:167)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:60)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.run(DefaultBuildOperationRunner.java:48)
+	at org.gradle.api.internal.tasks.execution.TaskExecution.executeAction(TaskExecution.java:229)
+	at org.gradle.api.internal.tasks.execution.TaskExecution.executeActions(TaskExecution.java:212)
+	at org.gradle.api.internal.tasks.execution.TaskExecution.executeWithPreviousOutputFiles(TaskExecution.java:195)
+	at org.gradle.api.internal.tasks.execution.TaskExecution.execute(TaskExecution.java:162)
+	at org.gradle.internal.execution.steps.ExecuteStep.executeInternal(ExecuteStep.java:105)
+	at org.gradle.internal.execution.steps.ExecuteStep.access$000(ExecuteStep.java:44)
+	at org.gradle.internal.execution.steps.ExecuteStep$1.call(ExecuteStep.java:59)
+	at org.gradle.internal.execution.steps.ExecuteStep$1.call(ExecuteStep.java:56)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:210)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:205)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:67)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:60)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:167)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:60)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:54)
+	at org.gradle.internal.execution.steps.ExecuteStep.execute(ExecuteStep.java:56)
+	at org.gradle.internal.execution.steps.ExecuteStep.execute(ExecuteStep.java:44)
+	at org.gradle.internal.execution.steps.CancelExecutionStep.execute(CancelExecutionStep.java:42)
+	at org.gradle.internal.execution.steps.TimeoutStep.executeWithoutTimeout(TimeoutStep.java:75)
+	at org.gradle.internal.execution.steps.TimeoutStep.execute(TimeoutStep.java:55)
+	at org.gradle.internal.execution.steps.PreCreateOutputParentsStep.execute(PreCreateOutputParentsStep.java:50)
+	at org.gradle.internal.execution.steps.PreCreateOutputParentsStep.execute(PreCreateOutputParentsStep.java:28)
+	at org.gradle.internal.execution.steps.RemovePreviousOutputsStep.execute(RemovePreviousOutputsStep.java:67)
+	at org.gradle.internal.execution.steps.RemovePreviousOutputsStep.execute(RemovePreviousOutputsStep.java:37)
+	at org.gradle.internal.execution.steps.BroadcastChangingOutputsStep.execute(BroadcastChangingOutputsStep.java:61)
+	at org.gradle.internal.execution.steps.BroadcastChangingOutputsStep.execute(BroadcastChangingOutputsStep.java:26)
+	at org.gradle.internal.execution.steps.CaptureOutputsAfterExecutionStep.execute(CaptureOutputsAfterExecutionStep.java:69)
+	at org.gradle.internal.execution.steps.CaptureOutputsAfterExecutionStep.execute(CaptureOutputsAfterExecutionStep.java:46)
+	at org.gradle.internal.execution.steps.ResolveInputChangesStep.execute(ResolveInputChangesStep.java:40)
+	at org.gradle.internal.execution.steps.ResolveInputChangesStep.execute(ResolveInputChangesStep.java:29)
+	at org.gradle.internal.execution.steps.BuildCacheStep.executeWithoutCache(BuildCacheStep.java:189)
+	at org.gradle.internal.execution.steps.BuildCacheStep.lambda$execute$1(BuildCacheStep.java:75)
+	at org.gradle.internal.Either$Right.fold(Either.java:175)
+	at org.gradle.internal.execution.caching.CachingState.fold(CachingState.java:62)
+	at org.gradle.internal.execution.steps.BuildCacheStep.execute(BuildCacheStep.java:73)
+	at org.gradle.internal.execution.steps.BuildCacheStep.execute(BuildCacheStep.java:48)
+	at org.gradle.internal.execution.steps.StoreExecutionStateStep.execute(StoreExecutionStateStep.java:46)
+	at org.gradle.internal.execution.steps.StoreExecutionStateStep.execute(StoreExecutionStateStep.java:35)
+	at org.gradle.internal.execution.steps.SkipUpToDateStep.executeBecause(SkipUpToDateStep.java:75)
+	at org.gradle.internal.execution.steps.SkipUpToDateStep.lambda$execute$2(SkipUpToDateStep.java:53)
+	at org.gradle.internal.execution.steps.SkipUpToDateStep.execute(SkipUpToDateStep.java:53)
+	at org.gradle.internal.execution.steps.SkipUpToDateStep.execute(SkipUpToDateStep.java:35)
+	at org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsFinishedStep.execute(MarkSnapshottingInputsFinishedStep.java:37)
+	at org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsFinishedStep.execute(MarkSnapshottingInputsFinishedStep.java:27)
+	at org.gradle.internal.execution.steps.ResolveIncrementalCachingStateStep.executeDelegate(ResolveIncrementalCachingStateStep.java:49)
+	at org.gradle.internal.execution.steps.ResolveIncrementalCachingStateStep.executeDelegate(ResolveIncrementalCachingStateStep.java:27)
+	at org.gradle.internal.execution.steps.AbstractResolveCachingStateStep.execute(AbstractResolveCachingStateStep.java:71)
+	at org.gradle.internal.execution.steps.AbstractResolveCachingStateStep.execute(AbstractResolveCachingStateStep.java:39)
+	at org.gradle.internal.execution.steps.ResolveChangesStep.execute(ResolveChangesStep.java:65)
+	at org.gradle.internal.execution.steps.ResolveChangesStep.execute(ResolveChangesStep.java:36)
+	at org.gradle.internal.execution.steps.ValidateStep.execute(ValidateStep.java:107)
+	at org.gradle.internal.execution.steps.ValidateStep.execute(ValidateStep.java:56)
+	at org.gradle.internal.execution.steps.AbstractCaptureStateBeforeExecutionStep.execute(AbstractCaptureStateBeforeExecutionStep.java:64)
+	at org.gradle.internal.execution.steps.AbstractCaptureStateBeforeExecutionStep.execute(AbstractCaptureStateBeforeExecutionStep.java:43)
+	at org.gradle.internal.execution.steps.AbstractSkipEmptyWorkStep.executeWithNonEmptySources(AbstractSkipEmptyWorkStep.java:125)
+	at org.gradle.internal.execution.steps.AbstractSkipEmptyWorkStep.execute(AbstractSkipEmptyWorkStep.java:61)
+	at org.gradle.internal.execution.steps.AbstractSkipEmptyWorkStep.execute(AbstractSkipEmptyWorkStep.java:36)
+	at org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsStartedStep.execute(MarkSnapshottingInputsStartedStep.java:38)
+	at org.gradle.internal.execution.steps.LoadPreviousExecutionStateStep.execute(LoadPreviousExecutionStateStep.java:36)
+	at org.gradle.internal.execution.steps.LoadPreviousExecutionStateStep.execute(LoadPreviousExecutionStateStep.java:23)
+	at org.gradle.internal.execution.steps.HandleStaleOutputsStep.execute(HandleStaleOutputsStep.java:75)
+	at org.gradle.internal.execution.steps.HandleStaleOutputsStep.execute(HandleStaleOutputsStep.java:41)
+	at org.gradle.internal.execution.steps.AssignMutableWorkspaceStep.lambda$execute$0(AssignMutableWorkspaceStep.java:35)
+	at org.gradle.api.internal.tasks.execution.TaskExecution$4.withWorkspace(TaskExecution.java:289)
+	at org.gradle.internal.execution.steps.AssignMutableWorkspaceStep.execute(AssignMutableWorkspaceStep.java:31)
+	at org.gradle.internal.execution.steps.AssignMutableWorkspaceStep.execute(AssignMutableWorkspaceStep.java:22)
+	at org.gradle.internal.execution.steps.ChoosePipelineStep.execute(ChoosePipelineStep.java:40)
+	at org.gradle.internal.execution.steps.ChoosePipelineStep.execute(ChoosePipelineStep.java:23)
+	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.lambda$execute$2(ExecuteWorkBuildOperationFiringStep.java:67)
+	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.execute(ExecuteWorkBuildOperationFiringStep.java:67)
+	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.execute(ExecuteWorkBuildOperationFiringStep.java:39)
+	at org.gradle.internal.execution.steps.IdentityCacheStep.execute(IdentityCacheStep.java:46)
+	at org.gradle.internal.execution.steps.IdentityCacheStep.execute(IdentityCacheStep.java:34)
+	at org.gradle.internal.execution.steps.IdentifyStep.execute(IdentifyStep.java:48)
+	at org.gradle.internal.execution.steps.IdentifyStep.execute(IdentifyStep.java:35)
+	at org.gradle.internal.execution.impl.DefaultExecutionEngine$1.execute(DefaultExecutionEngine.java:61)
+	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.executeIfValid(ExecuteActionsTaskExecuter.java:127)
+	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.execute(ExecuteActionsTaskExecuter.java:116)
+	at org.gradle.api.internal.tasks.execution.ProblemsTaskPathTrackingTaskExecuter.execute(ProblemsTaskPathTrackingTaskExecuter.java:40)
+	at org.gradle.api.internal.tasks.execution.FinalizePropertiesTaskExecuter.execute(FinalizePropertiesTaskExecuter.java:46)
+	at org.gradle.api.internal.tasks.execution.ResolveTaskExecutionModeExecuter.execute(ResolveTaskExecutionModeExecuter.java:51)
+	at org.gradle.api.internal.tasks.execution.SkipTaskWithNoActionsExecuter.execute(SkipTaskWithNoActionsExecuter.java:57)
+	at org.gradle.api.internal.tasks.execution.SkipOnlyIfTaskExecuter.execute(SkipOnlyIfTaskExecuter.java:74)
+	at org.gradle.api.internal.tasks.execution.CatchExceptionTaskExecuter.execute(CatchExceptionTaskExecuter.java:36)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.executeTask(EventFiringTaskExecuter.java:77)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.call(EventFiringTaskExecuter.java:55)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.call(EventFiringTaskExecuter.java:52)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:210)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:205)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:67)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:60)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:167)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:60)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:54)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter.execute(EventFiringTaskExecuter.java:52)
+	at org.gradle.execution.plan.LocalTaskNodeExecutor.execute(LocalTaskNodeExecutor.java:42)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(DefaultTaskExecutionGraph.java:331)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(DefaultTaskExecutionGraph.java:318)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.lambda$execute$0(DefaultTaskExecutionGraph.java:314)
+	at org.gradle.internal.operations.CurrentBuildOperationRef.with(CurrentBuildOperationRef.java:85)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:314)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:303)
+	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.execute(DefaultPlanExecutor.java:459)
+	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.run(DefaultPlanExecutor.java:376)
+	at org.gradle.internal.concurrent.ExecutorPolicy$CatchAndRecordFailures.onExecute(ExecutorPolicy.java:64)
+	at org.gradle.internal.concurrent.AbstractManagedExecutor$1.run(AbstractManagedExecutor.java:48)
+
+
+BUILD FAILED in 4s
+26 actionable tasks: 1 executed, 25 up-to-date
+Watched directory hierarchies: [C:\Registro empleados]

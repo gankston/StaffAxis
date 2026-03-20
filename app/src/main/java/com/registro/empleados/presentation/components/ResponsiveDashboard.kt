@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import com.registro.empleados.domain.model.Empleado
 import com.registro.empleados.presentation.viewmodel.DashboardUiState
 import java.time.LocalDate
@@ -146,17 +147,15 @@ fun ResponsiveDashboard(
                 
                 items(
                     items = uiState.empleadosFiltrados,
-                    key = { it.id } // Usar ID único (siempre presente y único)
+                    key = { it.employeeIdBackend ?: "local-${it.id}" }
                 ) { empleado ->
-                    // Usar una clave consistente para comparaciones cuando el DNI es nulo
-                    val legajoKey = empleado.legajo ?: "SIN_LEGAJO_${empleado.nombreCompleto.hashCode()}"
-
+                    val idReal = empleado.employeeIdBackend
+                    val estaAusente = idReal?.let { uiState.empleadosAusentesHoy.contains(it) } == true
                     EmpleadoCard(
                         empleado = empleado,
-                        tieneHorasCargadasHoy = uiState.empleadosConHorasHoy.contains(legajoKey),
-                        estaAusenteHoy = uiState.empleadosAusentesHoy.contains(legajoKey),
-                        // Evitar que múltiples empleados con DNI nulo queden "seleccionados"
-                        isSelected = uiState.empleadoEncontrado?.id == empleado.id,
+                        tieneHorasCargadasHoy = idReal?.let { uiState.empleadosConHorasHoy.contains(it) } == true,
+                        estaAusenteHoy = estaAusente,
+                        isSelected = uiState.empleadoEncontrado?.employeeIdBackend == empleado.employeeIdBackend,
                         onEditClick = { onEditarEmpleado(empleado) },
                         onRegistrarHorasClick = { onAbrirDialogoRegistroHoras(empleado) }
                     )
@@ -436,16 +435,29 @@ private fun RegistroHorasDialog(
     onConfirm: () -> Unit
 ) {
     val empleado = uiState.empleadoEncontrado ?: return
-    
+    val context = LocalContext.current
+    LaunchedEffect(uiState.error) {
+        uiState.error?.let { msg ->
+            android.widget.Toast.makeText(context, msg, android.widget.Toast.LENGTH_LONG).show()
+        }
+    }
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text("Registrar Horas", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                uiState.error?.let { err ->
+                    Text(
+                        text = err,
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
                 Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)) {
                     Column(modifier = Modifier.padding(12.dp).fillMaxWidth()) {
                         Text(empleado.nombreCompleto, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-                        Text("DNI: ${empleado.legajo ?: "Sin datos"}", style = MaterialTheme.typography.bodyMedium)
+                        Text("DNI: ${empleado.dni ?: "Sin datos"}", style = MaterialTheme.typography.bodyMedium)
                         Text("Sector: ${empleado.sector}", style = MaterialTheme.typography.bodySmall)
                         if (empleado.observacion != null && empleado.observacion.isNotBlank()) {
                             Text("Observación: ${empleado.observacion}", style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
@@ -755,7 +767,7 @@ fun EmpleadoCard(
                 Column(modifier = Modifier.weight(1f)) {
                     Text(empleado.nombreCompleto, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = textColor, maxLines = 1, overflow = TextOverflow.Ellipsis)
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text("DNI: ${empleado.legajo ?: "Sin datos"}", style = MaterialTheme.typography.bodyMedium, color = textColor.copy(alpha = 0.8f))
+                    Text("DNI: ${empleado.dni ?: "Sin datos"}", style = MaterialTheme.typography.bodyMedium, color = textColor.copy(alpha = 0.8f))
                     Spacer(modifier = Modifier.height(4.dp))
                     Text("Sector: ${empleado.sector}", style = MaterialTheme.typography.bodyMedium, color = textColor.copy(alpha = 0.8f))
                     Spacer(modifier = Modifier.height(4.dp))

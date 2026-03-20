@@ -1,0 +1,22 @@
+﻿
+> staffaxis-server@1.0.0 cf:deploy:prod
+> npm run embed-schema && wrangler deploy --env production
+
+
+> staffaxis-server@1.0.0 embed-schema
+> node scripts/embed-schema.js
+
+Schema embebido en src/bootstrap/schemaContent.ts
+
+ Ôøà´©Å wrangler 4.69.0 (update available 4.72.0)
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+Total Upload: 627.07 KiB / gzip: 120.75 KiB
+Worker Startup Time: 40 ms
+Your Worker has access to the following bindings:
+Binding                          Resource                  
+env.NODE_ENV ("production")      Environment Variable      
+
+Uploaded staffaxis-api-prod (7.99 sec)
+Deployed staffaxis-api-prod triggers (2.27 sec)
+  https://staffaxis-api-prod.pgastonor.workers.dev
+Current Version ID: 6cc9c982-77ca-40d5-a6eb-5a2cc7bb6c9a

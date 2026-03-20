@@ -2,11 +2,12 @@ package com.registro.empleados.di
 
 import android.content.Context
 import com.registro.empleados.data.local.database.AppDatabase
-import com.registro.empleados.data.local.dao.AusenciaDao
 import com.registro.empleados.data.local.dao.EmpleadoDao
 import com.registro.empleados.data.local.dao.ApprovedAttendanceDao
 import com.registro.empleados.data.local.dao.OutboxSubmissionDao
 import com.registro.empleados.data.local.dao.RegistroAsistenciaDao
+import com.registro.empleados.data.local.dao.AusenciaDao
+import com.registro.empleados.data.local.dao.SectorDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -30,13 +31,6 @@ object DatabaseModule {
         return AppDatabase.getDatabase(context)
     }
     
-    /**
-     * Proporciona el DAO de ausencias.
-     */
-    @Provides
-    fun provideAusenciaDao(database: AppDatabase): AusenciaDao {
-        return database.ausenciaDao()
-    }
     
     /**
      * Proporciona el DAO de empleados.
@@ -44,6 +38,11 @@ object DatabaseModule {
     @Provides
     fun provideEmpleadoDao(database: AppDatabase): EmpleadoDao {
         return database.empleadoDao()
+    }
+
+    @Provides
+    fun provideSectorDao(database: AppDatabase): SectorDao {
+        return database.sectorDao()
     }
 
     @Provides
@@ -60,4 +59,10 @@ object DatabaseModule {
     fun provideRegistroAsistenciaDao(database: AppDatabase): RegistroAsistenciaDao {
         return database.registroAsistenciaDao()
     }
+
+    @Provides
+    fun provideAusenciaDao(database: AppDatabase): AusenciaDao {
+        return database.ausenciaDao()
+    }
+
 }

@@ -158,12 +158,8 @@
 -allowaccessmodification
 -dontpreverify
 
-# Eliminar logs en release
--assumenosideeffects class android.util.Log {
-    public static *** d(...);
-    public static *** v(...);
-    public static *** i(...);
-}
+# Logs: mantener Log.i/Log.e para diagnóstico (StaffAxis)
+# -assumenosideeffects removido para ver getSectors OK / resolveSector en release
 
 # Compresión agresiva
 -keepattributes *Annotation*
@@ -174,11 +170,34 @@
 -keep class * extends androidx.room.RoomDatabase
 -dontwarn androidx.room.paging.**
 
-# Retrofit
+# Retrofit - evitar ClassCastException (Class cannot be cast to ParameterizedType)
 -dontwarn retrofit2.**
 -keep class retrofit2.** { *; }
+-keep,allowobfuscation,allowshrinking interface retrofit2.Call
+-keep,allowobfuscation,allowshrinking class retrofit2.Response
+-keep,allowobfuscation,allowshrinking class kotlin.coroutines.Continuation
+# Mantener interfaces API con sus firmas genéricas
+-keep interface com.registro.empleados.data.remote.api.** { *; }
+-keep class com.registro.empleados.data.remote.dto.** { *; }
+
+# DTOs de Gson: inmunes a obfuscación (sectors fix R8/ProGuard)
+-keep class com.registro.empleados.data.remote.api.SectorsResponseDto { *; }
+-keep class com.registro.empleados.data.remote.dto.SectorDto { *; }
+-keep class **SectorsResponseDto { *; }
+-keep class **SectorDto { *; }
+
+# Gson: mantener campos con @SerializedName
+-keepattributes Signature
+-keepattributes *Annotation*
+-dontwarn com.google.gson.**
+-keep class com.google.gson.** { *; }
+-keep class * extends com.google.gson.TypeAdapter
+-keep class * implements com.google.gson.TypeAdapterFactory
+-keep class * implements com.google.gson.JsonSerializer
+-keep class * implements com.google.gson.JsonDeserializer
 -keepattributes Signature
 -keepattributes Exceptions
+-keepattributes RuntimeVisibleAnnotations
 
 # Apache POI
 -dontwarn org.apache.poi.**
@@ -464,6 +483,11 @@
 -dontwarn androidx.lifecycle.LiveData
 
 # End of content from C:\Users\pgast\.gradle\caches\8.13\transforms\d7dfb973688429ddaa0bb40a9f62ec81\transformed\room-runtime-2.6.1\proguard.txt
+# The proguard configuration file for the following section is C:\Users\pgast\.gradle\caches\8.13\transforms\42d61d8b9a760cd96ee57f7e078650a1\transformed\datastore-preferences-1.0.0\proguard.txt
+-keepclassmembers class * extends androidx.datastore.preferences.protobuf.GeneratedMessageLite {
+    <fields>;
+}
+# End of content from C:\Users\pgast\.gradle\caches\8.13\transforms\42d61d8b9a760cd96ee57f7e078650a1\transformed\datastore-preferences-1.0.0\proguard.txt
 # The proguard configuration file for the following section is C:\Users\pgast\.gradle\caches\8.13\transforms\aca752818beb83624fb17d14de1169cf\transformed\runtime-release\proguard.txt
 -assumenosideeffects public class androidx.compose.runtime.ComposerKt {
     void sourceInformation(androidx.compose.runtime.Composer,java.lang.String);

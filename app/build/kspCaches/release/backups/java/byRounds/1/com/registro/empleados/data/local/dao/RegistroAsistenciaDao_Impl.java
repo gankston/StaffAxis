@@ -44,6 +44,8 @@ public final class RegistroAsistenciaDao_Impl implements RegistroAsistenciaDao {
 
   private final SharedSQLiteStatement __preparedStmtOfDeleteRegistro;
 
+  private final SharedSQLiteStatement __preparedStmtOfDeleteRegistroByLegajoYFecha;
+
   private final SharedSQLiteStatement __preparedStmtOfDeleteAllRegistros;
 
   private final LocalDateConverter __localDateConverter = new LocalDateConverter();
@@ -121,6 +123,14 @@ public final class RegistroAsistenciaDao_Impl implements RegistroAsistenciaDao {
         return _query;
       }
     };
+    this.__preparedStmtOfDeleteRegistroByLegajoYFecha = new SharedSQLiteStatement(__db) {
+      @Override
+      @NonNull
+      public String createQuery() {
+        final String _query = "DELETE FROM registros_asistencia WHERE legajo_empleado = ? AND fecha = ?";
+        return _query;
+      }
+    };
     this.__preparedStmtOfDeleteAllRegistros = new SharedSQLiteStatement(__db) {
       @Override
       @NonNull
@@ -189,6 +199,34 @@ public final class RegistroAsistenciaDao_Impl implements RegistroAsistenciaDao {
           }
         } finally {
           __preparedStmtOfDeleteRegistro.release(_stmt);
+        }
+      }
+    }, $completion);
+  }
+
+  @Override
+  public Object deleteRegistroByLegajoYFecha(final String legajo, final String fecha,
+      final Continuation<? super Unit> $completion) {
+    return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
+      @Override
+      @NonNull
+      public Unit call() throws Exception {
+        final SupportSQLiteStatement _stmt = __preparedStmtOfDeleteRegistroByLegajoYFecha.acquire();
+        int _argIndex = 1;
+        _stmt.bindString(_argIndex, legajo);
+        _argIndex = 2;
+        _stmt.bindString(_argIndex, fecha);
+        try {
+          __db.beginTransaction();
+          try {
+            _stmt.executeUpdateDelete();
+            __db.setTransactionSuccessful();
+            return Unit.INSTANCE;
+          } finally {
+            __db.endTransaction();
+          }
+        } finally {
+          __preparedStmtOfDeleteRegistroByLegajoYFecha.release(_stmt);
         }
       }
     }, $completion);

@@ -3,12 +3,8 @@ main = "src/worker.ts"
 compatibility_date = "2026-02-01"
 compatibility_flags = ["nodejs_compat"]
 
-# Variables (non-secret)
 [vars]
-NODE_ENV = "production"
-
-# Secrets: configurar con wrangler secret put
-# TURSO_DATABASE_URL, TURSO_AUTH_TOKEN, JWT_SECRET, ADMIN_BOOTSTRAP_USER, ADMIN_BOOTSTRAP_PASS
+NODE_ENV = "development"
 
 [env.staging]
 name = "staffaxis-api-staging"

@@ -40,7 +40,6 @@ function getSchemaSql(): string | null {
  */
 export async function bootstrapSchema(): Promise<void> {
   if (await schemaExists()) {
-    logger.info("Schema already present");
     return;
   }
 

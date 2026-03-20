@@ -43,8 +43,9 @@ class AsistenciaApplication : Application(), Configuration.Provider {
 
     override fun onCreate() {
         super.onCreate()
-        Log.i("StaffAxis", "BASE_URL=" + BuildConfig.BASE_URL)
-        Log.i("StaffAxis", "BUILD_TYPE=" + BuildConfig.BUILD_TYPE + " VERSION=" + BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")")
+        Log.i("StaffAxis", "BASE_URL=${BuildConfig.BASE_URL}")
+        Log.i("StaffAxis", "BUILD_TYPE=${BuildConfig.BUILD_TYPE} VERSION=${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})")
+        Log.i("StaffAxis", "DEVICE MODEL=${android.os.Build.MODEL} SDK=${android.os.Build.VERSION.SDK_INT}")
 
         // Inicializar WorkManager para tareas en segundo plano
         workManagerInitializer.initialize()
@@ -57,12 +58,14 @@ class AsistenciaApplication : Application(), Configuration.Provider {
         // Ping backend para confirmar conectividad al abrir
         appScope.launch {
             try {
+                Log.i("StaffAxis", "GET_SECTORS start (ping)")
                 val response = withContext(Dispatchers.IO) {
                     sectorsApiService.getSectors()
                 }
-                Log.i("StaffAxis", "PING sectors status=${response.code()}")
+                val ct = response.headers().get("Content-Type") ?: ""
+                Log.i("StaffAxis", "GET_SECTORS ok status=${response.code()} content-type=$ct")
             } catch (e: Exception) {
-                Log.i("StaffAxis", "PING sectors error=${e.message ?: e.javaClass.simpleName}")
+                Log.e("StaffAxis", "GET_SECTORS fail type=${e.javaClass.simpleName} msg=${e.message}", e)
             }
         }
     }

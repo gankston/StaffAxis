@@ -23,7 +23,6 @@ export async function bootstrapAdmin(): Promise<void> {
     const row = count.rows[0] as Record<string, unknown> | undefined;
     const n = Number(row?.["n"] ?? 0);
     if (n > 0) {
-      logger.info("Bootstrap admin: ya existen usuarios.");
       return;
     }
 

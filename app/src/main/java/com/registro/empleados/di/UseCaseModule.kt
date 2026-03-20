@@ -5,7 +5,6 @@ import com.registro.empleados.domain.repository.DiaLaboralRepository
 import com.registro.empleados.domain.repository.EmpleadoRepository
 import com.registro.empleados.domain.repository.HorasEmpleadoMesRepository
 import com.registro.empleados.domain.repository.RegistroAsistenciaRepository
-import com.registro.empleados.domain.repository.AusenciaRepository
 import com.registro.empleados.domain.usecase.asistencia.GetRegistrosByRangoUseCase
 import com.registro.empleados.domain.usecase.calendario.GetCalendarioPeriodoUseCase
 import com.registro.empleados.domain.usecase.calendario.GetDiasLaboralesUseCase
@@ -20,10 +19,6 @@ import com.registro.empleados.domain.usecase.empleado.GetEmpleadoByLegajoUseCase
 import com.registro.empleados.domain.usecase.empleado.InsertEmpleadoUseCase
 import com.registro.empleados.domain.usecase.empleado.TieneHorasCargadasHoyUseCase
 import com.registro.empleados.domain.usecase.empleado.CargarEmpleadosPorSectorUseCase
-import com.registro.empleados.domain.usecase.ausencia.CrearAusenciaUseCase
-import com.registro.empleados.domain.usecase.ausencia.EmpleadoTieneAusenciaEnFechaUseCase
-import com.registro.empleados.domain.usecase.ausencia.GetAusenciasByFechaUseCase
-import com.registro.empleados.domain.usecase.ausencia.GetAusenciasByRangoUseCase
 import com.registro.empleados.domain.usecase.export.ExportarRegistrosAsistenciaUseCase
 import com.registro.empleados.domain.usecase.feriados.SincronizarFeriadosUseCase
 import com.registro.empleados.domain.usecase.horas.ActualizarHorasMensualesUseCase
@@ -150,11 +145,10 @@ object UseCaseModule {
         excelExportService: com.registro.empleados.data.export.ExcelExportService,
         csvExportService: com.registro.empleados.data.export.CsvExportService,
         empleadoRepository: EmpleadoRepository,
-        registroAsistenciaRepository: RegistroAsistenciaRepository,
-        ausenciaRepository: AusenciaRepository
+        registroAsistenciaRepository: RegistroAsistenciaRepository
     ): ExportarRegistrosAsistenciaUseCase {
         return ExportarRegistrosAsistenciaUseCase(
-            excelExportService, csvExportService, empleadoRepository, registroAsistenciaRepository, ausenciaRepository
+            excelExportService, csvExportService, empleadoRepository, registroAsistenciaRepository
         )
     }
 
@@ -250,50 +244,6 @@ object UseCaseModule {
         empleadoRepository: EmpleadoRepository
     ): CargarEmpleadosPorSectorUseCase {
         return CargarEmpleadosPorSectorUseCase(empleadoRepository)
-    }
-
-    /**
-     * Proporciona el caso de uso para crear ausencias.
-     */
-    @Provides
-    @Singleton
-    fun provideCrearAusenciaUseCase(
-        ausenciaRepository: AusenciaRepository
-    ): CrearAusenciaUseCase {
-        return CrearAusenciaUseCase(ausenciaRepository)
-    }
-
-    /**
-     * Proporciona el caso de uso para verificar si un empleado tiene ausencia en una fecha.
-     */
-    @Provides
-    @Singleton
-    fun provideEmpleadoTieneAusenciaEnFechaUseCase(
-        ausenciaRepository: AusenciaRepository
-    ): EmpleadoTieneAusenciaEnFechaUseCase {
-        return EmpleadoTieneAusenciaEnFechaUseCase(ausenciaRepository)
-    }
-
-    /**
-     * Proporciona el caso de uso para obtener ausencias por fecha.
-     */
-    @Provides
-    @Singleton
-    fun provideGetAusenciasByFechaUseCase(
-        ausenciaRepository: AusenciaRepository
-    ): GetAusenciasByFechaUseCase {
-        return GetAusenciasByFechaUseCase(ausenciaRepository)
-    }
-
-    /**
-     * Proporciona el caso de uso para obtener ausencias por rango de fechas.
-     */
-    @Provides
-    @Singleton
-    fun provideGetAusenciasByRangoUseCase(
-        ausenciaRepository: AusenciaRepository
-    ): GetAusenciasByRangoUseCase {
-        return GetAusenciasByRangoUseCase(ausenciaRepository)
     }
 
 }

@@ -40,6 +40,21 @@ submissionsRouter.post(
     const id = crypto.randomUUID();
     const now = Math.floor(Date.now() / 1000);
 
+    const empCheck = await db.execute({
+      sql: "SELECT 1 FROM employees WHERE id = ?",
+      args: [employee_id],
+    });
+    if (empCheck.rows.length === 0) {
+      const errorMessage = `El empleado con ID ${employee_id} no existe en el sector ${device.sector_id}`;
+      console.error("[StaffAxis] checkEmployee 400:", errorMessage, { employee_id, sector_id: device.sector_id });
+      return res.status(400).json({
+        error: errorMessage,
+        code: "employee_not_found",
+        message: "El empleado no existe en la base de datos. Los empleados solo se crean desde el panel de administración.",
+        employee_id,
+      });
+    }
+
     try {
       await db.execute({
         sql: `

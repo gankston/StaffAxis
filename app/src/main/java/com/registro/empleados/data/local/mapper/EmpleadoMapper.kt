@@ -14,13 +14,15 @@ object EmpleadoMapper {
     fun toDomain(entity: EmpleadoEntity): Empleado {
         return Empleado(
             id = entity.id,
-            legajo = entity.legajo,  // Puede ser null
+            employeeIdBackend = entity.employeeIdBackend,
+            legajo = entity.legajo,
             nombreCompleto = entity.nombreCompleto,
             sector = entity.sector,
             fechaIngreso = entity.fechaIngreso,
             activo = entity.activo,
             fechaCreacion = entity.fechaCreacion,
-            observacion = entity.observacion
+            observacion = entity.observacion,
+            dni = entity.dni
         )
     }
     
@@ -30,13 +32,15 @@ object EmpleadoMapper {
     fun toEntity(domain: Empleado): EmpleadoEntity {
         return EmpleadoEntity(
             id = domain.id,
-            legajo = domain.legajo,  // Puede ser null
+            employeeIdBackend = domain.employeeIdBackend,
+            legajo = domain.legajo,
             nombreCompleto = domain.nombreCompleto,
             sector = domain.sector,
             fechaIngreso = domain.fechaIngreso,
             activo = domain.activo,
             fechaCreacion = domain.fechaCreacion,
-            observacion = domain.observacion
+            observacion = domain.observacion,
+            dni = domain.dni
         )
     }
     

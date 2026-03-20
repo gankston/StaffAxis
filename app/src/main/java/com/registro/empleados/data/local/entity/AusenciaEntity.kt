@@ -13,5 +13,10 @@ data class AusenciaEntity(
     val fechaInicio: LocalDate,
     val fechaFin: LocalDate,
     val motivo: String?,
-    val fechaCreacion: LocalDate = LocalDate.now()
+    val observaciones: String? = null,
+    val esJustificada: Boolean = false,
+    val fechaCreacion: LocalDate = LocalDate.now(),
+    val syncStatus: String = "pending",
+    val attempts: Int = 0,
+    val lastError: String? = null
 )

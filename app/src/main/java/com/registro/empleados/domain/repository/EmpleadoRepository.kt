@@ -105,4 +105,29 @@ interface EmpleadoRepository {
      * ¡CUIDADO! Esta operación es irreversible.
      */
     suspend fun deleteAllEmpleados()
+
+    /**
+     * Limpia todas las tablas locales antes de una sincronización forzada.
+     * Se ejecuta antes de la descarga desde la API (Turso) para forzar datos frescos.
+     */
+    suspend fun clearLocalTablesForSync()
+
+    /**
+     * Crea un empleado en la API (POST /api/employees) y, si la respuesta es 200/201,
+     * inserta el empleado devuelto en Room para que la lista se actualice al instante.
+     * @param firstName Nombre
+     * @param lastName Apellido
+     * @param documentNumber DNI/documento (opcional)
+     * @param sectorId ID del sector actual (inyectado por la app)
+     * @param sectorName Nombre del sector para mostrar en la lista local
+     * @return Result con el Empleado creado o error
+     */
+    suspend fun createEmployeeViaApi(
+        firstName: String,
+        lastName: String,
+        documentNumber: String?,
+        sectorId: String,
+        sectorName: String,
+        forceTransfer: Boolean = false
+    ): Result<Empleado>
 }

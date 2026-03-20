@@ -8,11 +8,17 @@ import androidx.room.PrimaryKey
  * Cola outbox para submissions pendientes de envío al backend.
  * Permite reintentos y tracking de errores.
  */
-@Entity(tableName = "outbox_submissions")
+@Entity(
+    tableName = "outbox_submissions",
+    indices = [androidx.room.Index(value = ["dedup_key"], unique = true)]
+)
 data class OutboxSubmissionEntity(
     @PrimaryKey
     @ColumnInfo(name = "id")
     val id: String, // UUID
+
+    @ColumnInfo(name = "dedup_key")
+    val dedupKey: String? = null,
 
     @ColumnInfo(name = "employee_id")
     val employeeId: String,

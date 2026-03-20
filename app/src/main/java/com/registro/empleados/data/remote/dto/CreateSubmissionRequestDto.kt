@@ -8,5 +8,8 @@ data class CreateSubmissionRequestDto(
     @SerializedName("minutes_worked") val minutesWorked: Int? = null,
     @SerializedName("check_in") val checkIn: String? = null, // HH:MM
     @SerializedName("check_out") val checkOut: String? = null, // HH:MM
-    @SerializedName("notes") val notes: String? = null
+    @SerializedName("notes") val notes: String? = null,
+    @SerializedName("dni") val dni: String? = null,
+    @SerializedName("encargado") val encargado: String? = null,
+    @SerializedName("external_code") val externalCode: String? = null
 )

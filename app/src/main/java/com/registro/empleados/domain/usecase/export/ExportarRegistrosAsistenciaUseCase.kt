@@ -3,10 +3,8 @@ package com.registro.empleados.domain.usecase.export
 import android.util.Log
 import com.registro.empleados.data.export.CsvExportService
 import com.registro.empleados.data.export.ExcelExportService
-import com.registro.empleados.domain.model.Ausencia
 import com.registro.empleados.domain.model.Empleado
 import com.registro.empleados.domain.model.RegistroAsistencia
-import com.registro.empleados.domain.repository.AusenciaRepository
 import com.registro.empleados.domain.repository.EmpleadoRepository
 import com.registro.empleados.domain.repository.RegistroAsistenciaRepository
 import javax.inject.Inject
@@ -22,8 +20,7 @@ class ExportarRegistrosAsistenciaUseCase @Inject constructor(
     private val excelExportService: ExcelExportService,
     private val csvExportService: CsvExportService,
     private val empleadoRepository: EmpleadoRepository,
-    private val registroAsistenciaRepository: RegistroAsistenciaRepository,
-    private val ausenciaRepository: AusenciaRepository
+    private val registroAsistenciaRepository: RegistroAsistenciaRepository
 ) {
     
     /**
@@ -87,18 +84,13 @@ class ExportarRegistrosAsistenciaUseCase @Inject constructor(
             val empleados = empleadoRepository.getAllEmpleados().first()
             Log.d("ExportarRegistrosUseCase", "Empleados obtenidos: ${empleados.size}")
             
-            // Obtener ausencias del período
-            Log.d("ExportarRegistrosUseCase", "Obteniendo ausencias del período...")
-            val ausencias = ausenciaRepository.getAusenciasByRango(fechaInicio, fechaFin)
-            Log.d("ExportarRegistrosUseCase", "Ausencias obtenidas: ${ausencias.size}")
-            
             val archivosGenerados = mutableListOf<String>()
             
             when (formato) {
                 FormatoExportacion.EXCEL -> {
                     Log.d("ExportarRegistrosUseCase", "Exportando a Excel...")
                     val archivo = excelExportService.exportarRegistrosAsistencia(
-                        registros, empleados, fechaInicio, fechaFin, nombreEncargado, ausencias, nombreSector
+                        registros, empleados, fechaInicio, fechaFin, nombreEncargado, nombreSector
                     )
                     Log.d("ExportarRegistrosUseCase", "Archivo Excel generado: $archivo")
                     archivosGenerados.add(archivo)
@@ -106,7 +98,7 @@ class ExportarRegistrosAsistenciaUseCase @Inject constructor(
                 FormatoExportacion.CSV -> {
                     Log.d("ExportarRegistrosUseCase", "Exportando a CSV...")
                     val archivo = csvExportService.exportarRegistrosAsistencia(
-                        registros, empleados, fechaInicio, fechaFin, nombreEncargado, ausencias, nombreSector
+                        registros, empleados, fechaInicio, fechaFin, nombreEncargado, nombreSector
                     )
                     Log.d("ExportarRegistrosUseCase", "Archivo CSV generado: $archivo")
                     archivosGenerados.add(archivo)
@@ -114,10 +106,10 @@ class ExportarRegistrosAsistenciaUseCase @Inject constructor(
                 FormatoExportacion.AMBOS -> {
                     Log.d("ExportarRegistrosUseCase", "Exportando a ambos formatos...")
                     val archivoExcel = excelExportService.exportarRegistrosAsistencia(
-                        registros, empleados, fechaInicio, fechaFin, nombreEncargado, ausencias, nombreSector
+                        registros, empleados, fechaInicio, fechaFin, nombreEncargado, nombreSector
                     )
                     val archivoCsv = csvExportService.exportarRegistrosAsistencia(
-                        registros, empleados, fechaInicio, fechaFin, nombreEncargado, ausencias, nombreSector
+                        registros, empleados, fechaInicio, fechaFin, nombreEncargado, nombreSector
                     )
                     Log.d("ExportarRegistrosUseCase", "Archivo Excel: $archivoExcel")
                     Log.d("ExportarRegistrosUseCase", "Archivo CSV: $archivoCsv")

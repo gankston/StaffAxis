@@ -90,20 +90,20 @@ fun AppNavigation(
                             viewModel = hiltViewModel(parentEntry)
                         )
                     }
-                    composable("ausencias") { backStackEntry ->
-                        val parentEntry = remember(backStackEntry) {
-                            navController.getBackStackEntry("main")
-                        }
-                        RegistroAusenciasScreen(
-                            viewModel = hiltViewModel(parentEntry)
-                        )
-                    }
                     composable("reportes") { backStackEntry ->
                         val parentEntry = remember(backStackEntry) {
                             navController.getBackStackEntry("main")
                         }
                         ReportesScreen(
                             windowSizeClass = windowSizeClass,
+                            viewModel = hiltViewModel(parentEntry)
+                        )
+                    }
+                    composable("ausencias") { backStackEntry ->
+                        val parentEntry = remember(backStackEntry) {
+                            navController.getBackStackEntry("main")
+                        }
+                        RegistroAusenciasScreen(
                             viewModel = hiltViewModel(parentEntry)
                         )
                     }
@@ -144,20 +144,20 @@ fun AppNavigation(
                                 viewModel = hiltViewModel(parentEntry)
                             )
                         }
-                        composable("ausencias") { backStackEntry ->
-                            val parentEntry = remember(backStackEntry) {
-                                navController.getBackStackEntry("main")
-                            }
-                            RegistroAusenciasScreen(
-                                viewModel = hiltViewModel(parentEntry)
-                            )
-                        }
                         composable("reportes") { backStackEntry ->
                             val parentEntry = remember(backStackEntry) {
                                 navController.getBackStackEntry("main")
                             }
                             ReportesScreen(
                                 windowSizeClass = windowSizeClass,
+                                viewModel = hiltViewModel(parentEntry)
+                            )
+                        }
+                        composable("ausencias") { backStackEntry ->
+                            val parentEntry = remember(backStackEntry) {
+                                navController.getBackStackEntry("main")
+                            }
+                            RegistroAusenciasScreen(
                                 viewModel = hiltViewModel(parentEntry)
                             )
                         }
@@ -212,20 +212,20 @@ fun AppNavigation(
                             viewModel = hiltViewModel(parentEntry)
                         )
                     }
-                    composable("ausencias") { backStackEntry ->
-                        val parentEntry = remember(backStackEntry) {
-                            navController.getBackStackEntry("main")
-                        }
-                        RegistroAusenciasScreen(
-                            viewModel = hiltViewModel(parentEntry)
-                        )
-                    }
                     composable("reportes") { backStackEntry ->
                         val parentEntry = remember(backStackEntry) {
                             navController.getBackStackEntry("main")
                         }
                         ReportesScreen(
                             windowSizeClass = windowSizeClass,
+                            viewModel = hiltViewModel(parentEntry)
+                        )
+                    }
+                    composable("ausencias") { backStackEntry ->
+                        val parentEntry = remember(backStackEntry) {
+                            navController.getBackStackEntry("main")
+                        }
+                        RegistroAusenciasScreen(
                             viewModel = hiltViewModel(parentEntry)
                         )
                     }

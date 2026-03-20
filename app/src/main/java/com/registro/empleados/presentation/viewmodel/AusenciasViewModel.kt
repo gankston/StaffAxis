@@ -4,6 +4,9 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.registro.empleados.data.local.preferences.AppPreferences
+import com.registro.empleados.data.remote.api.AusenciasApiService
+import com.registro.empleados.data.remote.dto.CreateAbsenceRequestDto
+import com.registro.empleados.data.device.DeviceIdentityManager
 import com.registro.empleados.domain.model.Ausencia
 import com.registro.empleados.domain.model.DiaLaboral
 import com.registro.empleados.domain.model.Empleado
@@ -36,7 +39,9 @@ class AusenciasViewModel @Inject constructor(
     private val actualizarAusenciaUseCase: com.registro.empleados.domain.usecase.ausencia.ActualizarAusenciaUseCase,
     private val eliminarAusenciaUseCase: com.registro.empleados.domain.usecase.ausencia.EliminarAusenciaUseCase,
     private val getAllEmpleadosActivosUseCase: GetAllEmpleadosActivosUseCase,
-    private val appPreferences: AppPreferences
+    private val appPreferences: AppPreferences,
+    private val ausenciasApiService: AusenciasApiService,
+    private val deviceIdentityManager: DeviceIdentityManager
 ) : ViewModel() {
 
     data class AusenciasUiState(
@@ -259,29 +264,73 @@ class AusenciasViewModel @Inject constructor(
         nombreEmpleado: String,
         fechaInicio: LocalDate,
         fechaFin: LocalDate,
-        motivo: String?
+        motivo: String?,
+        observaciones: String? = null,
+        esJustificada: Boolean = false
     ) {
         viewModelScope.launch {
             try {
-                Log.d("AusenciasVM", "═══ CREANDO AUSENCIA ═══")
+                Log.d("AusenciasVM", "╔═══ CREANDO AUSENCIA ═══╗")
                 Log.d("AusenciasVM", "Empleado: $nombreEmpleado")
-                Log.d("AusenciasVM", "Legajo: $legajo")
+                Log.d("AusenciasVM", "Legajo (employee_id): $legajo")
                 Log.d("AusenciasVM", "Fechas: $fechaInicio - $fechaFin")
+                Log.d("AusenciasVM", "Motivo: $motivo | Obs: $observaciones | Justificada: $esJustificada")
                 
                 val ausencia = Ausencia(
                     legajoEmpleado = legajo,
                     nombreEmpleado = nombreEmpleado,
                     fechaInicio = fechaInicio,
                     fechaFin = fechaFin,
-                    motivo = motivo
+                    motivo = motivo,
+                    observaciones = observaciones,
+                    esJustificada = esJustificada
                 )
                 
+                // 1. Guardar en Room (local first)
                 crearAusenciaUseCase(ausencia)
-                
-                Log.d("AusenciasVM", "✅ Ausencia guardada en BD")
+                Log.d("AusenciasVM", "✅ Ausencia guardada en BD local (Room)")
+
+                // 2. Enviar al API de producción (en un bloque try/catch separado para no bloquear)
+                try {
+                    Log.d("AusenciasVM_API", "╔═══ ENVIANDO AL API ═══╗")
+                    Log.d("AusenciasVM_API", "  employee_id: $legajo")
+                    Log.d("AusenciasVM_API", "  start_date: $fechaInicio | end_date: $fechaFin")
+                    Log.d("AusenciasVM_API", "  reason: ${motivo ?: "Sin motivo"} | is_justified: $esJustificada")
+
+                    // CRÍTICO: asegurar token antes de llamar al API
+                    val tieneToken = deviceIdentityManager.ensureDeviceToken()
+                    Log.d("AusenciasVM_API", "  ensureDeviceToken() → tieneToken=$tieneToken")
+
+                    if (!tieneToken) {
+                        Log.w("AusenciasVM_API", "  ⚠️ Sin device_token. Ausencia guardada en Room, se enviará al API en el próximo Cierre de Tarja.")
+                        Log.d("AusenciasVM_API", "╚═════════════════════╝")
+                    } else {
+                        val request = CreateAbsenceRequestDto(
+                            employeeId = legajo,
+                            startDate = fechaInicio.toString(),
+                            endDate = fechaFin.toString(),
+                            reason = motivo ?: "Ausencia",
+                            observations = observaciones,
+                            isJustified = esJustificada
+                        )
+
+                        val response = ausenciasApiService.createAbsence(request)
+                        Log.d("AusenciasVM_API", "  HTTP ${response.code()}")
+
+                        if (response.isSuccessful) {
+                            Log.d("AusenciasVM_API", "  ✅ Ausencia enviada exitosamente al API")
+                        } else {
+                            val errorBody = response.errorBody()?.string() ?: "sin cuerpo"
+                            Log.w("AusenciasVM_API", "  ⚠️ API respondió ${response.code()}: $errorBody (ausencia guardada localmente de igual forma)")
+                        }
+                        Log.d("AusenciasVM_API", "╚═════════════════════╝")
+                    }
+                } catch (apiEx: Exception) {
+                    // IMPORTANTE: el fallo del API NO bloquea el flujo. La ausencia queda en Room.
+                    Log.e("AusenciasVM_API", "❌ Error enviando ausencia al API (NO bloquea): ${apiEx.javaClass.simpleName} - ${apiEx.message}", apiEx)
+                }
                 
                 // Recargar calendario para mostrar los cambios
-                // Resetear el flag para permitir recarga
                 hasLoadedInitialData = false
                 cargarCalendario()
                 
@@ -294,9 +343,9 @@ class AusenciasViewModel @Inject constructor(
                     ) 
                 }
                 
-                Log.d("AusenciasVM", "═══ AUSENCIA CREADA EXITOSAMENTE ═══")
+                Log.d("AusenciasVM", "╚═══ AUSENCIA CREADA EXITOSAMENTE ═══╝")
                 
-                // NOTIFICAR A OTRAS PANTALLAS QUE SE CREÓ UNA AUSENCIA
+                // NOTIFICAR A OTRAS PANTALLAS QUE SE CRED UNA AUSENCIA
                 notificarAusenciaCreada()
                 
             } catch (e: Exception) {

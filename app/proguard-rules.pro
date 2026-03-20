@@ -4,12 +4,8 @@
 -allowaccessmodification
 -dontpreverify
 
-# Eliminar logs en release
--assumenosideeffects class android.util.Log {
-    public static *** d(...);
-    public static *** v(...);
-    public static *** i(...);
-}
+# Logs: mantener Log.i/Log.e para diagnóstico (StaffAxis)
+# -assumenosideeffects removido para ver getSectors OK / resolveSector en release
 
 # Compresión agresiva
 -keepattributes *Annotation*
@@ -29,6 +25,22 @@
 # Mantener interfaces API con sus firmas genéricas
 -keep interface com.registro.empleados.data.remote.api.** { *; }
 -keep class com.registro.empleados.data.remote.dto.** { *; }
+
+# DTOs de Gson: inmunes a obfuscación (sectors fix R8/ProGuard)
+-keep class com.registro.empleados.data.remote.api.SectorsResponseDto { *; }
+-keep class com.registro.empleados.data.remote.dto.SectorDto { *; }
+-keep class **SectorsResponseDto { *; }
+-keep class **SectorDto { *; }
+
+# Gson: mantener campos con @SerializedName
+-keepattributes Signature
+-keepattributes *Annotation*
+-dontwarn com.google.gson.**
+-keep class com.google.gson.** { *; }
+-keep class * extends com.google.gson.TypeAdapter
+-keep class * implements com.google.gson.TypeAdapterFactory
+-keep class * implements com.google.gson.JsonSerializer
+-keep class * implements com.google.gson.JsonDeserializer
 -keepattributes Signature
 -keepattributes Exceptions
 -keepattributes RuntimeVisibleAnnotations

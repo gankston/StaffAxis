@@ -2,7 +2,6 @@ package com.registro.empleados.di;
 
 import com.registro.empleados.data.export.CsvExportService;
 import com.registro.empleados.data.export.ExcelExportService;
-import com.registro.empleados.domain.repository.AusenciaRepository;
 import com.registro.empleados.domain.repository.EmpleadoRepository;
 import com.registro.empleados.domain.repository.RegistroAsistenciaRepository;
 import com.registro.empleados.domain.usecase.export.ExportarRegistrosAsistenciaUseCase;
@@ -36,40 +35,34 @@ public final class UseCaseModule_ProvideExportarRegistrosAsistenciaUseCaseFactor
 
   private final Provider<RegistroAsistenciaRepository> registroAsistenciaRepositoryProvider;
 
-  private final Provider<AusenciaRepository> ausenciaRepositoryProvider;
-
   public UseCaseModule_ProvideExportarRegistrosAsistenciaUseCaseFactory(
       Provider<ExcelExportService> excelExportServiceProvider,
       Provider<CsvExportService> csvExportServiceProvider,
       Provider<EmpleadoRepository> empleadoRepositoryProvider,
-      Provider<RegistroAsistenciaRepository> registroAsistenciaRepositoryProvider,
-      Provider<AusenciaRepository> ausenciaRepositoryProvider) {
+      Provider<RegistroAsistenciaRepository> registroAsistenciaRepositoryProvider) {
     this.excelExportServiceProvider = excelExportServiceProvider;
     this.csvExportServiceProvider = csvExportServiceProvider;
     this.empleadoRepositoryProvider = empleadoRepositoryProvider;
     this.registroAsistenciaRepositoryProvider = registroAsistenciaRepositoryProvider;
-    this.ausenciaRepositoryProvider = ausenciaRepositoryProvider;
   }
 
   @Override
   public ExportarRegistrosAsistenciaUseCase get() {
-    return provideExportarRegistrosAsistenciaUseCase(excelExportServiceProvider.get(), csvExportServiceProvider.get(), empleadoRepositoryProvider.get(), registroAsistenciaRepositoryProvider.get(), ausenciaRepositoryProvider.get());
+    return provideExportarRegistrosAsistenciaUseCase(excelExportServiceProvider.get(), csvExportServiceProvider.get(), empleadoRepositoryProvider.get(), registroAsistenciaRepositoryProvider.get());
   }
 
   public static UseCaseModule_ProvideExportarRegistrosAsistenciaUseCaseFactory create(
       Provider<ExcelExportService> excelExportServiceProvider,
       Provider<CsvExportService> csvExportServiceProvider,
       Provider<EmpleadoRepository> empleadoRepositoryProvider,
-      Provider<RegistroAsistenciaRepository> registroAsistenciaRepositoryProvider,
-      Provider<AusenciaRepository> ausenciaRepositoryProvider) {
-    return new UseCaseModule_ProvideExportarRegistrosAsistenciaUseCaseFactory(excelExportServiceProvider, csvExportServiceProvider, empleadoRepositoryProvider, registroAsistenciaRepositoryProvider, ausenciaRepositoryProvider);
+      Provider<RegistroAsistenciaRepository> registroAsistenciaRepositoryProvider) {
+    return new UseCaseModule_ProvideExportarRegistrosAsistenciaUseCaseFactory(excelExportServiceProvider, csvExportServiceProvider, empleadoRepositoryProvider, registroAsistenciaRepositoryProvider);
   }
 
   public static ExportarRegistrosAsistenciaUseCase provideExportarRegistrosAsistenciaUseCase(
       ExcelExportService excelExportService, CsvExportService csvExportService,
       EmpleadoRepository empleadoRepository,
-      RegistroAsistenciaRepository registroAsistenciaRepository,
-      AusenciaRepository ausenciaRepository) {
-    return Preconditions.checkNotNullFromProvides(UseCaseModule.INSTANCE.provideExportarRegistrosAsistenciaUseCase(excelExportService, csvExportService, empleadoRepository, registroAsistenciaRepository, ausenciaRepository));
+      RegistroAsistenciaRepository registroAsistenciaRepository) {
+    return Preconditions.checkNotNullFromProvides(UseCaseModule.INSTANCE.provideExportarRegistrosAsistenciaUseCase(excelExportService, csvExportService, empleadoRepository, registroAsistenciaRepository));
   }
 }

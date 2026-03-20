@@ -160,8 +160,8 @@ fun BottomNavigation(
                             brush = if (currentRoute == "ausencias") {
                                 Brush.radialGradient(
                                     colors = listOf(
-                                        Color(0xFFE91E63),
-                                        Color(0xFF9C27B0)
+                                        Color(0xFFF44336),
+                                        Color(0xFFFF9800)
                                     )
                                 )
                             } else {

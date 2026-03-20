@@ -1,0 +1,632 @@
+Initialized native services in: C:\Users\pgast\.gradle\native
+Initialized jansi services in: C:\Users\pgast\.gradle\native
+The client will now receive all logging from the daemon (pid: 20600). The daemon log file: C:\Users\pgast\.gradle\daemon\8.13\daemon-20600.out.log
+Starting 21st build in daemon [uptime: 32 mins 47.942 secs, performance: 99%, GC rate: 0.00/s, heap usage: 0% of 2 GiB]
+Using 12 worker leases.
+Now considering [C:\Registro empleados] as hierarchies to watch
+Watching the file system is configured to be enabled if available
+File system watching is active
+Starting Build
+Settings evaluated using settings file 'C:\Registro empleados\settings.gradle.kts'.
+Projects loaded. Root project using build file 'C:\Registro empleados\build.gradle.kts'.
+Included projects: [root project 'Registro Empleados', project ':app']
+
+> Configure project :
+Evaluating root project 'Registro Empleados' using build file 'C:\Registro empleados\build.gradle.kts'.
+Resolved plugin [id: 'com.android.application', version: '8.13.0', apply: false]
+Resolved plugin [id: 'org.jetbrains.kotlin.android', version: '2.0.0', apply: false]
+Resolved plugin [id: 'org.jetbrains.kotlin.kapt', version: '2.0.0', apply: false]
+Resolved plugin [id: 'com.google.devtools.ksp', version: '2.0.0-1.0.21', apply: false]
+Resolved plugin [id: 'com.google.dagger.hilt.android', version: '2.48', apply: false]
+Resolved plugin [id: 'org.jetbrains.kotlin.plugin.compose', version: '2.0.0', apply: false]
+
+> Configure project :app
+Evaluating project ':app' using build file 'C:\Registro empleados\app\build.gradle.kts'.
+Resolved plugin [id: 'com.android.application']
+Resolved plugin [id: 'org.jetbrains.kotlin.android']
+Resolved plugin [id: 'com.google.devtools.ksp']
+Resolved plugin [id: 'kotlin-parcelize']
+Resolved plugin [id: 'dagger.hilt.android.plugin']
+Resolved plugin [id: 'org.jetbrains.kotlin.plugin.compose']
+Using default execution profile
+Using Kotlin Gradle Plugin gradle85 variant
+Adding -Xuse-inline-scopes-numbers Kotlin compiler flag for task :app:compileDebugKotlin
+Detected Android Gradle Plugin compose compiler configuration
+Detected Android Gradle Plugin compose compiler configuration
+Adding -Xuse-inline-scopes-numbers Kotlin compiler flag for task :app:compileDebugAndroidTestKotlin
+Detected Android Gradle Plugin compose compiler configuration
+Detected Android Gradle Plugin compose compiler configuration
+Detected Android Gradle Plugin compose compiler configuration
+All projects evaluated.
+Task name matched 'assembleRelease'
+Selected primary task 'assembleRelease' from project :
+Tasks to be executed: [task ':app:preBuild', task ':app:preReleaseBuild', task ':app:mergeReleaseJniLibFolders', task ':app:mergeReleaseNativeLibs', task ':app:stripReleaseDebugSymbols', task ':app:extractReleaseNativeSymbolTables', task ':app:mergeReleaseNativeDebugMetadata', task ':app:checkReleaseDuplicateClasses', task ':app:mergeReleaseArtProfile', task ':app:buildKotlinToolingMetadata', task ':app:checkKotlinGradlePluginConfigurationErrors', task ':app:generateReleaseBuildConfig', task ':app:checkReleaseAarMetadata', task ':app:processReleaseNavigationResources', task ':app:compileReleaseNavigationResources', task ':app:generateReleaseResValues', task ':app:mapReleaseSourceSetPaths', task ':app:generateReleaseResources', task ':app:mergeReleaseResources', task ':app:packageReleaseResources', task ':app:parseReleaseLocalResources', task ':app:createReleaseCompatibleScreenManifests', task ':app:extractDeepLinksRelease', task ':app:processReleaseMainManifest', task ':app:processReleaseManifest', task ':app:processReleaseManifestForPackage', task ':app:processReleaseResources', task ':app:kspReleaseKotlin', task ':app:compileReleaseKotlin', task ':app:javaPreCompileRelease', task ':app:compileReleaseJavaWithJavac', task ':app:hiltAggregateDepsRelease', task ':app:hiltJavaCompileRelease', task ':app:transformReleaseClassesWithAsm', task ':app:expandReleaseArtProfileWildcards', task ':app:extractProguardFiles', task ':app:mergeReleaseGeneratedProguardFiles', task ':app:processReleaseJavaRes', task ':app:mergeReleaseJavaResource', task ':app:mergeReleaseStartupProfile', task ':app:minifyReleaseWithR8', task ':app:compileReleaseArtProfile', task ':app:mergeReleaseShaders', task ':app:compileReleaseShaders', task ':app:generateReleaseAssets', task ':app:mergeReleaseAssets', task ':app:compressReleaseAssets', task ':app:extractReleaseVersionControlInfo', task ':app:generateReleaseLintVitalReportModel', task ':app:lintVitalAnalyzeRelease', task ':app:lintVitalReportRelease', task ':app:lintVitalRelease', task ':app:convertShrunkResourcesToBinaryRelease', task ':app:optimizeReleaseResources', task ':app:collectReleaseDependencies', task ':app:sdkReleaseDependencyData', task ':app:validateSigningRelease', task ':app:writeReleaseAppMetadata', task ':app:writeReleaseSigningConfigVersions', task ':app:packageRelease', task ':app:createReleaseApkListingFileRedirect', task ':app:assembleRelease']
+Tasks that were excluded: []
+Resolve mutations for :app:preBuild (Thread[#2016,Execution worker,5,main]) started.
+:app:preBuild (Thread[#2016,Execution worker,5,main]) started.
+
+> Task :app:preBuild UP-TO-DATE
+Skipping task ':app:preBuild' as it has no actions.
+Resolve mutations for :app:preReleaseBuild (Thread[#2016,Execution worker,5,main]) started.
+:app:preReleaseBuild (Thread[#2016,Execution worker,5,main]) started.
+
+> Task :app:preReleaseBuild UP-TO-DATE
+Skipping task ':app:preReleaseBuild' as it has no actions.
+Resolve mutations for :app:mergeReleaseJniLibFolders (Thread[#2016,Execution worker,5,main]) started.
+:app:mergeReleaseJniLibFolders (Thread[#2016,Execution worker,5,main]) started.
+
+> Task :app:mergeReleaseJniLibFolders UP-TO-DATE
+Caching disabled for task ':app:mergeReleaseJniLibFolders' because:
+  Build cache is disabled
+  Simple merging task
+Skipping task ':app:mergeReleaseJniLibFolders' as it is up-to-date.
+Resolve mutations for :app:mergeReleaseNativeLibs (Thread[#2016,Execution worker,5,main]) started.
+:app:mergeReleaseNativeLibs (Thread[#2016,Execution worker,5,main]) started.
+
+> Task :app:mergeReleaseNativeLibs NO-SOURCE
+Skipping task ':app:mergeReleaseNativeLibs' as it has no source files and no previous output files.
+Resolve mutations for :app:stripReleaseDebugSymbols (Thread[#2016,Execution worker,5,main]) started.
+:app:stripReleaseDebugSymbols (Thread[#2016,Execution worker,5,main]) started.
+
+> Task :app:stripReleaseDebugSymbols NO-SOURCE
+Skipping task ':app:stripReleaseDebugSymbols' as it has no source files and no previous output files.
+Resolve mutations for :app:extractReleaseNativeSymbolTables (Thread[#2016,Execution worker,5,main]) started.
+:app:extractReleaseNativeSymbolTables (Thread[#2016,Execution worker,5,main]) started.
+
+> Task :app:extractReleaseNativeSymbolTables NO-SOURCE
+Skipping task ':app:extractReleaseNativeSymbolTables' as it has no source files and no previous output files.
+Resolve mutations for :app:mergeReleaseNativeDebugMetadata (Thread[#2016,Execution worker,5,main]) started.
+:app:mergeReleaseNativeDebugMetadata (Thread[#2016,Execution worker,5,main]) started.
+
+> Task :app:mergeReleaseNativeDebugMetadata NO-SOURCE
+Skipping task ':app:mergeReleaseNativeDebugMetadata' as it has no source files and no previous output files.
+Resolve mutations for :app:checkReleaseDuplicateClasses (Thread[#2016,Execution worker,5,main]) started.
+:app:checkReleaseDuplicateClasses (Thread[#2016,Execution worker,5,main]) started.
+
+> Task :app:checkReleaseDuplicateClasses UP-TO-DATE
+Caching disabled for task ':app:checkReleaseDuplicateClasses' because:
+  Build cache is disabled
+  Caching has been disabled for the task
+Skipping task ':app:checkReleaseDuplicateClasses' as it is up-to-date.
+Resolve mutations for :app:mergeReleaseArtProfile (Thread[#2016,Execution worker,5,main]) started.
+:app:mergeReleaseArtProfile (Thread[#2016,Execution worker,5,main]) started.
+
+> Task :app:mergeReleaseArtProfile UP-TO-DATE
+Caching disabled for task ':app:mergeReleaseArtProfile' because:
+  Build cache is disabled
+  Simple merging task
+Skipping task ':app:mergeReleaseArtProfile' as it is up-to-date.
+Resolve mutations for :app:buildKotlinToolingMetadata (Thread[#2016,Execution worker,5,main]) started.
+:app:buildKotlinToolingMetadata (Thread[#2016,Execution worker,5,main]) started.
+
+> Task :app:buildKotlinToolingMetadata UP-TO-DATE
+Caching disabled for task ':app:buildKotlinToolingMetadata' because:
+  Build cache is disabled
+  Caching has been disabled for the task
+Skipping task ':app:buildKotlinToolingMetadata' as it is up-to-date.
+Resolve mutations for :app:checkKotlinGradlePluginConfigurationErrors (Thread[#2016,Execution worker,5,main]) started.
+:app:checkKotlinGradlePluginConfigurationErrors (Thread[#2016,Execution worker,5,main]) started.
+
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+Skipping task ':app:checkKotlinGradlePluginConfigurationErrors' as task onlyIf 'errorDiagnostics are present' is false.
+Resolve mutations for :app:generateReleaseBuildConfig (Thread[#2016,Execution worker,5,main]) started.
+:app:generateReleaseBuildConfig (Thread[#2016,Execution worker,5,main]) started.
+
+> Task :app:generateReleaseBuildConfig UP-TO-DATE
+Caching disabled for task ':app:generateReleaseBuildConfig' because:
+  Build cache is disabled
+Skipping task ':app:generateReleaseBuildConfig' as it is up-to-date.
+Resolve mutations for :app:checkReleaseAarMetadata (Thread[#2016,Execution worker,5,main]) started.
+:app:checkReleaseAarMetadata (Thread[#2016,Execution worker,5,main]) started.
+
+> Task :app:checkReleaseAarMetadata UP-TO-DATE
+Caching disabled for task ':app:checkReleaseAarMetadata' because:
+  Build cache is disabled
+  Caching has been disabled for the task
+Skipping task ':app:checkReleaseAarMetadata' as it is up-to-date.
+Resolve mutations for :app:processReleaseNavigationResources (Thread[#2016,Execution worker,5,main]) started.
+:app:processReleaseNavigationResources (Thread[#2016,Execution worker,5,main]) started.
+
+> Task :app:processReleaseNavigationResources UP-TO-DATE
+Caching disabled for task ':app:processReleaseNavigationResources' because:
+  Build cache is disabled
+Skipping task ':app:processReleaseNavigationResources' as it is up-to-date.
+Resolve mutations for :app:compileReleaseNavigationResources (Thread[#2016,Execution worker,5,main]) started.
+:app:compileReleaseNavigationResources (Thread[#2016,Execution worker,5,main]) started.
+
+> Task :app:compileReleaseNavigationResources UP-TO-DATE
+Caching disabled for task ':app:compileReleaseNavigationResources' because:
+  Build cache is disabled
+Skipping task ':app:compileReleaseNavigationResources' as it is up-to-date.
+Resolve mutations for :app:generateReleaseResValues (Thread[#2016,Execution worker,5,main]) started.
+:app:generateReleaseResValues (Thread[#2016,Execution worker,5,main]) started.
+
+> Task :app:generateReleaseResValues UP-TO-DATE
+Caching disabled for task ':app:generateReleaseResValues' because:
+  Build cache is disabled
+Skipping task ':app:generateReleaseResValues' as it is up-to-date.
+Resolve mutations for :app:mapReleaseSourceSetPaths (Thread[#2016,Execution worker,5,main]) started.
+:app:mapReleaseSourceSetPaths (Thread[#2016,Execution worker,5,main]) started.
+
+> Task :app:mapReleaseSourceSetPaths UP-TO-DATE
+Caching disabled for task ':app:mapReleaseSourceSetPaths' because:
+  Build cache is disabled
+  Caching has been disabled for the task
+Skipping task ':app:mapReleaseSourceSetPaths' as it is up-to-date.
+Resolve mutations for :app:generateReleaseResources (Thread[#2016,Execution worker,5,main]) started.
+:app:generateReleaseResources (Thread[#2016,Execution worker,5,main]) started.
+
+> Task :app:generateReleaseResources UP-TO-DATE
+Caching disabled for task ':app:generateReleaseResources' because:
+  Build cache is disabled
+Skipping task ':app:generateReleaseResources' as it is up-to-date.
+Resolve mutations for :app:mergeReleaseResources (Thread[#2016,Execution worker,5,main]) started.
+:app:mergeReleaseResources (Thread[#2016,Execution worker,5,main]) started.
+
+> Task :app:mergeReleaseResources UP-TO-DATE
+Caching disabled for task ':app:mergeReleaseResources' because:
+  Build cache is disabled
+Skipping task ':app:mergeReleaseResources' as it is up-to-date.
+Resolve mutations for :app:packageReleaseResources (Thread[#2016,Execution worker,5,main]) started.
+:app:packageReleaseResources (Thread[#2016,Execution worker,5,main]) started.
+
+> Task :app:packageReleaseResources UP-TO-DATE
+Caching disabled for task ':app:packageReleaseResources' because:
+  Build cache is disabled
+Skipping task ':app:packageReleaseResources' as it is up-to-date.
+Resolve mutations for :app:parseReleaseLocalResources (Thread[#2016,Execution worker,5,main]) started.
+:app:parseReleaseLocalResources (Thread[#2016,Execution worker,5,main]) started.
+
+> Task :app:parseReleaseLocalResources UP-TO-DATE
+Caching disabled for task ':app:parseReleaseLocalResources' because:
+  Build cache is disabled
+Skipping task ':app:parseReleaseLocalResources' as it is up-to-date.
+Resolve mutations for :app:createReleaseCompatibleScreenManifests (Thread[#2016,Execution worker,5,main]) started.
+:app:createReleaseCompatibleScreenManifests (Thread[#2016,Execution worker,5,main]) started.
+
+> Task :app:createReleaseCompatibleScreenManifests UP-TO-DATE
+Caching disabled for task ':app:createReleaseCompatibleScreenManifests' because:
+  Build cache is disabled
+  Caching has been disabled for the task
+Skipping task ':app:createReleaseCompatibleScreenManifests' as it is up-to-date.
+Resolve mutations for :app:extractDeepLinksRelease (Thread[#2016,Execution worker,5,main]) started.
+:app:extractDeepLinksRelease (Thread[#2016,Execution worker,5,main]) started.
+
+> Task :app:extractDeepLinksRelease UP-TO-DATE
+Caching disabled for task ':app:extractDeepLinksRelease' because:
+  Build cache is disabled
+Skipping task ':app:extractDeepLinksRelease' as it is up-to-date.
+Resolve mutations for :app:processReleaseMainManifest (Thread[#2016,Execution worker,5,main]) started.
+:app:processReleaseMainManifest (Thread[#2016,Execution worker,5,main]) started.
+
+> Task :app:processReleaseMainManifest UP-TO-DATE
+Caching disabled for task ':app:processReleaseMainManifest' because:
+  Build cache is disabled
+Skipping task ':app:processReleaseMainManifest' as it is up-to-date.
+Resolve mutations for :app:processReleaseManifest (Thread[#2016,Execution worker,5,main]) started.
+:app:processReleaseManifest (Thread[#2016,Execution worker,5,main]) started.
+
+> Task :app:processReleaseManifest UP-TO-DATE
+Caching disabled for task ':app:processReleaseManifest' because:
+  Build cache is disabled
+Skipping task ':app:processReleaseManifest' as it is up-to-date.
+Resolve mutations for :app:processReleaseManifestForPackage (Thread[#2016,Execution worker,5,main]) started.
+:app:processReleaseManifestForPackage (Thread[#2016,Execution worker,5,main]) started.
+
+> Task :app:processReleaseManifestForPackage UP-TO-DATE
+Custom actions are attached to task ':app:processReleaseManifestForPackage'.
+Caching disabled for task ':app:processReleaseManifestForPackage' because:
+  Build cache is disabled
+Skipping task ':app:processReleaseManifestForPackage' as it is up-to-date.
+Resolve mutations for :app:processReleaseResources (Thread[#2016,Execution worker,5,main]) started.
+:app:processReleaseResources (Thread[#2016,Execution worker,5,main]) started.
+
+> Task :app:processReleaseResources UP-TO-DATE
+Caching disabled for task ':app:processReleaseResources' because:
+  Build cache is disabled
+Skipping task ':app:processReleaseResources' as it is up-to-date.
+Resolve mutations for :app:kspReleaseKotlin (Thread[#2016,Execution worker,5,main]) started.
+:app:kspReleaseKotlin (Thread[#2016,Execution worker,5,main]) started.
+Resolve mutations for :app:javaPreCompileRelease (Thread[#2025,Execution worker Thread 10,5,main]) started.
+:app:javaPreCompileRelease (Thread[#2025,Execution worker Thread 10,5,main]) started.
+
+> Task :app:javaPreCompileRelease UP-TO-DATE
+Caching disabled for task ':app:javaPreCompileRelease' because:
+  Build cache is disabled
+Skipping task ':app:javaPreCompileRelease' as it is up-to-date.
+Resolve mutations for :app:extractProguardFiles (Thread[#2025,Execution worker Thread 10,5,main]) started.
+:app:extractProguardFiles (Thread[#2025,Execution worker Thread 10,5,main]) started.
+
+> Task :app:extractProguardFiles UP-TO-DATE
+Caching disabled for task ':app:extractProguardFiles' because:
+  Build cache is disabled
+  Fast task
+Skipping task ':app:extractProguardFiles' as it is up-to-date.
+Resolve mutations for :app:mergeReleaseStartupProfile (Thread[#2025,Execution worker Thread 10,5,main]) started.
+:app:mergeReleaseStartupProfile (Thread[#2025,Execution worker Thread 10,5,main]) started.
+
+> Task :app:mergeReleaseStartupProfile UP-TO-DATE
+Caching disabled for task ':app:mergeReleaseStartupProfile' because:
+  Build cache is disabled
+  Simple merging task
+Skipping task ':app:mergeReleaseStartupProfile' as it is up-to-date.
+Resolve mutations for :app:mergeReleaseShaders (Thread[#2025,Execution worker Thread 10,5,main]) started.
+:app:mergeReleaseShaders (Thread[#2025,Execution worker Thread 10,5,main]) started.
+
+> Task :app:mergeReleaseShaders UP-TO-DATE
+Caching disabled for task ':app:mergeReleaseShaders' because:
+  Build cache is disabled
+  Simple merging task
+Skipping task ':app:mergeReleaseShaders' as it is up-to-date.
+Resolve mutations for :app:compileReleaseShaders (Thread[#2025,Execution worker Thread 10,5,main]) started.
+:app:compileReleaseShaders (Thread[#2025,Execution worker Thread 10,5,main]) started.
+
+> Task :app:compileReleaseShaders NO-SOURCE
+Skipping task ':app:compileReleaseShaders' as it has no source files and no previous output files.
+Resolve mutations for :app:generateReleaseAssets (Thread[#2022,Execution worker Thread 7,5,main]) started.
+:app:generateReleaseAssets (Thread[#2023,Execution worker Thread 8,5,main]) started.
+
+> Task :app:generateReleaseAssets UP-TO-DATE
+Skipping task ':app:generateReleaseAssets' as it has no actions.
+Resolve mutations for :app:mergeReleaseAssets (Thread[#2023,Execution worker Thread 8,5,main]) started.
+:app:mergeReleaseAssets (Thread[#2023,Execution worker Thread 8,5,main]) started.
+
+> Task :app:mergeReleaseAssets UP-TO-DATE
+Caching disabled for task ':app:mergeReleaseAssets' because:
+  Build cache is disabled
+  Simple merging task
+Skipping task ':app:mergeReleaseAssets' as it is up-to-date.
+Resolve mutations for :app:compressReleaseAssets (Thread[#2023,Execution worker Thread 8,5,main]) started.
+:app:compressReleaseAssets (Thread[#2023,Execution worker Thread 8,5,main]) started.
+
+> Task :app:compressReleaseAssets UP-TO-DATE
+Caching disabled for task ':app:compressReleaseAssets' because:
+  Build cache is disabled
+Skipping task ':app:compressReleaseAssets' as it is up-to-date.
+Resolve mutations for :app:extractReleaseVersionControlInfo (Thread[#2023,Execution worker Thread 8,5,main]) started.
+:app:extractReleaseVersionControlInfo (Thread[#2023,Execution worker Thread 8,5,main]) started.
+
+> Task :app:extractReleaseVersionControlInfo UP-TO-DATE
+Caching disabled for task ':app:extractReleaseVersionControlInfo' because:
+  Build cache is disabled
+  Caching has been disabled for the task
+Skipping task ':app:extractReleaseVersionControlInfo' as it is up-to-date.
+Resolve mutations for :app:collectReleaseDependencies (Thread[#2023,Execution worker Thread 8,5,main]) started.
+:app:collectReleaseDependencies (Thread[#2023,Execution worker Thread 8,5,main]) started.
+
+> Task :app:collectReleaseDependencies UP-TO-DATE
+Caching disabled for task ':app:collectReleaseDependencies' because:
+  Build cache is disabled
+  Caching has been disabled for the task
+Skipping task ':app:collectReleaseDependencies' as it is up-to-date.
+Resolve mutations for :app:sdkReleaseDependencyData (Thread[#2023,Execution worker Thread 8,5,main]) started.
+:app:sdkReleaseDependencyData (Thread[#2023,Execution worker Thread 8,5,main]) started.
+
+> Task :app:sdkReleaseDependencyData UP-TO-DATE
+Caching disabled for task ':app:sdkReleaseDependencyData' because:
+  Build cache is disabled
+  Caching has been disabled for the task
+Skipping task ':app:sdkReleaseDependencyData' as it is up-to-date.
+Resolve mutations for :app:validateSigningRelease (Thread[#2023,Execution worker Thread 8,5,main]) started.
+:app:validateSigningRelease (Thread[#2023,Execution worker Thread 8,5,main]) started.
+
+> Task :app:validateSigningRelease UP-TO-DATE
+Caching disabled for task ':app:validateSigningRelease' because:
+  Build cache is disabled
+  Caching has been disabled for the task
+Skipping task ':app:validateSigningRelease' as it is up-to-date.
+Resolve mutations for :app:writeReleaseAppMetadata (Thread[#2023,Execution worker Thread 8,5,main]) started.
+:app:writeReleaseAppMetadata (Thread[#2023,Execution worker Thread 8,5,main]) started.
+
+> Task :app:writeReleaseAppMetadata UP-TO-DATE
+Caching disabled for task ':app:writeReleaseAppMetadata' because:
+  Build cache is disabled
+  Caching has been disabled for the task
+Skipping task ':app:writeReleaseAppMetadata' as it is up-to-date.
+Resolve mutations for :app:writeReleaseSigningConfigVersions (Thread[#2023,Execution worker Thread 8,5,main]) started.
+:app:writeReleaseSigningConfigVersions (Thread[#2023,Execution worker Thread 8,5,main]) started.
+
+> Task :app:writeReleaseSigningConfigVersions UP-TO-DATE
+Caching disabled for task ':app:writeReleaseSigningConfigVersions' because:
+  Build cache is disabled
+  Caching has been disabled for the task
+Skipping task ':app:writeReleaseSigningConfigVersions' as it is up-to-date.
+
+> Task :app:kspReleaseKotlin FAILED
+file or directory 'C:\Registro empleados\app\src\release\kotlin', not found
+file or directory 'C:\Registro empleados\app\src\release\java', not found
+file or directory 'C:\Registro empleados\app\src\main\kotlin', not found
+file or directory 'C:\Registro empleados\app\src\release\java', not found
+file or directory 'C:\Registro empleados\app\src\release\kotlin', not found
+file or directory 'C:\Registro empleados\app\src\release\java', not found
+file or directory 'C:\Registro empleados\app\src\main\kotlin', not found
+file or directory 'C:\Registro empleados\app\src\release\java', not found
+Caching disabled for task ':app:kspReleaseKotlin' because:
+  Build cache is disabled
+Task ':app:kspReleaseKotlin' is not up-to-date because:
+  Task has failed previously.
+The input changes require a full rebuild for incremental task ':app:kspReleaseKotlin'.
+file or directory 'C:\Registro empleados\app\src\release\kotlin', not found
+file or directory 'C:\Registro empleados\app\src\release\java', not found
+file or directory 'C:\Registro empleados\app\src\main\kotlin', not found
+file or directory 'C:\Registro empleados\app\src\release\java', not found
+file or directory 'C:\Registro empleados\app\src\release\kotlin', not found
+file or directory 'C:\Registro empleados\app\src\release\java', not found
+file or directory 'C:\Registro empleados\app\src\main\kotlin', not found
+file or directory 'C:\Registro empleados\app\src\release\kotlin', not found
+file or directory 'C:\Registro empleados\app\src\release\java', not found
+file or directory 'C:\Registro empleados\app\src\main\kotlin', not found
+file or directory 'C:\Registro empleados\app\src\release\java', not found
+file or directory 'C:\Registro empleados\app\src\release\kotlin', not found
+file or directory 'C:\Registro empleados\app\src\release\java', not found
+file or directory 'C:\Registro empleados\app\src\main\kotlin', not found
+file or directory 'C:\Registro empleados\app\src\release\java', not found
+file or directory 'C:\Registro empleados\app\src\release\kotlin', not found
+file or directory 'C:\Registro empleados\app\src\release\java', not found
+file or directory 'C:\Registro empleados\app\src\main\kotlin', not found
+file or directory 'C:\Registro empleados\app\src\release\java', not found
+Kotlin source files: C:\Registro empleados\app\src\main\java\com\registro\empleados\AsistenciaApplication.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\database\AppDatabase.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\database\Converters.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\database\daos\DiaLaboralDao.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\database\daos\EmpleadoDao.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\database\daos\RegistroAsistenciaDao.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\database\entities\DiaLaboral.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\database\entities\Empleado.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\database\entities\RegistroAsistencia.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\device\DeviceIdentityManager.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\export\CsvExportService.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\export\ExcelExportService.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\local\converter\LocalDateConverter.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\local\converter\LocalDateTimeConverter.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\local\dao\ApprovedAttendanceDao.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\local\dao\AusenciaDao.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\local\dao\DiaLaboralDao.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\local\dao\EmpleadoDao.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\local\dao\HorasEmpleadoMesDao.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\local\dao\OutboxAusenciaDao.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\local\dao\OutboxSubmissionDao.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\local\dao\RegistroAsistenciaDao.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\local\dao\SectorDao.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\local\database\AppDatabase.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\local\entity\ApprovedAttendanceEntity.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\local\entity\AusenciaEntity.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\local\entity\DiaLaboralEntity.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\local\entity\EmpleadoEntity.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\local\entity\HorasEmpleadoMesEntity.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\local\entity\OutboxAusenciaEntity.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\local\entity\OutboxSubmissionEntity.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\local\entity\RegistroAsistenciaEntity.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\local\entity\SectorEntity.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\local\mapper\AusenciaMapper.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\local\mapper\DiaLaboralMapper.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\local\mapper\EmpleadoMapper.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\local\mapper\HorasEmpleadoMesMapper.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\local\mapper\RegistroAsistenciaMapper.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\local\preferences\AppPreferences.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\local\preferences\DevicePrefs.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\local\preferences\SyncStatePrefs.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\mapper\DiaLaboralMapper.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\mapper\EmpleadoMapper.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\remote\api\AusenciasApiService.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\remote\api\AuthApiService.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\remote\api\EmployeesApiService.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\remote\api\FeriadosApiService.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\remote\api\SectorsApiService.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\remote\api\SubmissionsApiService.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\remote\datasource\FeriadosRemoteDataSource.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\remote\dto\ApprovedResponseDto.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\remote\dto\AttendanceDto.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\remote\dto\CreateEmployeeRequestDto.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\remote\dto\CreateSubmissionRequestDto.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\remote\dto\EmployeeDto.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\remote\dto\FeriadoDto.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\remote\dto\RegisterDeviceRequestDto.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\remote\dto\RegisterDeviceResponseDto.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\remote\dto\SectorDto.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\remote\dto\SubmissionResponseDto.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\remote\mapper\FeriadoMapper.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\remote\network\RawPeekInterceptor.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\repository\AusenciaRepositoryImpl.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\repository\DiaLaboralRepositoryImpl.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\repository\EmpleadoRepositoryImpl.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\repository\HorasEmpleadoMesRepositoryImpl.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\repository\RegistroAsistenciaRepositoryImpl.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\data\repository\SectorRepositoryImpl.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\di\AppModule.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\di\DatabaseModule.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\di\ExportModule.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\di\NetworkModule.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\di\RepositoryModule.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\di\UseCaseModule.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\di\WorkerModule.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\domain\model\Ausencia.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\domain\model\ConfiguracionApp.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\domain\model\DiaLaboral.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\domain\model\Empleado.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\domain\model\EncargadoSector.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\domain\model\HorasEmpleadoMes.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\domain\model\PeriodoLaboral.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\domain\model\RegistroAsistencia.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\domain\model\Sector.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\domain\repository\AusenciaRepository.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\domain\repository\DiaLaboralRepository.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\domain\repository\EmpleadoRepository.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\domain\repository\HorasEmpleadoMesRepository.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\domain\repository\RegistroAsistenciaRepository.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\domain\repository\SectorRepository.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\domain\usecase\asistencia\GetRegistrosByRangoUseCase.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\domain\usecase\ausencia\ActualizarAusenciaUseCase.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\domain\usecase\ausencia\CrearAusenciaUseCase.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\domain\usecase\ausencia\EliminarAusenciaUseCase.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\domain\usecase\ausencia\EmpleadoTieneAusenciaEnFechaUseCase.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\domain\usecase\ausencia\GetAusenciasByFechaUseCase.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\domain\usecase\ausencia\GetAusenciasByRangoUseCase.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\domain\usecase\calendario\GenerarDiasLaboralesBasicosUseCase.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\domain\usecase\calendario\GetCalendarioPeriodoUseCase.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\domain\usecase\calendario\GetDiasLaboralesUseCase.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\domain\usecase\calendario\GetPeriodoActualUseCase.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\domain\usecase\database\CorregirEmpleadosDBDirectoUseCase.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\domain\usecase\database\LimpiarBaseDatosUseCase.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\domain\usecase\empleado\BuscarEmpleadoSimpleUseCase.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\domain\usecase\empleado\BuscarEmpleadosUseCase.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\domain\usecase\empleado\CargarEmpleadosPorSectorUseCase.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\domain\usecase\empleado\DarDeBajaEmpleadoUseCase.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\domain\usecase\empleado\GetAllEmpleadosActivosUseCase.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\domain\usecase\empleado\GetEmpleadoByLegajoUseCase.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\domain\usecase\empleado\InsertEmpleadoUseCase.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\domain\usecase\empleado\TieneHorasCargadasHoyUseCase.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\domain\usecase\empleado\UpdateEmpleadoUseCase.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\domain\usecase\empleado\UpdateEstadoEmpleadoUseCase.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\domain\usecase\export\ExportarRegistrosAsistenciaUseCase.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\domain\usecase\feriados\SincronizarFeriadosUseCase.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\domain\usecase\horas\ActualizarHorasMensualesUseCase.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\domain\usecase\horas\GetHorasMensualesUseCase.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\domain\usecase\LimpiarTodosLosRegistrosUseCase.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\domain\usecase\sync\SyncEmpleadosFromApiUseCase.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\presentation\components\BottomNavigation.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\presentation\components\calendar\CalendarLegend.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\presentation\components\calendar\CustomCalendarGrid.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\presentation\components\calendar\DayDetailsCard.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\presentation\components\calendar\PeriodoNavigation.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\presentation\components\EmployeeCard.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\presentation\components\NavigationDrawerBar.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\presentation\components\NavigationRailBar.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\presentation\components\ResponsiveDashboard.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\presentation\MainActivity.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\presentation\navigation\Navigation.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\presentation\screens\AgregarEmpleadoScreen.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\presentation\screens\BienvenidaScreen.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\presentation\screens\CalendarioScreen.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\presentation\screens\DashboardScreen.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\presentation\screens\EmpleadosScreen.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\presentation\screens\RegistroAusenciasScreen.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\presentation\screens\ReportesScreen.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\presentation\screens\SetupScreen.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\presentation\screens\UpdateDownloadScreen.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\presentation\screens\WelcomeScreen.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\presentation\theme\Color.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\presentation\theme\Theme.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\presentation\theme\Type.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\presentation\utils\ResponsiveUtils.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\presentation\utils\ScreenType.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\presentation\utils\UpdateChecker.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\presentation\viewmodel\AusenciasViewModel.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\presentation\viewmodel\BienvenidaViewModel.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\presentation\viewmodel\CalendarioViewModel.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\presentation\viewmodel\DashboardViewModel.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\presentation\viewmodel\EmpleadosViewModel.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\presentation\viewmodel\ReportesViewModel.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\presentation\viewmodel\SetupViewModel.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\worker\FeriadosSyncWorker.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\worker\PullApprovedWorker.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\worker\PushOutboxWorker.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\worker\SyncAusenciasWorker.kt, C:\Registro empleados\app\src\main\java\com\registro\empleados\worker\WorkManagerInitializer.kt
+Java source files: C:\Registro empleados\app\build\generated\source\buildConfig\release\com\registro\empleados\BuildConfig.java
+Script source files: 
+Script file extensions: 
+[KOTLIN] Kotlin compilation 'jdkHome' argument: null
+e: [ksp] C:/Registro empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt: (440, 11): Function declaration must have a name
+e: Error occurred in KSP, check log for detail
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:434:1 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:437:9 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:437:13 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:438:13 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:438:22 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:438:24 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:438:32 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:438:33 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:438:45 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:438:46 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:438:47 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:439:13 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:439:23 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:439:25 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:439:37 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:439:38 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:439:51 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:439:52 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:439:69 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:439:71 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:439:72 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:439:73 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:439:75 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:440:9 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:440:11 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:504:9 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:504:16 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:504:17 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:504:24 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:504:26 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:504:30 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:504:40 Unexpected tokens (use ';' to separate expressions on the same line)
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:526:9 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:526:16 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:526:17 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:526:22 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:526:24 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:526:28 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:526:36 Unexpected tokens (use ';' to separate expressions on the same line)
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:543:9 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:543:12 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:543:13 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:543:20 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:543:21 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:543:41 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:543:43 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:553:5 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:554:1 Expecting a top level declaration
+e: file:///C:/Registro%20empleados/app/src/main/java/com/registro/empleados/presentation/screens/ReportesScreen.kt:555:1 Expecting a top level declaration
+Finished executing kotlin compiler using DAEMON strategy
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:kspReleaseKotlin'.
+> A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+   > Compilation error. See log for more details
+
+* Try:
+> Run with --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+* Exception is:
+org.gradle.api.tasks.TaskExecutionException: Execution failed for task ':app:kspReleaseKotlin'.
+	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.lambda$executeIfValid$1(ExecuteActionsTaskExecuter.java:130)
+	at org.gradle.internal.Try$Failure.ifSuccessfulOrElse(Try.java:293)
+	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.executeIfValid(ExecuteActionsTaskExecuter.java:128)
+	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.execute(ExecuteActionsTaskExecuter.java:116)
+	at org.gradle.api.internal.tasks.execution.ProblemsTaskPathTrackingTaskExecuter.execute(ProblemsTaskPathTrackingTaskExecuter.java:40)
+	at org.gradle.api.internal.tasks.execution.FinalizePropertiesTaskExecuter.execute(FinalizePropertiesTaskExecuter.java:46)
+	at org.gradle.api.internal.tasks.execution.ResolveTaskExecutionModeExecuter.execute(ResolveTaskExecutionModeExecuter.java:51)
+	at org.gradle.api.internal.tasks.execution.SkipTaskWithNoActionsExecuter.execute(SkipTaskWithNoActionsExecuter.java:57)
+	at org.gradle.api.internal.tasks.execution.SkipOnlyIfTaskExecuter.execute(SkipOnlyIfTaskExecuter.java:74)
+	at org.gradle.api.internal.tasks.execution.CatchExceptionTaskExecuter.execute(CatchExceptionTaskExecuter.java:36)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.executeTask(EventFiringTaskExecuter.java:77)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.call(EventFiringTaskExecuter.java:55)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.call(EventFiringTaskExecuter.java:52)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:210)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:205)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:67)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:60)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:167)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:60)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:54)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter.execute(EventFiringTaskExecuter.java:52)
+	at org.gradle.execution.plan.LocalTaskNodeExecutor.execute(LocalTaskNodeExecutor.java:42)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(DefaultTaskExecutionGraph.java:331)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(DefaultTaskExecutionGraph.java:318)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.lambda$execute$0(DefaultTaskExecutionGraph.java:314)
+	at org.gradle.internal.operations.CurrentBuildOperationRef.with(CurrentBuildOperationRef.java:85)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:314)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:303)
+	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.execute(DefaultPlanExecutor.java:459)
+	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.run(DefaultPlanExecutor.java:376)
+	at org.gradle.internal.concurrent.ExecutorPolicy$CatchAndRecordFailures.onExecute(ExecutorPolicy.java:64)
+	at org.gradle.internal.concurrent.AbstractManagedExecutor$1.run(AbstractManagedExecutor.java:48)
+Caused by: org.gradle.workers.internal.DefaultWorkerExecutor$WorkExecutionException: A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+	at org.gradle.workers.internal.DefaultWorkerExecutor$WorkItemExecution.waitForCompletion(DefaultWorkerExecutor.java:287)
+	at org.gradle.internal.work.DefaultAsyncWorkTracker.lambda$waitForItemsAndGatherFailures$2(DefaultAsyncWorkTracker.java:130)
+	at org.gradle.internal.Factories$1.create(Factories.java:31)
+	at org.gradle.internal.work.DefaultWorkerLeaseService.withoutLocks(DefaultWorkerLeaseService.java:335)
+	at org.gradle.internal.work.DefaultWorkerLeaseService.withoutLocks(DefaultWorkerLeaseService.java:318)
+	at org.gradle.internal.work.DefaultWorkerLeaseService.withoutLock(DefaultWorkerLeaseService.java:323)
+	at org.gradle.internal.work.DefaultAsyncWorkTracker.waitForItemsAndGatherFailures(DefaultAsyncWorkTracker.java:126)
+	at org.gradle.internal.work.DefaultAsyncWorkTracker.waitForItemsAndGatherFailures(DefaultAsyncWorkTracker.java:92)
+	at org.gradle.internal.work.DefaultAsyncWorkTracker.waitForAll(DefaultAsyncWorkTracker.java:78)
+	at org.gradle.internal.work.DefaultAsyncWorkTracker.waitForCompletion(DefaultAsyncWorkTracker.java:66)
+	at org.gradle.api.internal.tasks.execution.TaskExecution$3.run(TaskExecution.java:252)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:30)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:27)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:67)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:60)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:167)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:60)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.run(DefaultBuildOperationRunner.java:48)
+	at org.gradle.api.internal.tasks.execution.TaskExecution.executeAction(TaskExecution.java:229)
+	at org.gradle.api.internal.tasks.execution.TaskExecution.executeActions(TaskExecution.java:212)
+	at org.gradle.api.internal.tasks.execution.TaskExecution.executeWithPreviousOutputFiles(TaskExecution.java:195)
+	at org.gradle.api.internal.tasks.execution.TaskExecution.execute(TaskExecution.java:162)
+	at org.gradle.internal.execution.steps.ExecuteStep.executeInternal(ExecuteStep.java:105)
+	at org.gradle.internal.execution.steps.ExecuteStep.access$000(ExecuteStep.java:44)
+	at org.gradle.internal.execution.steps.ExecuteStep$1.call(ExecuteStep.java:59)
+	at org.gradle.internal.execution.steps.ExecuteStep$1.call(ExecuteStep.java:56)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:210)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:205)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:67)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:60)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:167)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:60)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:54)
+	at org.gradle.internal.execution.steps.ExecuteStep.execute(ExecuteStep.java:56)
+	at org.gradle.internal.execution.steps.ExecuteStep.execute(ExecuteStep.java:44)
+	at org.gradle.internal.execution.steps.CancelExecutionStep.execute(CancelExecutionStep.java:42)
+	at org.gradle.internal.execution.steps.TimeoutStep.executeWithoutTimeout(TimeoutStep.java:75)
+	at org.gradle.internal.execution.steps.TimeoutStep.execute(TimeoutStep.java:55)
+	at org.gradle.internal.execution.steps.PreCreateOutputParentsStep.execute(PreCreateOutputParentsStep.java:50)
+	at org.gradle.internal.execution.steps.PreCreateOutputParentsStep.execute(PreCreateOutputParentsStep.java:28)
+	at org.gradle.internal.execution.steps.RemovePreviousOutputsStep.execute(RemovePreviousOutputsStep.java:67)
+	at org.gradle.internal.execution.steps.RemovePreviousOutputsStep.execute(RemovePreviousOutputsStep.java:37)
+	at org.gradle.internal.execution.steps.BroadcastChangingOutputsStep.execute(BroadcastChangingOutputsStep.java:61)
+	at org.gradle.internal.execution.steps.BroadcastChangingOutputsStep.execute(BroadcastChangingOutputsStep.java:26)
+	at org.gradle.internal.execution.steps.CaptureOutputsAfterExecutionStep.execute(CaptureOutputsAfterExecutionStep.java:69)
+	at org.gradle.internal.execution.steps.CaptureOutputsAfterExecutionStep.execute(CaptureOutputsAfterExecutionStep.java:46)
+	at org.gradle.internal.execution.steps.ResolveInputChangesStep.execute(ResolveInputChangesStep.java:40)
+	at org.gradle.internal.execution.steps.ResolveInputChangesStep.execute(ResolveInputChangesStep.java:29)
+	at org.gradle.internal.execution.steps.BuildCacheStep.executeWithoutCache(BuildCacheStep.java:189)
+	at org.gradle.internal.execution.steps.BuildCacheStep.lambda$execute$1(BuildCacheStep.java:75)
+	at org.gradle.internal.Either$Right.fold(Either.java:175)
+	at org.gradle.internal.execution.caching.CachingState.fold(CachingState.java:62)
+	at org.gradle.internal.execution.steps.BuildCacheStep.execute(BuildCacheStep.java:73)
+	at org.gradle.internal.execution.steps.BuildCacheStep.execute(BuildCacheStep.java:48)
+	at org.gradle.internal.execution.steps.StoreExecutionStateStep.execute(StoreExecutionStateStep.java:46)
+	at org.gradle.internal.execution.steps.StoreExecutionStateStep.execute(StoreExecutionStateStep.java:35)
+	at org.gradle.internal.execution.steps.SkipUpToDateStep.executeBecause(SkipUpToDateStep.java:75)
+	at org.gradle.internal.execution.steps.SkipUpToDateStep.lambda$execute$2(SkipUpToDateStep.java:53)
+	at org.gradle.internal.execution.steps.SkipUpToDateStep.execute(SkipUpToDateStep.java:53)
+	at org.gradle.internal.execution.steps.SkipUpToDateStep.execute(SkipUpToDateStep.java:35)
+	at org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsFinishedStep.execute(MarkSnapshottingInputsFinishedStep.java:37)
+	at org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsFinishedStep.execute(MarkSnapshottingInputsFinishedStep.java:27)
+	at org.gradle.internal.execution.steps.ResolveIncrementalCachingStateStep.executeDelegate(ResolveIncrementalCachingStateStep.java:49)
+	at org.gradle.internal.execution.steps.ResolveIncrementalCachingStateStep.executeDelegate(ResolveIncrementalCachingStateStep.java:27)
+	at org.gradle.internal.execution.steps.AbstractResolveCachingStateStep.execute(AbstractResolveCachingStateStep.java:71)
+	at org.gradle.internal.execution.steps.AbstractResolveCachingStateStep.execute(AbstractResolveCachingStateStep.java:39)
+	at org.gradle.internal.execution.steps.ResolveChangesStep.execute(ResolveChangesStep.java:65)
+	at org.gradle.internal.execution.steps.ResolveChangesStep.execute(ResolveChangesStep.java:36)
+	at org.gradle.internal.execution.steps.ValidateStep.execute(ValidateStep.java:107)
+	at org.gradle.internal.execution.steps.ValidateStep.execute(ValidateStep.java:56)
+	at org.gradle.internal.execution.steps.AbstractCaptureStateBeforeExecutionStep.execute(AbstractCaptureStateBeforeExecutionStep.java:64)
+	at org.gradle.internal.execution.steps.AbstractCaptureStateBeforeExecutionStep.execute(AbstractCaptureStateBeforeExecutionStep.java:43)
+	at org.gradle.internal.execution.steps.AbstractSkipEmptyWorkStep.executeWithNonEmptySources(AbstractSkipEmptyWorkStep.java:125)
+	at org.gradle.internal.execution.steps.AbstractSkipEmptyWorkStep.execute(AbstractSkipEmptyWorkStep.java:61)
+	at org.gradle.internal.execution.steps.AbstractSkipEmptyWorkStep.execute(AbstractSkipEmptyWorkStep.java:36)
+	at org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsStartedStep.execute(MarkSnapshottingInputsStartedStep.java:38)
+	at org.gradle.internal.execution.steps.LoadPreviousExecutionStateStep.execute(LoadPreviousExecutionStateStep.java:36)
+	at org.gradle.internal.execution.steps.LoadPreviousExecutionStateStep.execute(LoadPreviousExecutionStateStep.java:23)
+	at org.gradle.internal.execution.steps.HandleStaleOutputsStep.execute(HandleStaleOutputsStep.java:75)
+	at org.gradle.internal.execution.steps.HandleStaleOutputsStep.execute(HandleStaleOutputsStep.java:41)
+	at org.gradle.internal.execution.steps.AssignMutableWorkspaceStep.lambda$execute$0(AssignMutableWorkspaceStep.java:35)
+	at org.gradle.api.internal.tasks.execution.TaskExecution$4.withWorkspace(TaskExecution.java:289)
+	at org.gradle.internal.execution.steps.AssignMutableWorkspaceStep.execute(AssignMutableWorkspaceStep.java:31)
+	at org.gradle.internal.execution.steps.AssignMutableWorkspaceStep.execute(AssignMutableWorkspaceStep.java:22)
+	at org.gradle.internal.execution.steps.ChoosePipelineStep.execute(ChoosePipelineStep.java:40)
+	at org.gradle.internal.execution.steps.ChoosePipelineStep.execute(ChoosePipelineStep.java:23)
+	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.lambda$execute$2(ExecuteWorkBuildOperationFiringStep.java:67)
+	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.execute(ExecuteWorkBuildOperationFiringStep.java:67)
+	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.execute(ExecuteWorkBuildOperationFiringStep.java:39)
+	at org.gradle.internal.execution.steps.IdentityCacheStep.execute(IdentityCacheStep.java:46)
+	at org.gradle.internal.execution.steps.IdentityCacheStep.execute(IdentityCacheStep.java:34)
+	at org.gradle.internal.execution.steps.IdentifyStep.execute(IdentifyStep.java:48)
+	at org.gradle.internal.execution.steps.IdentifyStep.execute(IdentifyStep.java:35)
+	at org.gradle.internal.execution.impl.DefaultExecutionEngine$1.execute(DefaultExecutionEngine.java:61)
+	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.executeIfValid(ExecuteActionsTaskExecuter.java:127)
+	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.execute(ExecuteActionsTaskExecuter.java:116)
+	at org.gradle.api.internal.tasks.execution.ProblemsTaskPathTrackingTaskExecuter.execute(ProblemsTaskPathTrackingTaskExecuter.java:40)
+	at org.gradle.api.internal.tasks.execution.FinalizePropertiesTaskExecuter.execute(FinalizePropertiesTaskExecuter.java:46)
+	at org.gradle.api.internal.tasks.execution.ResolveTaskExecutionModeExecuter.execute(ResolveTaskExecutionModeExecuter.java:51)
+	at org.gradle.api.internal.tasks.execution.SkipTaskWithNoActionsExecuter.execute(SkipTaskWithNoActionsExecuter.java:57)
+	at org.gradle.api.internal.tasks.execution.SkipOnlyIfTaskExecuter.execute(SkipOnlyIfTaskExecuter.java:74)
+	at org.gradle.api.internal.tasks.execution.CatchExceptionTaskExecuter.execute(CatchExceptionTaskExecuter.java:36)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.executeTask(EventFiringTaskExecuter.java:77)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.call(EventFiringTaskExecuter.java:55)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.call(EventFiringTaskExecuter.java:52)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:210)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:205)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:67)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:60)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:167)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:60)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:54)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter.execute(EventFiringTaskExecuter.java:52)
+	at org.gradle.execution.plan.LocalTaskNodeExecutor.execute(LocalTaskNodeExecutor.java:42)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(DefaultTaskExecutionGraph.java:331)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(DefaultTaskExecutionGraph.java:318)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.lambda$execute$0(DefaultTaskExecutionGraph.java:314)
+	at org.gradle.internal.operations.CurrentBuildOperationRef.with(CurrentBuildOperationRef.java:85)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:314)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:303)
+	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.execute(DefaultPlanExecutor.java:459)
+	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.run(DefaultPlanExecutor.java:376)
+	at org.gradle.internal.concurrent.ExecutorPolicy$CatchAndRecordFailures.onExecute(ExecutorPolicy.java:64)
+	at org.gradle.internal.concurrent.AbstractManagedExecutor$1.run(AbstractManagedExecutor.java:48)
+Caused by: org.jetbrains.kotlin.gradle.tasks.CompilationErrorException: Compilation error. See log for more details
+	at org.jetbrains.kotlin.gradle.tasks.TasksUtilsKt.throwExceptionIfCompilationFailed(tasksUtils.kt:21)
+	at org.jetbrains.kotlin.compilerRunner.GradleKotlinCompilerWork.run(GradleKotlinCompilerWork.kt:119)
+	at org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction.execute(GradleCompilerRunnerWithWorkers.kt:76)
+	at org.gradle.workers.internal.DefaultWorkerServer.execute(DefaultWorkerServer.java:63)
+	at org.gradle.workers.internal.NoIsolationWorkerFactory$1$1.create(NoIsolationWorkerFactory.java:66)
+	at org.gradle.workers.internal.NoIsolationWorkerFactory$1$1.create(NoIsolationWorkerFactory.java:62)
+	at org.gradle.internal.classloader.ClassLoaderUtils.executeInClassloader(ClassLoaderUtils.java:100)
+	at org.gradle.workers.internal.NoIsolationWorkerFactory$1.lambda$execute$0(NoIsolationWorkerFactory.java:62)
+	at org.gradle.workers.internal.AbstractWorker$1.call(AbstractWorker.java:44)
+	at org.gradle.workers.internal.AbstractWorker$1.call(AbstractWorker.java:41)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:210)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:205)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:67)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:60)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:167)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:60)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:54)
+	at org.gradle.workers.internal.AbstractWorker.executeWrappedInBuildOperation(AbstractWorker.java:41)
+	at org.gradle.workers.internal.NoIsolationWorkerFactory$1.execute(NoIsolationWorkerFactory.java:59)
+	at org.gradle.workers.internal.DefaultWorkerExecutor.lambda$submitWork$0(DefaultWorkerExecutor.java:174)
+	at org.gradle.internal.work.DefaultConditionalExecutionQueue$ExecutionRunner.runExecution(DefaultConditionalExecutionQueue.java:194)
+	at org.gradle.internal.work.DefaultConditionalExecutionQueue$ExecutionRunner.access$700(DefaultConditionalExecutionQueue.java:127)
+	at org.gradle.internal.work.DefaultConditionalExecutionQueue$ExecutionRunner$1.run(DefaultConditionalExecutionQueue.java:169)
+	at org.gradle.internal.Factories$1.create(Factories.java:31)
+	at org.gradle.internal.work.DefaultWorkerLeaseService.withLocks(DefaultWorkerLeaseService.java:263)
+	at org.gradle.internal.work.DefaultWorkerLeaseService.runAsWorkerThread(DefaultWorkerLeaseService.java:127)
+	at org.gradle.internal.work.DefaultWorkerLeaseService.runAsWorkerThread(DefaultWorkerLeaseService.java:132)
+	at org.gradle.internal.work.DefaultConditionalExecutionQueue$ExecutionRunner.runBatch(DefaultConditionalExecutionQueue.java:164)
+	at org.gradle.internal.work.DefaultConditionalExecutionQueue$ExecutionRunner.run(DefaultConditionalExecutionQueue.java:133)
+	... 2 more
+
+
+BUILD FAILED in 2s
+33 actionable tasks: 1 executed, 32 up-to-date
+Watched directory hierarchies: [C:\Registro empleados]

@@ -82,4 +82,17 @@ interface EmpleadoDao {
     
     @Query("UPDATE empleados SET nombreCompleto = :nuevoNombre, legajo = :nuevoLegajo WHERE sector = :sector AND nombreCompleto LIKE '%' || :apellidoBusqueda || '%' AND nombreCompleto LIKE '%' || :nombreBusqueda || '%'")
     suspend fun corregirEmpleadoPorNombre(sector: String, apellidoBusqueda: String, nombreBusqueda: String, nuevoNombre: String, nuevoLegajo: String?)
+
+    @Query("SELECT * FROM empleados WHERE employee_id_backend = :backendId LIMIT 1")
+    suspend fun getEmpleadoByBackendId(backendId: String): EmpleadoEntity?
+
+    @Query("""
+        DELETE FROM empleados 
+        WHERE id NOT IN (
+            SELECT MIN(id) 
+            FROM empleados 
+            GROUP BY COALESCE(employee_id_backend, id)
+        )
+    """)
+    suspend fun borrarDuplicadosPorBackendId()
 }

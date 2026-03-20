@@ -10,3 +10,8 @@ export const logger = {
     }
   },
 };
+
+export function logTiming(endpoint: string, step: string, t0: number): void {
+  const ms = Math.round(performance.now() - t0);
+  logger.info(`TIMING endpoint=${endpoint} step=${step} ms=${ms}`);
+}

@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.registro.empleados.data.device.DeviceIdentityManager
 import com.registro.empleados.data.local.preferences.AppPreferences
 import com.registro.empleados.domain.model.EncargadoSector
-import com.registro.empleados.domain.usecase.empleado.CargarEmpleadosPorSectorUseCase
+import com.registro.empleados.domain.usecase.sync.SyncEmpleadosFromApiUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,7 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class BienvenidaViewModel @Inject constructor(
     private val appPreferences: AppPreferences,
-    private val cargarEmpleadosPorSectorUseCase: CargarEmpleadosPorSectorUseCase,
+    private val syncEmpleadosFromApiUseCase: SyncEmpleadosFromApiUseCase,
     private val deviceIdentityManager: DeviceIdentityManager
 ) : ViewModel() {
 
@@ -51,19 +51,29 @@ class BienvenidaViewModel @Inject constructor(
                 
                 appPreferences.guardarConfiguracion(encargado.nombreEncargado, encargado.sector)
                 
-                // Registrar dispositivo en backend (POST /auth/device/register) y guardar token
+                // Registrar dispositivo en backend (POST /auth/device/register) y guardar token + sector_id
                 deviceIdentityManager.registerWhenConfigSaved(encargado.nombreEncargado, encargado.sector)
                 
                 Log.d("BienvenidaVM", "Configuración guardada exitosamente")
                 
-                val resultadoCarga = cargarEmpleadosPorSectorUseCase()
-                Log.d("BienvenidaVM", "Resultado carga empleados: $resultadoCarga")
-                
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        configuracionGuardada = true
-                    )
+                // Llamar a API real: GET /api/employees?sector_id={id} y poblar lista desde Turso
+                when (val result = syncEmpleadosFromApiUseCase()) {
+                    is SyncEmpleadosFromApiUseCase.Result.Success -> {
+                        Log.d("BienvenidaVM", "Sync empleados desde API OK")
+                        _uiState.update {
+                            it.copy(isLoading = false, configuracionGuardada = true, error = null)
+                        }
+                    }
+                    is SyncEmpleadosFromApiUseCase.Result.Error -> {
+                        Log.e("BienvenidaVM", "Sync empleados falló: ${result.message}")
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false,
+                                configuracionGuardada = false,
+                                error = "No se pudieron cargar los empleados: ${result.message}"
+                            )
+                        }
+                    }
                 }
             } catch (e: Exception) {
                 Log.e("BienvenidaVM", "Error al guardar configuración", e)

@@ -32,6 +32,8 @@ class InsertEmpleadoUseCase @Inject constructor(
         
         val empleado = Empleado(
             legajo = legajo.trim().uppercase(),
+            dni = legajo.trim().uppercase(),
+            employeeIdBackend = java.util.UUID.randomUUID().toString(),
             nombreCompleto = nombreCompleto.trim(),
             sector = sector.trim(),
             fechaIngreso = fechaIngreso,

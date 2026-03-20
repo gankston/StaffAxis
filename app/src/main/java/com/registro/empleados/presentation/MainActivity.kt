@@ -28,7 +28,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
 import com.registro.empleados.data.local.preferences.AppPreferences
 import com.registro.empleados.presentation.navigation.AppNavigation
-import com.registro.empleados.presentation.screens.BienvenidaScreen
+import com.registro.empleados.presentation.screens.SetupScreen
+import com.registro.empleados.presentation.screens.WelcomeScreen
 import com.registro.empleados.presentation.theme.AsistenciaTheme
 import com.registro.empleados.presentation.screens.UpdateDownloadScreen
 import com.registro.empleados.presentation.utils.UpdateChecker
@@ -91,6 +92,8 @@ fun AsistenciaApp(
 ) {
     // Estado reactivo para la configuración
     var configuracionCompletada by remember { mutableStateOf(appPreferences.tieneConfiguracion()) }
+    // Navegación inicial: WelcomeScreen es startDestination; al tocar Continuar pasamos a SetupScreen
+    var showSetupScreen by remember { mutableStateOf(false) }
     
     // Estado para la pantalla de actualización
     var updateInfo by remember { mutableStateOf<UpdateInfo?>(null) }
@@ -119,17 +122,19 @@ fun AsistenciaApp(
             }
         )
     } ?: run {
-        // Mostrar app normal o bienvenida
+        // startDestination: WelcomeScreen; luego SetupScreen; luego app principal
         if (configuracionCompletada) {
-            // Navegación normal de la app
             AppNavigation(windowSizeClass = windowSizeClass)
-        } else {
-            // Pantalla de bienvenida
-            BienvenidaScreen(
+        } else if (showSetupScreen) {
+            SetupScreen(
                 onConfiguracionCompletada = {
                     Log.d("MainActivity", "Configuración completada, navegando a app principal")
                     configuracionCompletada = true
                 }
+            )
+        } else {
+            WelcomeScreen(
+                onContinuar = { showSetupScreen = true }
             )
         }
     }

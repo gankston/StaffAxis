@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.work.BackoffPolicy
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
@@ -30,7 +31,7 @@ class WorkManagerInitializer @Inject constructor(
         setupPushOutboxWork()
         triggerPushOutboxNow()
         setupPullApprovedWork()
-        triggerPullApprovedNow()
+        triggerPullApprovedNow(staggerSeconds = 30)
     }
     
     /**
@@ -71,6 +72,8 @@ class WorkManagerInitializer @Inject constructor(
     private fun setupPushOutboxWork() {
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
+            .setRequiresBatteryNotLow(true)
+            .setRequiresStorageNotLow(true)
             .build()
         
         val pushOutboxWork = PeriodicWorkRequestBuilder<PushOutboxWorker>(
@@ -94,14 +97,18 @@ class WorkManagerInitializer @Inject constructor(
     
     /**
      * Dispara el push del outbox al arrancar la app (una vez, cuando haya red).
+     * initialDelay 10s para no spamear al inicio.
      */
     private fun triggerPushOutboxNow() {
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
+            .setRequiresBatteryNotLow(true)
+            .setRequiresStorageNotLow(true)
             .build()
         
         val oneTimeWork = OneTimeWorkRequestBuilder<PushOutboxWorker>()
             .setConstraints(constraints)
+            .setInitialDelay(10, TimeUnit.SECONDS)
             .setBackoffCriteria(
                 BackoffPolicy.EXPONENTIAL,
                 PushOutboxWorker.BACKOFF_DELAY,
@@ -110,7 +117,11 @@ class WorkManagerInitializer @Inject constructor(
             .addTag(PushOutboxWorker.WORK_TAG)
             .build()
         
-        WorkManager.getInstance(context).enqueue(oneTimeWork)
+        WorkManager.getInstance(context).enqueueUniqueWork(
+            PushOutboxWorker.WORK_NAME,
+            ExistingWorkPolicy.KEEP,
+            oneTimeWork
+        )
     }
     
     /**
@@ -119,6 +130,8 @@ class WorkManagerInitializer @Inject constructor(
     private fun setupPullApprovedWork() {
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
+            .setRequiresBatteryNotLow(true)
+            .setRequiresStorageNotLow(true)
             .build()
         
         val pullApprovedWork = PeriodicWorkRequestBuilder<PullApprovedWorker>(
@@ -142,13 +155,16 @@ class WorkManagerInitializer @Inject constructor(
     
     /**
      * Dispara el pull de approved al arrancar la app.
+     * @param staggerSeconds retraso inicial para no ejecutar junto con PushOutbox (evitar tormenta).
      */
-    private fun triggerPullApprovedNow() {
+    private fun triggerPullApprovedNow(staggerSeconds: Long = 0) {
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
+            .setRequiresBatteryNotLow(true)
+            .setRequiresStorageNotLow(true)
             .build()
         
-        val oneTimeWork = OneTimeWorkRequestBuilder<PullApprovedWorker>()
+        val builder = OneTimeWorkRequestBuilder<PullApprovedWorker>()
             .setConstraints(constraints)
             .setBackoffCriteria(
                 BackoffPolicy.EXPONENTIAL,
@@ -156,9 +172,16 @@ class WorkManagerInitializer @Inject constructor(
                 PullApprovedWorker.BACKOFF_UNIT
             )
             .addTag(PullApprovedWorker.WORK_TAG)
-            .build()
+        if (staggerSeconds > 0) {
+            builder.setInitialDelay(staggerSeconds, TimeUnit.SECONDS)
+        }
+        val oneTimeWork = builder.build()
         
-        WorkManager.getInstance(context).enqueue(oneTimeWork)
+        WorkManager.getInstance(context).enqueueUniqueWork(
+            PullApprovedWorker.WORK_NAME,
+            ExistingWorkPolicy.KEEP,
+            oneTimeWork
+        )
     }
     
     /**

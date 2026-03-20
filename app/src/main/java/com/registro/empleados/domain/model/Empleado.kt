@@ -8,6 +8,8 @@ import java.time.LocalDate
  */
 data class Empleado(
     val id: Long = 0,
+    /** ID del empleado en el backend (API). Obligatorio para cargar horas y enviar cierre de tarja. */
+    val employeeIdBackend: String? = null,
     val legajo: String?,
     val nombreCompleto: String,
     val sector: String,
@@ -15,7 +17,8 @@ data class Empleado(
     val activo: Boolean = true,
     val fechaCreacion: LocalDate = LocalDate.now(),
     val observacion: String? = null,
-    val observaciones: String? = null
+    val observaciones: String? = null,
+    val dni: String? = null
 ) {
     /**
      * Nombre del empleado (primera palabra del nombreCompleto).

@@ -2,7 +2,6 @@ package com.registro.empleados.domain.usecase.export;
 
 import com.registro.empleados.data.export.CsvExportService;
 import com.registro.empleados.data.export.ExcelExportService;
-import com.registro.empleados.domain.repository.AusenciaRepository;
 import com.registro.empleados.domain.repository.EmpleadoRepository;
 import com.registro.empleados.domain.repository.RegistroAsistenciaRepository;
 import dagger.internal.DaggerGenerated;
@@ -34,40 +33,34 @@ public final class ExportarRegistrosAsistenciaUseCase_Factory implements Factory
 
   private final Provider<RegistroAsistenciaRepository> registroAsistenciaRepositoryProvider;
 
-  private final Provider<AusenciaRepository> ausenciaRepositoryProvider;
-
   public ExportarRegistrosAsistenciaUseCase_Factory(
       Provider<ExcelExportService> excelExportServiceProvider,
       Provider<CsvExportService> csvExportServiceProvider,
       Provider<EmpleadoRepository> empleadoRepositoryProvider,
-      Provider<RegistroAsistenciaRepository> registroAsistenciaRepositoryProvider,
-      Provider<AusenciaRepository> ausenciaRepositoryProvider) {
+      Provider<RegistroAsistenciaRepository> registroAsistenciaRepositoryProvider) {
     this.excelExportServiceProvider = excelExportServiceProvider;
     this.csvExportServiceProvider = csvExportServiceProvider;
     this.empleadoRepositoryProvider = empleadoRepositoryProvider;
     this.registroAsistenciaRepositoryProvider = registroAsistenciaRepositoryProvider;
-    this.ausenciaRepositoryProvider = ausenciaRepositoryProvider;
   }
 
   @Override
   public ExportarRegistrosAsistenciaUseCase get() {
-    return newInstance(excelExportServiceProvider.get(), csvExportServiceProvider.get(), empleadoRepositoryProvider.get(), registroAsistenciaRepositoryProvider.get(), ausenciaRepositoryProvider.get());
+    return newInstance(excelExportServiceProvider.get(), csvExportServiceProvider.get(), empleadoRepositoryProvider.get(), registroAsistenciaRepositoryProvider.get());
   }
 
   public static ExportarRegistrosAsistenciaUseCase_Factory create(
       Provider<ExcelExportService> excelExportServiceProvider,
       Provider<CsvExportService> csvExportServiceProvider,
       Provider<EmpleadoRepository> empleadoRepositoryProvider,
-      Provider<RegistroAsistenciaRepository> registroAsistenciaRepositoryProvider,
-      Provider<AusenciaRepository> ausenciaRepositoryProvider) {
-    return new ExportarRegistrosAsistenciaUseCase_Factory(excelExportServiceProvider, csvExportServiceProvider, empleadoRepositoryProvider, registroAsistenciaRepositoryProvider, ausenciaRepositoryProvider);
+      Provider<RegistroAsistenciaRepository> registroAsistenciaRepositoryProvider) {
+    return new ExportarRegistrosAsistenciaUseCase_Factory(excelExportServiceProvider, csvExportServiceProvider, empleadoRepositoryProvider, registroAsistenciaRepositoryProvider);
   }
 
   public static ExportarRegistrosAsistenciaUseCase newInstance(
       ExcelExportService excelExportService, CsvExportService csvExportService,
       EmpleadoRepository empleadoRepository,
-      RegistroAsistenciaRepository registroAsistenciaRepository,
-      AusenciaRepository ausenciaRepository) {
-    return new ExportarRegistrosAsistenciaUseCase(excelExportService, csvExportService, empleadoRepository, registroAsistenciaRepository, ausenciaRepository);
+      RegistroAsistenciaRepository registroAsistenciaRepository) {
+    return new ExportarRegistrosAsistenciaUseCase(excelExportService, csvExportService, empleadoRepository, registroAsistenciaRepository);
   }
 }

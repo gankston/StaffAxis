@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -71,6 +72,19 @@ class DevicePrefs @Inject constructor(
     fun getDeviceTokenSync(): String? = runBlocking { getDeviceToken() }
 
     /**
+     * Timestamp del último intento de register (para rate-limit).
+     */
+    suspend fun getLastRegisterAttemptMillis(): Long {
+        return dataStore.data.first()[KEY_LAST_REGISTER_ATTEMPT] ?: 0L
+    }
+
+    suspend fun setLastRegisterAttemptMillis(millis: Long) {
+        dataStore.edit { prefs ->
+            prefs[KEY_LAST_REGISTER_ATTEMPT] = millis
+        }
+    }
+
+    /**
      * Limpia las credenciales del dispositivo (logout).
      */
     suspend fun clearDeviceCredentials() {
@@ -83,5 +97,6 @@ class DevicePrefs @Inject constructor(
     companion object {
         private val KEY_DEVICE_TOKEN = stringPreferencesKey("device_token")
         private val KEY_DEVICE_ID = stringPreferencesKey("device_id")
+        private val KEY_LAST_REGISTER_ATTEMPT = longPreferencesKey("last_register_attempt_millis")
     }
 }

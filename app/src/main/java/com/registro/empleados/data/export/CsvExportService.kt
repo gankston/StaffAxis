@@ -2,7 +2,6 @@ package com.registro.empleados.data.export
 
 import android.content.Context
 import android.util.Log
-import com.registro.empleados.domain.model.Ausencia
 import com.registro.empleados.domain.model.Empleado
 import com.registro.empleados.domain.model.RegistroAsistencia
 import java.io.File
@@ -38,7 +37,6 @@ class CsvExportService @Inject constructor(
         periodoInicio: java.time.LocalDate,
         periodoFin: java.time.LocalDate,
         nombreEncargado: String = "",
-        ausencias: List<Ausencia> = emptyList(),
         nombreSector: String = ""
     ): String {
         // Generar nombre del archivo: asistencia[NombreDelSector][FechaDelDiaDeExportacion].csv
@@ -86,11 +84,8 @@ class CsvExportService @Inject constructor(
             fileWriter = FileWriter(file)
             Log.d("CsvExport", "FileWriter inicializado")
             
-        // Crear mapa de empleados por clave consistente usada en toda la app
-        // Si el DNI es nulo, usamos una clave sintética estable basada en el nombre
-        val empleadosMap = empleados.associateBy { emp ->
-            emp.legajo ?: "SIN_LEGAJO_${emp.nombreCompleto.hashCode()}"
-        }
+        // Mapa de empleados por ID real del backend (usado en registros.legajoEmpleado)
+        val empleadosMap = empleados.mapNotNull { emp -> emp.employeeIdBackend?.let { id -> id to emp } }.toMap()
             Log.d("CsvExport", "Mapa de empleados creado: ${empleadosMap.size} empleados")
             
             // AGREGAR ENCABEZADO DE ENCARGADO
@@ -117,16 +112,8 @@ class CsvExportService @Inject constructor(
             val registrosPorEmpleado = registros.groupBy { it.legajoEmpleado }
             Log.d("CsvExport", "Registros agrupados por ${registrosPorEmpleado.size} empleados")
             
-            // Obtener empleados que solo tienen ausencias (sin registros de asistencia)
-            val empleadosConAusencias = ausencias.map { it.legajoEmpleado }.distinct()
-            val empleadosSoloConAusencias = empleadosConAusencias.filter { legajo ->
-                legajo !in registrosPorEmpleado.keys
-            }
-            Log.d("CsvExport", "Empleados solo con ausencias: ${empleadosSoloConAusencias.size}")
-            
             // Crear lista combinada de todos los empleados a exportar
             val todosLosEmpleados = registrosPorEmpleado.keys.toMutableSet()
-            todosLosEmpleados.addAll(empleadosSoloConAusencias)
             
             // ELIMINAR DUPLICADOS comparando DNI únicamente (si existe)
             val empleadosUnicos = mutableSetOf<String>()
@@ -156,12 +143,8 @@ class CsvExportService @Inject constructor(
                     // N (número de fila)
                     fila.add(filaIndex.toString())
                     
-                    // DNI (mostrar "Sin datos" si no tiene)
-                    val dniParaMostrar = when {
-                        empleado?.legajo != null -> empleado.legajo
-                        legajoEmpleado.startsWith("SIN_LEGAJO_") -> "Sin datos"
-                        else -> legajoEmpleado
-                    }
+                    // DNI (mostrar "Sin datos" si no tiene legajo)
+                    val dniParaMostrar = empleado.legajo ?: "Sin datos"
                     fila.add(dniParaMostrar)
                     
                     // RUTA 5 (nombre del empleado)
@@ -174,36 +157,16 @@ class CsvExportService @Inject constructor(
                         fecha.dayOfMonth
                     }
                     
-                    // Crear mapa de fechas con ausencias para este empleado
-                    val ausenciasEmpleado = ausencias.filter { 
-                        it.legajoEmpleado == legajoEmpleado 
-                    }
-                    val fechasConAusencia = mutableSetOf<Int>()
-                    ausenciasEmpleado.forEach { ausencia ->
-                        val fechasAfectadas = ausencia.getFechasAfectadas()
-                        fechasAfectadas.forEach { fecha ->
-                            if (fecha.dayOfMonth in diasDelPeriodo) {
-                                fechasConAusencia.add(fecha.dayOfMonth)
-                            }
-                        }
-                    }
-                    
                     var totalHoras = 0
                     
                     // Llenar columnas de días
                     diasDelPeriodo.forEach { dia ->
-                        // Si hay ausencia en este día, escribir 0
-                        if (dia in fechasConAusencia) {
-                            fila.add("0")
-                            // No sumar al total si es ausencia
+                        val horasDelDia = horasPorFecha[dia]?.horasTrabajadas ?: 0
+                        if (horasDelDia > 0) {
+                            fila.add(horasDelDia.toString())
+                            totalHoras += horasDelDia
                         } else {
-                            val horasDelDia = horasPorFecha[dia]?.horasTrabajadas ?: 0
-                            if (horasDelDia > 0) {
-                                fila.add(horasDelDia.toString())
-                                totalHoras += horasDelDia
-                            } else {
-                                fila.add("") // Celda vacía si no hay horas
-                            }
+                            fila.add("") // Celda vacía si no hay horas
                         }
                     }
                     

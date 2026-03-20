@@ -3,7 +3,7 @@ import { AppError } from "../middleware/errorHandler.js";
 
 export async function listSectors() {
   const result = await db.execute({
-    sql: "SELECT id, name FROM sectors ORDER BY name",
+    sql: "SELECT id, name, encargado FROM sectors ORDER BY name ASC",
     args: [],
   });
   return { sectors: result.rows };

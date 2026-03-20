@@ -13,7 +13,10 @@ object AusenciaMapper {
             fechaInicio = entity.fechaInicio,
             fechaFin = entity.fechaFin,
             motivo = entity.motivo,
-            fechaCreacion = entity.fechaCreacion
+            observaciones = entity.observaciones,
+            esJustificada = entity.esJustificada,
+            fechaCreacion = entity.fechaCreacion,
+            syncStatus = entity.syncStatus
         )
     }
     
@@ -25,7 +28,10 @@ object AusenciaMapper {
             fechaInicio = domain.fechaInicio,
             fechaFin = domain.fechaFin,
             motivo = domain.motivo,
-            fechaCreacion = domain.fechaCreacion
+            observaciones = domain.observaciones,
+            esJustificada = domain.esJustificada,
+            fechaCreacion = domain.fechaCreacion,
+            syncStatus = domain.syncStatus
         )
     }
 }

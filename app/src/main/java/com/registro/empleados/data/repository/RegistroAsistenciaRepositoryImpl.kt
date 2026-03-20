@@ -2,6 +2,7 @@ package com.registro.empleados.data.repository
 
 import androidx.work.BackoffPolicy
 import androidx.work.Constraints
+import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
@@ -73,25 +74,27 @@ class RegistroAsistenciaRepositoryImpl @Inject constructor(
         schedulePushOutbox()
     }
 
+    private fun computeDedupKey(employeeId: String, date: String, minutesWorked: Int?, checkIn: String?, checkOut: String?): String {
+        val m = minutesWorked ?: -1
+        val ci = checkIn ?: ""
+        val co = checkOut ?: ""
+        return "$employeeId:$date:$m:$ci:$co"
+    }
+
     private suspend fun addToOutboxIfNeeded(registro: RegistroAsistencia) {
         val employeeId = registro.legajoEmpleado
         val date = registro.fecha
         val minutesWorked = registro.horasTrabajadas * 60
         val checkIn = null
         val checkOut = null
-        val checkInOrEmpty = checkIn ?: ""
-        val checkOutOrEmpty = checkOut ?: ""
-        val minutesWorkedOrSentinel = minutesWorked
-        if (outboxDao.countPendingWithSameKey(
-                employeeId,
-                date,
-                checkInOrEmpty,
-                checkOutOrEmpty,
-                minutesWorkedOrSentinel
-            ) > 0
-        ) return
+        val dedupKey = computeDedupKey(employeeId, date, minutesWorked, checkIn, checkOut)
+        if (outboxDao.countPendingByDedupKey(dedupKey) > 0) {
+            android.util.Log.i("StaffAxis", "DEDUP local hit")
+            return
+        }
         val outbox = OutboxSubmissionEntity(
             id = UUID.randomUUID().toString(),
+            dedupKey = dedupKey,
             employeeId = employeeId,
             date = date,
             minutesWorked = minutesWorked,
@@ -115,7 +118,11 @@ class RegistroAsistenciaRepositoryImpl @Inject constructor(
             .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, PushOutboxWorker.BACKOFF_DELAY, PushOutboxWorker.BACKOFF_UNIT)
             .addTag(PushOutboxWorker.WORK_TAG)
             .build()
-        workManager.enqueue(work)
+        workManager.enqueueUniqueWork(
+            PushOutboxWorker.WORK_NAME,
+            ExistingWorkPolicy.KEEP,
+            work
+        )
     }
 
     override suspend fun deleteRegistro(id: Long) {

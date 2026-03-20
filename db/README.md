@@ -114,16 +114,23 @@ Si la columna `id` muestra `type=TEXT`, el schema es correcto. No hace falta mig
 
 ### Migraciones
 
-Si tu base fue creada con un schema antiguo donde `employees.id` era INTEGER, ejecutar:
+**001 - employees.id como TEXT** (solo si tu base tiene `employees.id` como INTEGER):
 
 ```bash
 turso db shell staffaxis < db/migrations/001_employees_id_text.sql
+```
+
+**002 - UNIQUE index para dedup en attendance_submissions** (recomendado en prod):
+
+Garantiza idempotencia: un solo registro por `(device_id, employee_id, date)`. Elimina duplicados existentes conservando el más antiguo antes de crear el índice.
+
+```bash
+turso db shell staffaxis < db/migrations/002_attendance_submissions_dedup_unique.sql
 ```
 
 O desde shell interactivo:
 
 ```sql
 .read db/migrations/001_employees_id_text.sql
+.read db/migrations/002_attendance_submissions_dedup_unique.sql
 ```
-
-La migración crea `employees_new` con `id TEXT`, copia datos con `CAST(id AS TEXT)`, elimina la tabla vieja y renombra. Los índices y el trigger se recrean.

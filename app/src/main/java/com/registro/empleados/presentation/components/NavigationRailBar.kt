@@ -29,14 +29,6 @@ fun NavigationRailBar(
             onClick = { navController.navigate("dashboard") }
         )
         
-        
-        NavigationRailItem(
-            icon = { Icon(Icons.Default.EventBusy, contentDescription = "Ausencias") },
-            label = { Text("Ausencias") },
-            selected = currentDestination?.hierarchy?.any { it.route == "ausencias" } == true,
-            onClick = { navController.navigate("ausencias") }
-        )
-        
         NavigationRailItem(
             icon = { Icon(Icons.Default.Assessment, contentDescription = "Reportes") },
             label = { Text("Reportes") },

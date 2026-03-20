@@ -50,6 +50,14 @@ fun ReportesScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
+
+    val snackbarHostState = remember { SnackbarHostState() }
+    LaunchedEffect(uiState.tarjaSnackbar) {
+        uiState.tarjaSnackbar?.let { msg ->
+            snackbarHostState.showSnackbar(message = msg)
+            viewModel.clearMessages()
+        }
+    }
     
     // Función para compartir archivos
     fun compartirArchivo(rutaArchivo: String) {
@@ -119,13 +127,17 @@ fun ReportesScreen(
 
     val scrollState = rememberScrollState()
     
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(padding)
-            .verticalScroll(scrollState),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
+    Scaffold(
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .padding(innerPadding)
+                .verticalScroll(scrollState),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
         // Header con logo StaffAxis y botón de filtros (ARRIBA DEL TODO)
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -412,10 +424,10 @@ fun ReportesScreen(
                         ) {
                             Text("Mes anterior")
                         }
-                    }
                 }
             }
         }
+    }
         
         // Botones de exportación
         Card(
@@ -433,110 +445,49 @@ fun ReportesScreen(
                     modifier = Modifier.padding(horizontal = 4.dp, vertical = 4.dp)
                 )
                 
-                Row(
+                Button(
+                    onClick = { viewModel.submitTarjaToServer() },
                     modifier = Modifier
                         .fillMaxWidth()
+                        .height(56.dp)
                         .padding(horizontal = 4.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+                    contentPadding = PaddingValues(0.dp),
+                    shape = RoundedCornerShape(16.dp),
+                    enabled = !uiState.submittingTarja
                 ) {
-                    // Botón Excel
-                    Button(
-                        onClick = { 
-                            android.util.Log.d("ReportesScreen", "Click en botón Excel")
-                            viewModel.exportarAExcel()
-                        },
+                    Box(
                         modifier = Modifier
-                            .weight(1f)
-                            .height(56.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
-                        contentPadding = PaddingValues(0.dp),
-                        shape = RoundedCornerShape(16.dp),
-                        enabled = !uiState.exportandoExcel
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .background(
-                                    brush = Brush.horizontalGradient(
-                                        colors = listOf(
-                                            Color(0xFF5E35B1),
-                                            Color(0xFF26C6DA)
-                                        )
+                            .fillMaxSize()
+                            .background(
+                                brush = Brush.horizontalGradient(
+                                    colors = listOf(
+                                        Color(0xFF5E35B1),
+                                        Color(0xFF26C6DA)
                                     )
-                                ),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            if (uiState.exportandoExcel) {
-                                CircularProgressIndicator(
-                                    modifier = Modifier.size(16.dp),
-                                    strokeWidth = 2.dp,
-                                    color = Color.White
                                 )
-                            } else {
-                                Row(verticalAlignment = Alignment.CenterVertically) {
-                                    Icon(
-                                        Icons.Default.TableChart,
-                                        contentDescription = null,
-                                        tint = Color.White
-                                    )
-                                    Spacer(modifier = Modifier.width(8.dp))
-                                    Text(
-                                        "Excel",
-                                        color = Color.White,
-                                        fontWeight = FontWeight.Bold
-                                    )
-                                }
-                            }
-                        }
-                    }
-                    
-                    // Botón CSV
-                    Button(
-                        onClick = { 
-                            android.util.Log.d("ReportesScreen", "Click en botón CSV")
-                            viewModel.exportarACSV()
-                        },
-                        modifier = Modifier
-                            .weight(1f)
-                            .height(56.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
-                        contentPadding = PaddingValues(0.dp),
-                        shape = RoundedCornerShape(16.dp),
-                        enabled = !uiState.exportandoCSV
+                            ),
+                        contentAlignment = Alignment.Center
                     ) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .background(
-                                    brush = Brush.horizontalGradient(
-                                        colors = listOf(
-                                            Color(0xFF5E35B1),
-                                            Color(0xFF26C6DA)
-                                        )
-                                    )
-                                ),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            if (uiState.exportandoCSV) {
-                                CircularProgressIndicator(
-                                    modifier = Modifier.size(16.dp),
-                                    strokeWidth = 2.dp,
-                                    color = Color.White
+                        if (uiState.submittingTarja) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(18.dp),
+                                strokeWidth = 2.dp,
+                                color = Color.White
+                            )
+                        } else {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(
+                                    Icons.Default.Send,
+                                    contentDescription = null,
+                                    tint = Color.White
                                 )
-                            } else {
-                                Row(verticalAlignment = Alignment.CenterVertically) {
-                                    Icon(
-                                        Icons.Default.GridOn,
-                                        contentDescription = null,
-                                        tint = Color.White
-                                    )
-                                    Spacer(modifier = Modifier.width(8.dp))
-                                    Text(
-                                        "CSV",
-                                        color = Color.White,
-                                        fontWeight = FontWeight.Bold
-                                    )
-                                }
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text(
+                                    text = "Realizar Cierre de Tarja",
+                                    color = Color.White,
+                                    fontWeight = FontWeight.Bold
+                                )
                             }
                         }
                     }
@@ -584,7 +535,19 @@ fun ReportesScreen(
             }
         }
         
+        // Diálogo de resultado de envío (Tarja)
+        if (uiState.showSubmissionResult) {
+            SubmissionResultDialog(
+                success = uiState.submissionResultSuccess,
+                message = if (uiState.submissionResultSuccess) 
+                    uiState.mensaje ?: "El cierre de tarja se procesó correctamente."
+                else 
+                    uiState.error ?: "Ocurrió un error al intentar enviar el cierre de tarja.",
+                onDismiss = { viewModel.clearMessages() }
+            )
+        }
     }
+}
 }
 
 @Composable
@@ -643,4 +606,55 @@ fun StatItem(value: String, label: String, icon: ImageVector) {
             )
         }
     }
+}
+@Composable
+fun SubmissionResultDialog(
+    success: Boolean,
+    message: String,
+    onDismiss: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        confirmButton = {
+            TextButton(onClick = onDismiss) {
+                Text("ACEPTAR", fontWeight = FontWeight.Bold)
+            }
+        },
+        icon = {
+            Icon(
+                imageVector = if (success) Icons.Default.CheckCircle else Icons.Default.Error,
+                contentDescription = null,
+                modifier = Modifier.size(64.dp),
+                tint = if (success) Color(0xFF4CAF50) else Color(0xFFF44336)
+            )
+        },
+        title = {
+            Text(
+                text = if (success) "¡Envío Exitoso!" else "Error en el Envío",
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold,
+                color = if (success) Color(0xFF4CAF50) else Color(0xFFF44336)
+            )
+        },
+        text = {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(
+                    text = message,
+                    style = MaterialTheme.typography.bodyLarge,
+                    textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                )
+                if (!success) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = "Revise su conexión e intente nuevamente.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color.Gray
+                    )
+                }
+            }
+        },
+        shape = RoundedCornerShape(28.dp),
+        containerColor = MaterialTheme.colorScheme.surface,
+        tonalElevation = 6.dp
+    )
 }

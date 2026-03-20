@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.registro.empleados"
-    android:versionCode="12"
-    android:versionName="1.7.5" >
+    android:versionCode="28"
+    android:versionName="2.0.5" >
 
     <uses-sdk
         android:minSdkVersion="26"
@@ -40,6 +40,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Asistencia" >
+
+        <!-- Quitar inicializador por defecto: usamos Configuration.Provider en AsistenciaApplication -->
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="com.registro.empleados.androidx-startup"
+            android:exported="false" >
+            <meta-data
+                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+                android:value="androidx.startup" />
+            <meta-data
+                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+                android:value="androidx.startup" />
+            <meta-data
+                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+                android:value="androidx.startup" />
+        </provider>
+
         <activity
             android:name="com.registro.empleados.presentation.MainActivity"
             android:exported="true"
@@ -60,23 +77,6 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
-        </provider>
-        <provider
-            android:name="androidx.startup.InitializationProvider"
-            android:authorities="com.registro.empleados.androidx-startup"
-            android:exported="false" >
-            <meta-data
-                android:name="androidx.work.WorkManagerInitializer"
-                android:value="androidx.startup" />
-            <meta-data
-                android:name="androidx.emoji2.text.EmojiCompatInitializer"
-                android:value="androidx.startup" />
-            <meta-data
-                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
-                android:value="androidx.startup" />
-            <meta-data
-                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
-                android:value="androidx.startup" />
         </provider>
 
         <service

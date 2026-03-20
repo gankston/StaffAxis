@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
@@ -13,6 +14,8 @@ import androidx.lifecycle.LifecycleEventObserver
 import com.registro.empleados.presentation.components.ResponsiveDashboard
 import com.registro.empleados.presentation.viewmodel.DashboardViewModel
 import kotlinx.coroutines.delay
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 /**
  * Pantalla principal del dashboard.
@@ -26,7 +29,16 @@ fun DashboardScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val lifecycleOwner = LocalLifecycleOwner.current
-    
+    val context = LocalContext.current
+
+    // Toast cuando falla guardar registro (evitar fallo silencioso)
+    LaunchedEffect(uiState.toastMessageRegistroHoras) {
+        uiState.toastMessageRegistroHoras?.let { msg ->
+            android.widget.Toast.makeText(context, msg, android.widget.Toast.LENGTH_LONG).show()
+            viewModel.clearToastMessageRegistroHoras()
+        }
+    }
+
     // RECARGAR cuando la pantalla se vuelve visible
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
@@ -43,11 +55,15 @@ fun DashboardScreen(
         }
     }
     
-    // Cartel de confirmación eliminado - ahora se usa el cartel flotante
-    
-        ResponsiveDashboard(
-            windowSizeClass = windowSizeClass,
-            uiState = uiState,
+    Scaffold { innerPadding ->
+        SwipeRefresh(
+            state = rememberSwipeRefreshState(isRefreshing = uiState.isRefreshing),
+            onRefresh = { viewModel.refreshData() },
+            modifier = Modifier.padding(innerPadding)
+        ) {
+            ResponsiveDashboard(
+                windowSizeClass = windowSizeClass,
+                uiState = uiState,
             onBusquedaChanged = viewModel::onBusquedaChanged,
             onAbrirDialogoRegistroHoras = viewModel::abrirDialogoRegistroHoras,
             onFechaChanged = viewModel::onFechaChanged,
@@ -85,4 +101,6 @@ fun DashboardScreen(
             onCerrarDialogoConfirmarCargaMasiva = viewModel::cerrarDialogoConfirmarCargaMasiva,
             modifier = Modifier.padding(16.dp)
         )
+        }
+    }
 }

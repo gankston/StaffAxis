@@ -35,8 +35,3 @@ val Info = Color(0xFF26C6DA)
 // Colores para indicador de horas cargadas
 val TurquesaBrillante = Color(0xFF42EEDB)
 val TurquesaOscuro = Color(0xFF30D4C2)
-
-// COLORES PARA AUSENCIAS
-val RojoAusencia = Color(0xFFFF5252)         // Rojo brillante para ausencias
-val RojoAusenciaOscuro = Color(0xFFD32F2F)   // Rojo más oscuro para gradiente
-val RojoAusenciaClaro = Color(0xFFFF6E6E)    // Rojo claro para indicadores

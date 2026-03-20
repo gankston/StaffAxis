@@ -27,15 +27,15 @@ android {
         //    - Es la versión visible para el usuario
         // 3. El APK se firmará automáticamente con la misma keystore configurada
         // ============================================
-        versionCode = 17
-        versionName = "1.7.8.2"
+        versionCode = 28
+        versionName = "2.0.5"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
         
-        buildConfigField("String", "BASE_URL", "\"http://10.0.2.2:3000/\"")
+        buildConfigField("String", "BASE_URL", "\"https://staffaxis-api-prod.pgastonor.workers.dev/\"")
         
         // Aumentar heap size para Apache POI
         javaCompileOptions {
@@ -68,28 +68,35 @@ android {
             val keystorePath = System.getenv("USERPROFILE") + "\\Desktop\\staffaxis-release.keystore"
             val keystoreFile = file(keystorePath)
             
-            // Validar que el keystore existe
-            if (!keystoreFile.exists()) {
+            // Validar keystore SOLO cuando se construye/instala Release.
+            // Si no, rompe tareas comunes (ej: compileDebugKotlin) en entornos sin keystore.
+            val isReleaseTask = gradle.startParameter.taskNames.any { it.contains("Release", ignoreCase = true) }
+            if (isReleaseTask && !keystoreFile.exists()) {
                 throw GradleException(
                     "ERROR: El keystore no se encuentra en: $keystorePath\n" +
                     "Asegúrate de que el archivo 'staffaxis-release.keystore' esté en tu Escritorio."
                 )
             }
             
-            storeFile = keystoreFile
-            storePassword = "staffaxis123"
-            keyAlias = "staffaxis"
-            keyPassword = "staffaxis123"
+            if (keystoreFile.exists()) {
+                storeFile = keystoreFile
+                storePassword = "staffaxis123"
+                keyAlias = "staffaxis"
+                keyPassword = "staffaxis123"
+            }
         }
     }
 
     buildTypes {
         debug {
-            // Debug sin minify/shrink para builds rápidas y depuración estable
             isMinifyEnabled = false
             isShrinkResources = false
             buildConfigField("String", "BASE_URL", "\"https://staffaxis-api-prod.pgastonor.workers.dev/\"")
-            signingConfig = signingConfigs.getByName("release")
+            // Para debug, si falta keystore release, usar debug signing por defecto.
+            val keystorePath = System.getenv("USERPROFILE") + "\\Desktop\\staffaxis-release.keystore"
+            if (file(keystorePath).exists()) {
+                signingConfig = signingConfigs.getByName("release")
+            }
         }
         release {
             isMinifyEnabled = true
@@ -98,7 +105,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField("String", "BASE_URL", "\"https://your-api-domain.com/\"")
+            buildConfigField("String", "BASE_URL", "\"https://staffaxis-api-prod.pgastonor.workers.dev/\"")
             // SIEMPRE usar la misma firma para release
             signingConfig = signingConfigs.getByName("release")
         }
@@ -163,6 +170,9 @@ dependencies {
     
     // JExcelApi para Excel (compatible con Android)
     implementation("net.sourceforge.jexcelapi:jxl:2.6.12")
+    
+    // Pull-to-refresh (SwipeRefresh) para Compose
+    implementation("com.google.accompanist:accompanist-swiperefresh:0.34.0")
     
     // ViewModel Compose
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")

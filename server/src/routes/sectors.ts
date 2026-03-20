@@ -11,7 +11,10 @@ const createSectorSchema = z.object({
 });
 
 sectorsRouter.get("/", async (_req, res) => {
-  const result = await db.execute("SELECT id, name FROM sectors ORDER BY name");
+  const result = await db.execute({
+    sql: "SELECT id, name, encargado FROM sectors ORDER BY name ASC",
+    args: [],
+  });
   res.json({ sectors: result.rows });
 });
 
