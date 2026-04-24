@@ -253,10 +253,10 @@ api.post("/sectors", zValidator("json", createSectorSchema), async (c) => {
   let isAdmin = false;
   try {
     const admin = authService.getAdminFromBearer(auth);
-    if (admin.username === "admin" || admin.username === "mabel") isAdmin = true;
+    if (admin.username === "admin" || admin.username === "mabel.salvita") isAdmin = true;
   } catch (e) { }
 
-  if (fallbackRole === "admin" || fallbackRole === "mabel") isAdmin = true;
+  if (fallbackRole === "admin" || fallbackRole === "mabel.salvita") isAdmin = true;
 
   if (!isAdmin) {
     console.log("Rebotado por Auth en /sectors. Headers recibidos:", c.req.header());
@@ -286,10 +286,10 @@ api.delete("/sectors/:id", async (c) => {
   let isAdmin = false;
   try {
     const admin = authService.getAdminFromBearer(auth);
-    if (admin.username === "admin" || admin.username === "mabel") isAdmin = true;
+    if (admin.username === "admin" || admin.username === "mabel.salvita") isAdmin = true;
   } catch (e) { }
 
-  if (fallbackRole === "admin" || fallbackRole === "mabel") isAdmin = true;
+  if (fallbackRole === "admin" || fallbackRole === "mabel.salvita") isAdmin = true;
 
   if (!isAdmin) return c.json({ error: "Unauthorized" }, 401);
 
@@ -322,10 +322,10 @@ api.post("/admin-users", zValidator("json", createAdminUserSchema), async (c) =>
   let isAdmin = false;
   try {
     const admin = authService.getAdminFromBearer(auth);
-    if (admin.username === "admin" || admin.username === "mabel") isAdmin = true;
+    if (admin.username === "admin" || admin.username === "mabel.salvita") isAdmin = true;
   } catch (e) { }
 
-  if (fallbackRole === "admin" || fallbackRole === "mabel") isAdmin = true;
+  if (fallbackRole === "admin" || fallbackRole === "mabel.salvita") isAdmin = true;
 
   if (!isAdmin) {
     console.log("Rebotado por Auth en /admin-users. Headers recibidos:", c.req.header());
@@ -354,9 +354,9 @@ api.get("/admin-users", async (c) => {
   let isAdmin = false;
   try {
     const admin = authService.getAdminFromBearer(auth);
-    if (admin.username === "admin" || admin.username === "mabel") isAdmin = true;
+    if (admin.username === "admin" || admin.username === "mabel.salvita") isAdmin = true;
   } catch (e) { }
-  if (fallbackRole === "admin" || fallbackRole === "mabel") isAdmin = true;
+  if (fallbackRole === "admin" || fallbackRole === "mabel.salvita") isAdmin = true;
 
   if (!isAdmin) return c.json({ error: "Unauthorized" }, 401);
 
@@ -372,9 +372,9 @@ api.put("/admin-users/:id", async (c) => {
   let isAdmin = false;
   try {
     const admin = authService.getAdminFromBearer(auth);
-    if (admin.username === "admin" || admin.username === "mabel") isAdmin = true;
+    if (admin.username === "admin" || admin.username === "mabel.salvita") isAdmin = true;
   } catch (e) { }
-  if (fallbackRole === "admin" || fallbackRole === "mabel") isAdmin = true;
+  if (fallbackRole === "admin" || fallbackRole === "mabel.salvita") isAdmin = true;
 
   if (!isAdmin) return c.json({ error: "Unauthorized" }, 401);
   const id = c.req.param("id");
@@ -402,9 +402,9 @@ api.delete("/admin-users/:id", async (c) => {
   let isAdmin = false;
   try {
     const admin = authService.getAdminFromBearer(auth);
-    if (admin.username === "admin" || admin.username === "mabel") isAdmin = true;
+    if (admin.username === "admin" || admin.username === "mabel.salvita") isAdmin = true;
   } catch (e) { }
-  if (fallbackRole === "admin" || fallbackRole === "mabel") isAdmin = true;
+  if (fallbackRole === "admin" || fallbackRole === "mabel.salvita") isAdmin = true;
 
   if (!isAdmin) return c.json({ error: "Unauthorized" }, 401);
   const id = c.req.param("id");
@@ -459,9 +459,9 @@ api.post("/employees", async (c) => {
   } else {
     try {
       const admin = authService.getAdminFromBearer(auth);
-      if (admin.username === "admin" || admin.username === "mabel") isAllowed = true;
+      if (admin.username === "admin" || admin.username === "mabel.salvita") isAllowed = true;
     } catch (e) { }
-    if (fallbackRole === "admin" || fallbackRole === "mabel") isAllowed = true;
+    if (fallbackRole === "admin" || fallbackRole === "mabel.salvita") isAllowed = true;
   }
 
   // Fallback: Si no es admin pero tiene un token de dispositivo válido
@@ -609,9 +609,9 @@ api.delete("/employees/:id", async (c) => {
   let isAdmin = false;
   try {
     const admin = authService.getAdminFromBearer(auth);
-    if (admin.username === "admin" || admin.username === "mabel") isAdmin = true;
+    if (admin.username === "admin" || admin.username === "mabel.salvita") isAdmin = true;
   } catch (e) { }
-  if (fallbackRole === "admin" || fallbackRole === "mabel") isAdmin = true;
+  if (fallbackRole === "admin" || fallbackRole === "mabel.salvita") isAdmin = true;
 
   if (!isAdmin) return c.json({ error: "Unauthorized" }, 401);
 
@@ -653,9 +653,9 @@ api.put("/employees/:id", async (c) => {
   } else {
     try {
       const admin = authService.getAdminFromBearer(auth);
-      if (admin.username === "admin" || admin.username === "mabel") isAllowed = true;
+      if (admin.username === "admin" || admin.username === "mabel.salvita") isAllowed = true;
     } catch (e) { }
-    if (fallbackRole === "admin" || fallbackRole === "mabel") isAllowed = true;
+    if (fallbackRole === "admin" || fallbackRole === "mabel.salvita") isAllowed = true;
   }
 
   if (!isAllowed && deviceToken?.startsWith("sk_")) {
