@@ -137,6 +137,37 @@ api.get("/auth/device/ping", async (c) => {
   return c.json({ device });
 });
 
+api.get("/auth/device/allowed-sectors", async (c) => {
+  const token = c.req.header("X-Device-Token");
+  const device = await authService.getDeviceFromToken(token);
+  
+  const name = (device.encargado_name || "").toUpperCase();
+  const allowedSectors = [];
+
+  if (name.includes("JUAN AGUIRRE") || name === "JUAN AGUIRRE") {
+    allowedSectors.push(
+      { id: "sec-aguado-d2b2", name: "AGUADO" },
+      { id: "sec-aguado-empaque-7ba5", name: "AGUADO EMPAQUE" },
+      { id: "sec-pescado-ba51", name: "PESCADO" }
+    );
+  } else if (name.includes("ORELLANA") || name === "ORELLANA") {
+    allowedSectors.push(
+      { id: "sec-zanja-d77d", name: "ZANJA" },
+      { id: "sec-carletto-9832", name: "CARLETTO" },
+      { id: "sec-cremer-5aaa", name: "CREMER" }
+    );
+  }
+
+  // Si no está en la lista especial, al menos se le permite su sector actual
+  if (allowedSectors.length === 0) {
+    // Si queremos que pueda ver solo el suyo podemos devolver una lista vacía para que no se muestre selector, 
+    // o devolver el actual para que el frontend procese lo mismo. Voy a devolver array vacío, así la App
+    // detecta que no tiene modo multi-sector.
+  }
+
+  return c.json({ ok: true, allowedSectors });
+});
+
 api.get("/auth/me", async (c) => {
   const auth = c.req.header("Authorization");
   const admin = authService.getAdminFromBearer(auth);
@@ -222,10 +253,10 @@ api.post("/sectors", zValidator("json", createSectorSchema), async (c) => {
   let isAdmin = false;
   try {
     const admin = authService.getAdminFromBearer(auth);
-    if (admin.username === "admin") isAdmin = true;
+    if (admin.username === "admin" || admin.username === "mabel") isAdmin = true;
   } catch (e) { }
 
-  if (fallbackRole === "admin") isAdmin = true;
+  if (fallbackRole === "admin" || fallbackRole === "mabel") isAdmin = true;
 
   if (!isAdmin) {
     console.log("Rebotado por Auth en /sectors. Headers recibidos:", c.req.header());
@@ -255,10 +286,10 @@ api.delete("/sectors/:id", async (c) => {
   let isAdmin = false;
   try {
     const admin = authService.getAdminFromBearer(auth);
-    if (admin.username === "admin") isAdmin = true;
+    if (admin.username === "admin" || admin.username === "mabel") isAdmin = true;
   } catch (e) { }
 
-  if (fallbackRole === "admin") isAdmin = true;
+  if (fallbackRole === "admin" || fallbackRole === "mabel") isAdmin = true;
 
   if (!isAdmin) return c.json({ error: "Unauthorized" }, 401);
 
@@ -291,10 +322,10 @@ api.post("/admin-users", zValidator("json", createAdminUserSchema), async (c) =>
   let isAdmin = false;
   try {
     const admin = authService.getAdminFromBearer(auth);
-    if (admin.username === "admin") isAdmin = true;
+    if (admin.username === "admin" || admin.username === "mabel") isAdmin = true;
   } catch (e) { }
 
-  if (fallbackRole === "admin") isAdmin = true;
+  if (fallbackRole === "admin" || fallbackRole === "mabel") isAdmin = true;
 
   if (!isAdmin) {
     console.log("Rebotado por Auth en /admin-users. Headers recibidos:", c.req.header());
@@ -323,9 +354,9 @@ api.get("/admin-users", async (c) => {
   let isAdmin = false;
   try {
     const admin = authService.getAdminFromBearer(auth);
-    if (admin.username === "admin") isAdmin = true;
+    if (admin.username === "admin" || admin.username === "mabel") isAdmin = true;
   } catch (e) { }
-  if (fallbackRole === "admin") isAdmin = true;
+  if (fallbackRole === "admin" || fallbackRole === "mabel") isAdmin = true;
 
   if (!isAdmin) return c.json({ error: "Unauthorized" }, 401);
 
@@ -341,9 +372,9 @@ api.put("/admin-users/:id", async (c) => {
   let isAdmin = false;
   try {
     const admin = authService.getAdminFromBearer(auth);
-    if (admin.username === "admin") isAdmin = true;
+    if (admin.username === "admin" || admin.username === "mabel") isAdmin = true;
   } catch (e) { }
-  if (fallbackRole === "admin") isAdmin = true;
+  if (fallbackRole === "admin" || fallbackRole === "mabel") isAdmin = true;
 
   if (!isAdmin) return c.json({ error: "Unauthorized" }, 401);
   const id = c.req.param("id");
@@ -371,9 +402,9 @@ api.delete("/admin-users/:id", async (c) => {
   let isAdmin = false;
   try {
     const admin = authService.getAdminFromBearer(auth);
-    if (admin.username === "admin") isAdmin = true;
+    if (admin.username === "admin" || admin.username === "mabel") isAdmin = true;
   } catch (e) { }
-  if (fallbackRole === "admin") isAdmin = true;
+  if (fallbackRole === "admin" || fallbackRole === "mabel") isAdmin = true;
 
   if (!isAdmin) return c.json({ error: "Unauthorized" }, 401);
   const id = c.req.param("id");
@@ -428,9 +459,9 @@ api.post("/employees", async (c) => {
   } else {
     try {
       const admin = authService.getAdminFromBearer(auth);
-      if (admin.username === "admin") isAllowed = true;
+      if (admin.username === "admin" || admin.username === "mabel") isAllowed = true;
     } catch (e) { }
-    if (fallbackRole === "admin") isAllowed = true;
+    if (fallbackRole === "admin" || fallbackRole === "mabel") isAllowed = true;
   }
 
   // Fallback: Si no es admin pero tiene un token de dispositivo válido
@@ -578,9 +609,9 @@ api.delete("/employees/:id", async (c) => {
   let isAdmin = false;
   try {
     const admin = authService.getAdminFromBearer(auth);
-    if (admin.username === "admin") isAdmin = true;
+    if (admin.username === "admin" || admin.username === "mabel") isAdmin = true;
   } catch (e) { }
-  if (fallbackRole === "admin") isAdmin = true;
+  if (fallbackRole === "admin" || fallbackRole === "mabel") isAdmin = true;
 
   if (!isAdmin) return c.json({ error: "Unauthorized" }, 401);
 
@@ -600,12 +631,12 @@ api.delete("/employees/:id", async (c) => {
 });
 
 const updateEmployeeSchema = z.object({
-  first_name: z.string().optional(),
-  last_name: z.string().optional(),
+  first_name: z.string().nullable().optional(),
+  last_name: z.string().nullable().optional(),
   dni: z.string().nullable().optional(),
   external_code: z.string().nullable().optional(),
-  sector_id: z.string().optional(),
-  is_active: z.union([z.boolean(), z.number()]).optional(),
+  sector_id: z.string().nullable().optional(),
+  is_active: z.union([z.boolean(), z.number()]).nullable().optional(),
 });
 
 api.put("/employees/:id", async (c) => {
@@ -622,9 +653,9 @@ api.put("/employees/:id", async (c) => {
   } else {
     try {
       const admin = authService.getAdminFromBearer(auth);
-      if (admin.username === "admin") isAllowed = true;
+      if (admin.username === "admin" || admin.username === "mabel") isAllowed = true;
     } catch (e) { }
-    if (fallbackRole === "admin") isAllowed = true;
+    if (fallbackRole === "admin" || fallbackRole === "mabel") isAllowed = true;
   }
 
   if (!isAllowed && deviceToken?.startsWith("sk_")) {
@@ -642,7 +673,8 @@ api.put("/employees/:id", async (c) => {
   const body = (await c.req.json().catch(() => ({}))) as Record<string, unknown>;
   const parsed = updateEmployeeSchema.safeParse(body);
   if (!parsed.success) {
-    return c.json({ error: "Datos inválidos" }, 400);
+    logger.error(`[UPDATE_EMP_VALIDATION] id=${id} body=${JSON.stringify(body)} error=${JSON.stringify(parsed.error.flatten())}`);
+    return c.json({ error: "Datos inválidos", details: parsed.error.flatten() }, 400);
   }
 
   const env = (c.env ?? {}) as Record<string, string>;
@@ -668,17 +700,26 @@ api.put("/employees/:id", async (c) => {
     const externalCode = (updateData.external_code !== undefined ? updateData.external_code : row.external_code) as string | null;
     const sectorId = (updateData.sector_id ?? row.sector_id) as string;
     
-    let isActive: number = (row.is_active === 1 || row.is_active === true) ? 1 : 0;
+    const parseActive = (val: any): number => {
+      if (val === 1 || val === true || val === "1" || val === "true") return 1;
+      return 0;
+    };
+
+    let isActive = parseActive(row.is_active);
     if (updateData.is_active !== undefined) {
-      isActive = (updateData.is_active === true || updateData.is_active === 1) ? 1 : 0;
+      isActive = parseActive(updateData.is_active);
     }
 
-    await client.execute({
+    logger.info(`[UPDATE_EMP] id=${id} -> updates: ${JSON.stringify(updateData)} | final: ${firstName} ${lastName}, DNI=${dni}, Sector=${sectorId}, Active=${isActive}`);
+
+    const updateRes = await client.execute({
       sql: `UPDATE employees SET 
               sector_id = ?, first_name = ?, last_name = ?, dni = ?, external_code = ?, is_active = ?, updated_at = ?
             WHERE id = ?`,
       args: [sectorId, firstName, lastName, dni, externalCode, isActive, now, id]
     });
+
+    logger.info(`[UPDATE_EMP] rowsAffected=${updateRes.rowsAffected}`);
 
     const updated = await client.execute({ sql: "SELECT * FROM employees WHERE id = ?", args: [id] });
     return c.json(buildEmployeeResponse(updated.rows[0] as Record<string, unknown>));
@@ -692,7 +733,7 @@ api.put("/employees/:id", async (c) => {
 const createSubmissionSchema = z.object({
   employee_id: z.string().min(1),
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "YYYY-MM-DD"),
-  minutes_worked: z.number().int().positive().nullable().optional(),
+  minutes_worked: z.union([z.number(), z.string()]).nullable().optional(),
   check_in: z.string().nullable().optional(),
   check_out: z.string().nullable().optional(),
   notes: z.string().nullable().optional(),
@@ -740,23 +781,79 @@ api.get("/attendances", async (c) => {
     let result: { rows: Record<string, unknown>[] };
     if (start_date != null && end_date != null) {
       result = await client.execute({
-        sql: `SELECT s.date, s.minutes_worked, (s.minutes_worked / 60.0) AS hours,
-               e.id AS employee_id, e.first_name, e.last_name, e.dni
-               FROM attendance_submissions s
-               JOIN employees e ON s.employee_id = e.id
-               WHERE e.sector_id = ? AND s.date BETWEEN ? AND ?
-               ORDER BY e.last_name ASC, s.date ASC`,
-        args: [sector_id, start_date, end_date],
+        sql: `WITH CombinedDocs AS (
+                 SELECT e.id AS employee_id, e.first_name, e.last_name, e.dni,
+                        e.sector_id AS assigned_sector_id, s_asgn.name AS assigned_sector_name,
+                        a.date, a.minutes_worked AS work_value, a.sector_id AS record_sector_id,
+                        s_rec.name AS record_sector_name,
+                        2 AS priority, a.updated_at AS ts
+                 FROM attendances a
+                 JOIN employees e ON a.employee_id = e.id
+                 LEFT JOIN sectors s_rec ON a.sector_id = s_rec.id
+                 LEFT JOIN sectors s_asgn ON e.sector_id = s_asgn.id
+                 WHERE e.sector_id = ? AND a.date BETWEEN ? AND ?
+
+                 UNION ALL
+
+                 SELECT e.id AS employee_id, e.first_name, e.last_name, e.dni,
+                        e.sector_id AS assigned_sector_id, s_asgn.name AS assigned_sector_name,
+                        sub.date, sub.minutes_worked AS work_value, sub.sector_id AS record_sector_id,
+                        s_rec.name AS record_sector_name,
+                        1 AS priority, sub.updated_at AS ts
+                 FROM attendance_submissions sub
+                 JOIN employees e ON sub.employee_id = e.id
+                 LEFT JOIN sectors s_rec ON sub.sector_id = s_rec.id
+                 LEFT JOIN sectors s_asgn ON e.sector_id = s_asgn.id
+                 WHERE e.sector_id = ? AND sub.date BETWEEN ? AND ?
+               ), RankedDocs AS (
+                 SELECT *, ROW_NUMBER() OVER (PARTITION BY employee_id, date ORDER BY priority DESC, ts DESC) as rn
+                 FROM CombinedDocs
+               )
+               SELECT date, work_value, record_sector_id, record_sector_name,
+                      assigned_sector_id, assigned_sector_name,
+                      employee_id, first_name, last_name, dni
+               FROM RankedDocs
+               WHERE rn = 1
+               ORDER BY last_name ASC, date ASC`,
+        args: [sector_id, start_date, end_date, sector_id, start_date, end_date],
       });
     } else {
       result = await client.execute({
-        sql: `SELECT s.date, s.minutes_worked, (s.minutes_worked / 60.0) AS hours,
-               e.id AS employee_id, e.first_name, e.last_name, e.dni
-               FROM attendance_submissions s
-               JOIN employees e ON s.employee_id = e.id
-               WHERE e.sector_id = ?
-               ORDER BY e.last_name ASC, s.date ASC`,
-        args: [sector_id],
+        sql: `WITH CombinedDocs AS (
+                 SELECT e.id AS employee_id, e.first_name, e.last_name, e.dni,
+                        e.sector_id AS assigned_sector_id, s_asgn.name AS assigned_sector_name,
+                        a.date, a.minutes_worked AS work_value, a.sector_id AS record_sector_id,
+                        s_rec.name AS record_sector_name,
+                        2 AS priority, a.updated_at AS ts
+                 FROM attendances a
+                 JOIN employees e ON a.employee_id = e.id
+                 LEFT JOIN sectors s_rec ON a.sector_id = s_rec.id
+                 LEFT JOIN sectors s_asgn ON e.sector_id = s_asgn.id
+                 WHERE e.sector_id = ?
+
+                 UNION ALL
+
+                 SELECT e.id AS employee_id, e.first_name, e.last_name, e.dni,
+                        e.sector_id AS assigned_sector_id, s_asgn.name AS assigned_sector_name,
+                        sub.date, sub.minutes_worked AS work_value, sub.sector_id AS record_sector_id,
+                        s_rec.name AS record_sector_name,
+                        1 AS priority, sub.updated_at AS ts
+                 FROM attendance_submissions sub
+                 JOIN employees e ON sub.employee_id = e.id
+                 LEFT JOIN sectors s_rec ON sub.sector_id = s_rec.id
+                 LEFT JOIN sectors s_asgn ON e.sector_id = s_asgn.id
+                 WHERE e.sector_id = ?
+               ), RankedDocs AS (
+                 SELECT *, ROW_NUMBER() OVER (PARTITION BY employee_id, date ORDER BY priority DESC, ts DESC) as rn
+                 FROM CombinedDocs
+               )
+               SELECT date, work_value, record_sector_id, record_sector_name,
+                      assigned_sector_id, assigned_sector_name,
+                      employee_id, first_name, last_name, dni
+               FROM RankedDocs
+               WHERE rn = 1
+               ORDER BY last_name ASC, date ASC`,
+        args: [sector_id, sector_id],
       });
     }
     return c.json(
@@ -858,7 +955,12 @@ api.post("/submissions", async (c) => {
     const parsed = createSubmissionSchema.safeParse(body);
     if (!parsed.success) {
       logTiming("/api/submissions", "TOTAL", t0);
-      const first = Object.values(parsed.error.flatten().fieldErrors).flat()[0];
+      const fieldErrors = parsed.error.flatten().fieldErrors;
+      const first = Object.values(fieldErrors).flat()[0];
+      logger.error("[StaffAxis] POST /submissions 400 validation_error", {
+        body_received: JSON.stringify(body),
+        field_errors: JSON.stringify(fieldErrors),
+      });
       return c.json({ code: "validation_error", message: (first as string) ?? "Datos inválidos" }, 400);
     }
     logTiming("/api/submissions", "validate", t0);
@@ -1239,6 +1341,37 @@ api.post("/admin/employees/upsert", async (c) => {
   });
   return c.json(result, 200);
 });
+
+/**
+ * GET /api/admin/stats — estadísticas globales con caché de 5 mins.
+ */
+api.get("/admin/stats", async (c) => {
+  const cache = (caches as any).default;
+  const cacheKey = new Request(c.req.url, c.req.raw);
+  
+  // 1. Intentar obtener del caché
+  let response = await cache.match(cacheKey);
+  if (response) {
+    logger.info("Stats: Cache HIT");
+    return response;
+  }
+
+  logger.info("Stats: Cache MISS, consultando Turso...");
+  const stats = await adminService.getGlobalStats();
+  
+  // 2. Crear respuesta
+  const res = c.json(stats, 200);
+  
+  // Cache-Control para que Cloudflare y el navegador sepan qué hacer
+  // s-maxage=300 le dice al CDN que lo guarde 5 minutos
+  res.headers.set("Cache-Control", "public, s-maxage=300, max-age=60");
+
+  // 3. Guardar en caché asincrónicamente
+  c.executionCtx.waitUntil(cache.put(cacheKey, res.clone()));
+
+  return res;
+});
+
 
 // --- Dev (solo en development) ---
 api.post("/dev/seed-min", async (c) => {
